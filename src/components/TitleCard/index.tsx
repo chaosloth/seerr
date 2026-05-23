@@ -23,8 +23,8 @@ import {
   StarIcon,
 } from '@heroicons/react/24/outline';
 import { MediaStatus } from '@server/constants/media';
-import type { RemoteAvailability } from '@server/interfaces/api/mediaInterfaces';
 import type { Watchlist } from '@server/entity/Watchlist';
+import type { RemoteAvailability } from '@server/interfaces/api/mediaInterfaces';
 import type { MediaType } from '@server/models/Search';
 import axios from 'axios';
 import Link from 'next/link';

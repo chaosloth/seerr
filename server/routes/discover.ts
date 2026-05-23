@@ -173,12 +173,12 @@ discoverRoutes.get('/movies', async (req, res, next) => {
       totalResults: data.total_results,
       keywords: keywordData,
       results: data.results.map((result) =>
-        mapTvResult(
+        mapMovieResult(
           result,
           media.find(
-            (med) => med.tmdbId === result.id && med.mediaType === MediaType.TV
+            (med) =>
+              med.tmdbId === result.id && med.mediaType === MediaType.MOVIE
           ),
-          remoteAvailability.get(result.id)
           remoteAvailability.get(result.id)
         )
       ),
@@ -453,15 +453,8 @@ discoverRoutes.get('/tv', async (req, res, next) => {
       certificationCountry: query.certificationCountry,
     });
 
-    const media = await Media.getRelatedMedia(
+    const { media, remoteAvailability } = await enrichWithAvailability(
       req.user,
-      data.results.map((result) => ({
-        tmdbId: result.id,
-        mediaType: MediaType.TV,
-      }))
-    );
-
-    const remoteAvailability = await Media.getRemoteAvailability(
       data.results.map((result) => ({
         tmdbId: result.id,
         mediaType: MediaType.TV,
@@ -493,7 +486,8 @@ discoverRoutes.get('/tv', async (req, res, next) => {
           result,
           media.find(
             (med) => med.tmdbId === result.id && med.mediaType === MediaType.TV
-          )
+          ),
+          remoteAvailability.get(result.id)
         )
       ),
     });
@@ -784,7 +778,7 @@ discoverRoutes.get('/trending', async (req, res, next) => {
               ? (result.media_type as string) === 'tv'
                 ? MediaType.TV
                 : MediaType.MOVIE
-              : type ?? MediaType.MOVIE,
+              : (type ?? MediaType.MOVIE),
         }))
     );
 

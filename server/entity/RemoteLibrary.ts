@@ -1,4 +1,4 @@
-import { RemoteLibraryType } from '@server/constants/server';
+import type { RemoteLibraryType } from '@server/constants/server';
 import {
   Column,
   CreateDateColumn,

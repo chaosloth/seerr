@@ -4,13 +4,11 @@ import availabilitySync from '@server/lib/availabilitySync';
 import downloadTracker from '@server/lib/downloadtracker';
 import ImageProxy from '@server/lib/imageproxy';
 import refreshToken from '@server/lib/refreshToken';
+import { embyJellyfinScanner } from '@server/lib/scanners/emby-jellyfin';
 import {
   jellyfinFullScanner,
   jellyfinRecentScanner,
 } from '@server/lib/scanners/jellyfin';
-import {
-  embyJellyfinScanner,
-} from '@server/lib/scanners/emby-jellyfin';
 import { plexFullScanner, plexRecentScanner } from '@server/lib/scanners/plex';
 import { radarrScanner } from '@server/lib/scanners/radarr';
 import { seerrScanner } from '@server/lib/scanners/seerr';
@@ -278,8 +276,7 @@ export const startJobs = (): void => {
       embyJellyfinScanner.run();
     }),
     running: () =>
-      seerrScanner.status().running ||
-      embyJellyfinScanner.status().running,
+      seerrScanner.status().running || embyJellyfinScanner.status().running,
   });
 
   logger.info('Scheduled jobs loaded', { label: 'Jobs' });

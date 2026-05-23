@@ -26,7 +26,6 @@ import {
 } from 'typeorm';
 import Issue from './Issue';
 import { MediaRequest } from './MediaRequest';
-import { RemoteMedia } from './RemoteMedia';
 import Season from './Season';
 
 @Entity()
@@ -88,10 +87,10 @@ class Media {
         .getMany();
 
       for (const entry of remoteEntries) {
-        const mediaTbId = (entry.media as unknown as { tmdbId: number; mediaType: string }).tmdbId;
-        const matching = items.find(
-          (i) => i.tmdbId === mediaTbId
-        );
+        const mediaTbId = (
+          entry.media as unknown as { tmdbId: number; mediaType: string }
+        ).tmdbId;
+        const matching = items.find((i) => i.tmdbId === mediaTbId);
 
         if (!matching) continue;
 

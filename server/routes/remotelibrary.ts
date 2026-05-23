@@ -68,9 +68,7 @@ remoteLibraryRoutes.post('/test', async (req, res, next) => {
     const { type, hostname, port, useSsl, baseUrl, apiKey } = req.body;
 
     const protocol = useSsl ? 'https' : 'http';
-    const base = baseUrl
-      ? `/${baseUrl.replace(/^\/|\/$/g, '')}`
-      : '';
+    const base = baseUrl ? `/${baseUrl.replace(/^\/|\/$/g, '')}` : '';
     const url = `${protocol}://${hostname}:${port}${base}`;
 
     if (
@@ -82,9 +80,8 @@ remoteLibraryRoutes.post('/test', async (req, res, next) => {
         Accept: 'application/json',
       };
       if (apiKey) {
-        headers[
-          'Authorization'
-        ] = `MediaBrowser Client="Seerr", Device="Seerr", DeviceId="test", Version="1.0.0", Token="${apiKey}"`;
+        headers['Authorization'] =
+          `MediaBrowser Client="Seerr", Device="Seerr", DeviceId="test", Version="1.0.0", Token="${apiKey}"`;
       }
 
       await axios.get(`${url}/System/Info`, {
@@ -144,26 +141,23 @@ remoteLibraryRoutes.put<{ id: string }, RemoteLibrary, Partial<RemoteLibrary>>(
   }
 );
 
-remoteLibraryRoutes.delete<{ id: string }>(
-  '/:id',
-  async (req, res, next) => {
-    const repository = getRepository(RemoteLibrary);
+remoteLibraryRoutes.delete<{ id: string }>('/:id', async (req, res, next) => {
+  const repository = getRepository(RemoteLibrary);
 
-    const library = await repository.findOne({
-      where: { id: Number(req.params.id) },
+  const library = await repository.findOne({
+    where: { id: Number(req.params.id) },
+  });
+
+  if (!library) {
+    return next({
+      status: 404,
+      message: 'Remote library not found',
     });
-
-    if (!library) {
-      return next({
-        status: 404,
-        message: 'Remote library not found',
-      });
-    }
-
-    await repository.remove(library);
-
-    return res.status(204).send();
   }
-);
+
+  await repository.remove(library);
+
+  return res.status(204).send();
+});
 
 export default remoteLibraryRoutes;

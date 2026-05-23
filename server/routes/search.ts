@@ -1,10 +1,9 @@
 import TheMovieDb from '@server/api/themoviedb';
 import type { TmdbSearchMultiResponse } from '@server/api/themoviedb/interfaces';
-import Media from '@server/entity/Media';
-import { enrichWithAvailability } from '@server/routes/discover';
 import { findSearchProvider } from '@server/lib/search';
 import logger from '@server/logger';
 import { mapSearchResults } from '@server/models/Search';
+import { enrichWithAvailability } from '@server/routes/discover';
 import { Router } from 'express';
 
 const searchRoutes = Router();

@@ -1,4 +1,4 @@
-import { MediaType } from '@server/constants/media';
+import type { MediaType } from '@server/constants/media';
 import { RemoteLibraryType } from '@server/constants/server';
 import { getRepository } from '@server/datasource';
 import Media from '@server/entity/Media';

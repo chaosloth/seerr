@@ -16,9 +16,7 @@ type EmbyJellyfinSyncStatus = StatusBase & {
   libraries: RemoteLibrary[];
 };
 
-class EmbyJellyfinScanner
-  implements RunnableScanner<EmbyJellyfinSyncStatus>
-{
+class EmbyJellyfinScanner implements RunnableScanner<EmbyJellyfinSyncStatus> {
   private running = false;
   private progress = 0;
   private total = 0;
@@ -50,10 +48,9 @@ class EmbyJellyfinScanner
     });
 
     if (this.libraries.length === 0) {
-      logger.info(
-        'No enabled Emby/Jellyfin remote libraries to scan',
-        { label: 'Emby/Jellyfin Scanner' }
-      );
+      logger.info('No enabled Emby/Jellyfin remote libraries to scan', {
+        label: 'Emby/Jellyfin Scanner',
+      });
       return;
     }
 
@@ -87,10 +84,9 @@ class EmbyJellyfinScanner
 
     const url = this.buildUrl(library);
 
-    logger.info(
-      `Scanning remote Emby/Jellyfin library: ${library.name}`,
-      { label: 'Emby/Jellyfin Scanner' }
-    );
+    logger.info(`Scanning remote Emby/Jellyfin library: ${library.name}`, {
+      label: 'Emby/Jellyfin Scanner',
+    });
 
     const seenIds: Set<number> = new Set();
 
@@ -173,7 +169,7 @@ class EmbyJellyfinScanner
           }
         } catch {
           logger.warn(
-            `Failed to scan library contents: ${lib.name} on ${library.name}`,
+            `Failed to scan library contents: ${lib.title} on ${library.name}`,
             { label: 'Emby/Jellyfin Scanner' }
           );
         }

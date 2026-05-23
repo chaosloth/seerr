@@ -1,6 +1,6 @@
 import Badge from '@app/components/Common/Badge';
-import type { RemoteAvailability } from '@server/interfaces/api/mediaInterfaces';
 import { UsersIcon } from '@heroicons/react/24/solid';
+import type { RemoteAvailability } from '@server/interfaces/api/mediaInterfaces';
 
 interface FriendBadgeProps {
   remoteAvailability: RemoteAvailability[];
@@ -12,9 +12,7 @@ const FriendBadge = ({ remoteAvailability }: FriendBadgeProps) => {
   }
 
   const count = remoteAvailability.length;
-  const names = remoteAvailability
-    .map((r) => r.remoteLibraryName)
-    .join(', ');
+  const names = remoteAvailability.map((r) => r.remoteLibraryName).join(', ');
 
   return (
     <span
@@ -22,7 +20,7 @@ const FriendBadge = ({ remoteAvailability }: FriendBadgeProps) => {
       className="relative inline-flex items-center"
     >
       <Badge badgeType="primary">
-        <UsersIcon className="mr-0.5 h-3 w-3 inline" />
+        <UsersIcon className="mr-0.5 inline h-3 w-3" />
         {count}
       </Badge>
     </span>

@@ -19,12 +19,12 @@ import useSWR, { mutate } from 'swr';
 const messages = defineMessages('components.Settings.RemoteLibrary', {
   remotesettings: 'Remote Libraries',
   remotesettingsDescription:
-    'Configure remote libraries to discover content available on your friends\' servers. Remote libraries will appear as availability badges on the discovery page.',
+    "Configure remote libraries to discover content available on your friends' servers. Remote libraries will appear as availability badges on the discovery page.",
   addremote: 'Add Remote Library',
   editremote: 'Edit Remote Library',
   deleteremoteconfirm: 'Are you sure you want to delete this remote library?',
   name: 'Library Name',
-  namePlaceholder: 'My Friend\'s Server',
+  namePlaceholder: "My Friend's Server",
   type: 'Library Type',
   hostname: 'Hostname or IP Address',
   hostnamePlaceholder: '192.168.1.100',
@@ -82,9 +82,7 @@ const SettingsRemoteLibrary = () => {
   );
   const [testResult, setTestResult] = useState<boolean | null>(null);
 
-  const { data, error } = useSWR<RemoteLibrary[]>(
-    '/api/v1/remoteLibrary'
-  );
+  const { data, error } = useSWR<RemoteLibrary[]>('/api/v1/remoteLibrary');
 
   if (!data && !error) {
     return <LoadingSpinner />;
@@ -115,7 +113,7 @@ const SettingsRemoteLibrary = () => {
       mutate('/api/v1/remoteLibrary');
     } catch {
       addToast(intl.formatMessage(messages.toastRemoteLibraryDeleteFailure), {
-        type: 'error',
+        appearance: 'error',
       });
     }
   };
@@ -132,16 +130,14 @@ const SettingsRemoteLibrary = () => {
     try {
       await axios.post('/api/v1/remoteLibrary/test', values);
       setTestResult(true);
-      addToast(
-        intl.formatMessage(messages.toastRemoteLibraryTestSuccess),
-        { type: 'success' }
-      );
+      addToast(intl.formatMessage(messages.toastRemoteLibraryTestSuccess), {
+        appearance: 'success',
+      });
     } catch {
       setTestResult(false);
-      addToast(
-        intl.formatMessage(messages.toastRemoteLibraryTestFailure),
-        { type: 'error' }
-      );
+      addToast(intl.formatMessage(messages.toastRemoteLibraryTestFailure), {
+        appearance: 'error',
+      });
     }
   };
 
@@ -158,20 +154,15 @@ const SettingsRemoteLibrary = () => {
   }) => {
     try {
       if (editingLibrary) {
-        await axios.put(
-          `/api/v1/remoteLibrary/${editingLibrary.id}`,
-          values
-        );
-        addToast(
-          intl.formatMessage(messages.toastRemoteLibraryUpdateSuccess),
-          { type: 'success' }
-        );
+        await axios.put(`/api/v1/remoteLibrary/${editingLibrary.id}`, values);
+        addToast(intl.formatMessage(messages.toastRemoteLibraryUpdateSuccess), {
+          appearance: 'success',
+        });
       } else {
         await axios.post('/api/v1/remoteLibrary', values);
-        addToast(
-          intl.formatMessage(messages.toastRemoteLibraryCreateSuccess),
-          { type: 'success' }
-        );
+        addToast(intl.formatMessage(messages.toastRemoteLibraryCreateSuccess), {
+          appearance: 'success',
+        });
       }
       mutate('/api/v1/remoteLibrary');
       closeModal();
@@ -180,7 +171,7 @@ const SettingsRemoteLibrary = () => {
         editingLibrary
           ? intl.formatMessage(messages.toastRemoteLibraryUpdateFailure)
           : intl.formatMessage(messages.toastRemoteLibraryCreateFailure),
-        { type: 'error' }
+        { appearance: 'error' }
       );
     }
   };
@@ -202,7 +193,9 @@ const SettingsRemoteLibrary = () => {
 
   const buildUrl = (library: RemoteLibrary) => {
     const protocol = library.useSsl ? 'https' : 'http';
-    const base = library.baseUrl ? `/${library.baseUrl.replace(/^\/|\/$/g, '')}` : '';
+    const base = library.baseUrl
+      ? `/${library.baseUrl.replace(/^\/|\/$/g, '')}`
+      : '';
     return `${protocol}://${library.hostname}:${library.port}${base}`;
   };
 
@@ -297,7 +290,7 @@ const ServerInstance = ({
   onDelete,
 }: ServerInstanceProps) => {
   return (
-    <li className="border-gray-700 bg-gray-800/50 rounded-lg border p-4">
+    <li className="rounded-lg border border-gray-700 bg-gray-800/50 p-4">
       <div className="flex items-center justify-between">
         <div>
           <div className="flex items-center space-x-2">
@@ -325,11 +318,7 @@ const ServerInstance = ({
           <Button
             buttonType="ghost"
             onClick={async () => {
-              if (
-                confirm(
-                  intl.formatMessage(messages.deleteremoteconfirm)
-                )
-              ) {
+              if (confirm(intl.formatMessage(messages.deleteremoteconfirm))) {
                 onDelete();
               }
             }}
@@ -387,9 +376,7 @@ const RemoteLibraryModal = ({
   const [baseUrl, setBaseUrl] = useState(library?.baseUrl ?? '');
   const [apiKey, setApiKey] = useState(library?.apiKey ?? '');
   const [plexToken, setPlexToken] = useState(library?.plexToken ?? '');
-  const [syncEnabled, setSyncEnabled] = useState(
-    library?.syncEnabled ?? true
-  );
+  const [syncEnabled, setSyncEnabled] = useState(library?.syncEnabled ?? true);
   const [isSubmitting, setSubmitting] = useState(false);
 
   const handleSubmit = async () => {
@@ -402,7 +389,8 @@ const RemoteLibraryModal = ({
       useSsl,
       baseUrl: baseUrl || undefined,
       apiKey: apiKey || undefined,
-      plexToken: type === RemoteLibraryType.PLEX ? plexToken || undefined : undefined,
+      plexToken:
+        type === RemoteLibraryType.PLEX ? plexToken || undefined : undefined,
       syncEnabled,
     });
     setSubmitting(false);
@@ -421,9 +409,7 @@ const RemoteLibraryModal = ({
   };
 
   const isValid =
-    name.trim().length > 0 &&
-    hostname.trim().length > 0 &&
-    Number(port) > 0;
+    name.trim().length > 0 && hostname.trim().length > 0 && Number(port) > 0;
 
   return (
     <Modal
@@ -432,7 +418,6 @@ const RemoteLibraryModal = ({
           ? intl.formatMessage(messages.editremote)
           : intl.formatMessage(messages.addremote)
       }
-      iconSvg={<PlusIcon />}
       onCancel={onClose}
       onOk={handleSubmit}
       okDisabled={!isValid || isSubmitting}
@@ -565,12 +550,8 @@ const RemoteLibraryModal = ({
           {testResult !== null && (
             <Badge badgeType={testResult ? 'success' : 'danger'}>
               {testResult
-                ? intl.formatMessage(
-                    messages.toastRemoteLibraryTestSuccess
-                  )
-                : intl.formatMessage(
-                    messages.toastRemoteLibraryTestFailure
-                  )}
+                ? intl.formatMessage(messages.toastRemoteLibraryTestSuccess)
+                : intl.formatMessage(messages.toastRemoteLibraryTestFailure)}
             </Badge>
           )}
         </div>
