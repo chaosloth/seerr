@@ -287,7 +287,7 @@ class JellyfinAPI extends ExternalAPI {
     try {
       const mediaFolderResponse = await this.get<any>(`/Library/MediaFolders`);
 
-      return this.mapLibraries(mediaFolderResponse.Items);
+      return this.mapLibraries(mediaFolderResponse?.Items ?? []);
     } catch {
       // fallback to user views to get libraries
       // this only and maybe/depending on factors affects LDAP users
@@ -296,7 +296,7 @@ class JellyfinAPI extends ExternalAPI {
           `/Users/${this.userId ?? 'Me'}/Views`
         );
 
-        return this.mapLibraries(mediaFolderResponse.Items);
+        return this.mapLibraries(mediaFolderResponse?.Items ?? []);
       } catch (e) {
         logger.error(
           `Something went wrong while getting libraries from the Jellyfin server: ${e.message}`,
