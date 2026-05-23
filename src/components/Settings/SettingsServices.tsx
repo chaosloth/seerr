@@ -523,7 +523,7 @@ const SettingsServices = () => {
       </div>
       <div className="section">
         <ul className="grid max-w-6xl grid-cols-1 gap-6 lg:grid-cols-2 xl:grid-cols-3">
-          {friendarrData && (
+          {friendarrData?.enabled ? (
             <li className="col-span-1 rounded-lg bg-gray-800 shadow ring-1 ring-gray-500">
               <div className="flex w-full items-center justify-between space-x-6 p-6">
                 <div className="flex-1 truncate">
@@ -531,35 +531,27 @@ const SettingsServices = () => {
                     <h3 className="truncate font-medium leading-5 text-white">
                       {intl.formatMessage(messages.friendarrsettings)}
                     </h3>
-                    {friendarrData.enabled ? (
-                      <Badge badgeType="success">
-                        {intl.formatMessage(messages.enabled)}
-                      </Badge>
-                    ) : (
-                      <Badge badgeType="danger">
-                        {intl.formatMessage(messages.disabled)}
-                      </Badge>
-                    )}
+                    <Badge badgeType="success">
+                      {intl.formatMessage(messages.enabled)}
+                    </Badge>
                     {friendarrData.useSsl && (
                       <Badge badgeType="success">
                         {intl.formatMessage(messages.ssl)}
                       </Badge>
                     )}
                   </div>
-                  {friendarrData.enabled && (
-                    <p className="mt-1 truncate text-sm leading-5 text-gray-300">
-                      <span className="mr-2 font-bold">
-                        {intl.formatMessage(messages.address)}
-                      </span>
-                      <span className="text-gray-400">
-                        {friendarrData.useSsl ? 'https' : 'http'}://
-                        {friendarrData.hostname}:{friendarrData.port}
-                        {friendarrData.baseUrl
-                          ? `/${friendarrData.baseUrl.replace(/^\/|\/$/g, '')}`
-                          : ''}
-                      </span>
-                    </p>
-                  )}
+                  <p className="mt-1 truncate text-sm leading-5 text-gray-300">
+                    <span className="mr-2 font-bold">
+                      {intl.formatMessage(messages.address)}
+                    </span>
+                    <span className="text-gray-400">
+                      {friendarrData.useSsl ? 'https' : 'http'}://
+                      {friendarrData.hostname}:{friendarrData.port}
+                      {friendarrData.baseUrl
+                        ? `/${friendarrData.baseUrl.replace(/^\/|\/$/g, '')}`
+                        : ''}
+                    </span>
+                  </p>
                 </div>
               </div>
               <div className="border-t border-gray-500">
@@ -576,6 +568,18 @@ const SettingsServices = () => {
                     </button>
                   </div>
                 </div>
+              </div>
+            </li>
+          ) : (
+            <li className="col-span-1 h-32 rounded-lg border-2 border-dashed border-gray-400 shadow sm:h-44">
+              <div className="flex h-full w-full items-center justify-center">
+                <Button
+                  buttonType="ghost"
+                  onClick={() => setFriendarrModal(true)}
+                >
+                  <PencilIcon className="mr-2 h-5 w-5" />
+                  <span>{intl.formatMessage(messages.configurefriendarr)}</span>
+                </Button>
               </div>
             </li>
           )}
