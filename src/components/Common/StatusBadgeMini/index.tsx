@@ -93,7 +93,11 @@ const StatusBadgeMini = ({
         shrink ? '' : 'ring-1'
       }`}
     >
-      <div className={badgeStyle.join(' ')}>{indicatorIcon}</div>
+      <div
+        className={`${badgeStyle.join(' ')} flex items-center justify-center`}
+      >
+        {indicatorIcon}
+      </div>
       {is4k && <span className="pl-1 pr-2 text-gray-200">4K</span>}
     </div>
   );
