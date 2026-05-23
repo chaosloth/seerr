@@ -7,11 +7,12 @@ import SensitiveInput from '@app/components/Common/SensitiveInput';
 import useToasts from '@app/hooks/useToasts';
 import globalMessages from '@app/i18n/globalMessages';
 import defineMessages from '@app/utils/defineMessages';
+import { Transition } from '@headlessui/react';
 import { PencilIcon, PlusIcon, TrashIcon } from '@heroicons/react/24/solid';
 import { RemoteLibraryType } from '@server/constants/server';
 import type { RemoteLibrary } from '@server/entity/RemoteLibrary';
 import axios from 'axios';
-import { useState } from 'react';
+import React, { Fragment, useState } from 'react';
 import { useIntl } from 'react-intl';
 import useSWR, { mutate } from 'swr';
 
@@ -246,7 +247,16 @@ const SettingsRemoteLibrary = () => {
             </ul>
           )}
         </div>
-        {isModalOpen && (
+        <Transition
+          as={Fragment}
+          enter="transition-opacity duration-300"
+          enterFrom="opacity-0"
+          enterTo="opacity-100"
+          leave="transition-opacity duration-300"
+          leaveFrom="opacity-100"
+          leaveTo="opacity-0"
+          show={isModalOpen}
+        >
           <RemoteLibraryModal
             key={editingLibrary ? editingLibrary.id : 'new'}
             library={editingLibrary}
@@ -256,7 +266,7 @@ const SettingsRemoteLibrary = () => {
             testResult={testResult}
             intl={intl}
           />
-        )}
+        </Transition>
       </div>
     </>
   );
@@ -348,14 +358,10 @@ interface RemoteLibraryModalProps {
   intl: ReturnType<typeof useIntl>;
 }
 
-const RemoteLibraryModal = ({
-  library,
-  onClose,
-  onTest,
-  onSubmit,
-  testResult,
-  intl,
-}: RemoteLibraryModalProps) => {
+const RemoteLibraryModal = React.forwardRef<
+  HTMLDivElement,
+  RemoteLibraryModalProps
+>(({ library, onClose, onTest, onSubmit, testResult, intl }, ref) => {
   const [name, setName] = useState(library?.name ?? '');
   const [type, setType] = useState<RemoteLibraryType>(
     library?.type ?? RemoteLibraryType.SEERR
@@ -403,6 +409,7 @@ const RemoteLibraryModal = ({
 
   return (
     <Modal
+      ref={ref}
       title={
         library
           ? intl.formatMessage(messages.editremote)
@@ -548,6 +555,6 @@ const RemoteLibraryModal = ({
       </div>
     </Modal>
   );
-};
+});
 
 export default SettingsRemoteLibrary;
