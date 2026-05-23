@@ -4,8 +4,10 @@ import { MediaStatus, MediaType } from '@server/constants/media';
 import { MediaServerType } from '@server/constants/server';
 import { getRepository } from '@server/datasource';
 import { Blocklist } from '@server/entity/Blocklist';
+import { RemoteMedia } from '@server/entity/RemoteMedia';
 import type { User } from '@server/entity/User';
 import { Watchlist } from '@server/entity/Watchlist';
+import type { RemoteAvailability } from '@server/interfaces/api/mediaInterfaces';
 import type { DownloadingItem } from '@server/lib/downloadtracker';
 import downloadTracker from '@server/lib/downloadtracker';
 import { getSettings } from '@server/lib/settings';
@@ -24,6 +26,7 @@ import {
 } from 'typeorm';
 import Issue from './Issue';
 import { MediaRequest } from './MediaRequest';
+import { RemoteMedia } from './RemoteMedia';
 import Season from './Season';
 
 @Entity()
@@ -59,6 +62,56 @@ class Media {
     } catch (e) {
       logger.error(e.message);
       return [];
+    }
+  }
+
+  public static async getRemoteAvailability(
+    items: { tmdbId: number; mediaType: string }[]
+  ): Promise<Map<number, RemoteAvailability[]>> {
+    const remoteMediaRepository = getRepository(RemoteMedia);
+    const result = new Map<number, RemoteAvailability[]>();
+
+    if (items.length === 0) {
+      return result;
+    }
+
+    try {
+      const finalIds = [...new Set(items.map((i) => i.tmdbId))];
+
+      const remoteEntries = await remoteMediaRepository
+        .createQueryBuilder('rm')
+        .leftJoinAndSelect('rm.remoteLibrary', 'rl')
+        .leftJoin('rm.media', 'media')
+        .addSelect(['media.tmdbId', 'media.mediaType'])
+        .where('media.tmdbId IN (:...finalIds)', { finalIds })
+        .andWhere('rl.isEnabled = true')
+        .getMany();
+
+      for (const entry of remoteEntries) {
+        const mediaTbId = (entry.media as unknown as { tmdbId: number; mediaType: string }).tmdbId;
+        const matching = items.find(
+          (i) => i.tmdbId === mediaTbId
+        );
+
+        if (!matching) continue;
+
+        const availability: RemoteAvailability = {
+          remoteLibraryId: entry.remoteLibrary.id,
+          remoteLibraryName: entry.remoteLibrary.name,
+          remoteLibraryType: entry.remoteLibrary.type,
+          status: entry.status,
+          remoteId: entry.remoteId ?? undefined,
+        };
+
+        const existing = result.get(matching.tmdbId) ?? [];
+        existing.push(availability);
+        result.set(matching.tmdbId, existing);
+      }
+
+      return result;
+    } catch (e) {
+      logger.error(e.message);
+      return result;
     }
   }
 
@@ -126,6 +179,9 @@ class Media {
 
   @OneToOne(() => Blocklist, (blocklist) => blocklist.media)
   public blocklist: Promise<Blocklist>;
+
+  @OneToMany(() => RemoteMedia, (remoteMedia) => remoteMedia.media)
+  public remoteMedia: RemoteMedia[];
 
   @DbAwareColumn({ type: 'datetime', default: () => 'CURRENT_TIMESTAMP' })
   public createdAt: Date;

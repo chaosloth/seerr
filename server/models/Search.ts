@@ -9,6 +9,7 @@ import type {
 } from '@server/api/themoviedb/interfaces';
 import { MediaType as MainMediaType } from '@server/constants/media';
 import type Media from '@server/entity/Media';
+import type { RemoteAvailability } from '@server/interfaces/api/mediaInterfaces';
 
 export type MediaType = 'tv' | 'movie' | 'person' | 'collection';
 
@@ -34,6 +35,7 @@ export interface MovieResult extends SearchResult {
   adult: boolean;
   video: boolean;
   mediaInfo?: Media;
+  remoteAvailability?: RemoteAvailability[];
 }
 
 export interface TvResult extends SearchResult {
@@ -42,6 +44,7 @@ export interface TvResult extends SearchResult {
   originalName: string;
   originCountry: string[];
   firstAirDate: string;
+  remoteAvailability?: RemoteAvailability[];
 }
 
 export interface CollectionResult {
@@ -70,7 +73,8 @@ export type Results = MovieResult | TvResult | PersonResult | CollectionResult;
 
 export const mapMovieResult = (
   movieResult: TmdbMovieResult,
-  media?: Media
+  media?: Media,
+  remoteAvailability?: RemoteAvailability[]
 ): MovieResult => ({
   id: movieResult.id,
   mediaType: 'movie',
@@ -88,11 +92,13 @@ export const mapMovieResult = (
   backdropPath: movieResult.backdrop_path,
   posterPath: movieResult.poster_path,
   mediaInfo: media,
+  remoteAvailability: remoteAvailability ?? undefined,
 });
 
 export const mapTvResult = (
   tvResult: TmdbTvResult,
-  media?: Media
+  media?: Media,
+  remoteAvailability?: RemoteAvailability[]
 ): TvResult => ({
   id: tvResult.id,
   firstAirDate: tvResult.first_air_date,
@@ -110,6 +116,7 @@ export const mapTvResult = (
   backdropPath: tvResult.backdrop_path,
   posterPath: tvResult.poster_path,
   mediaInfo: media,
+  remoteAvailability: remoteAvailability ?? undefined,
 });
 
 export const mapCollectionResult = (
@@ -151,7 +158,8 @@ export const mapSearchResults = (
     | TmdbPersonResult
     | TmdbCollectionResult
   )[],
-  media?: Media[]
+  media?: Media[],
+  remoteAvailability?: Map<number, RemoteAvailability[]>
 ): Results[] =>
   results.map((result) => {
     switch (result.media_type) {
@@ -161,7 +169,8 @@ export const mapSearchResults = (
           media?.find(
             (req) =>
               req.tmdbId === result.id && req.mediaType === MainMediaType.MOVIE
-          )
+          ),
+          remoteAvailability?.get(result.id)
         );
       case 'tv':
         return mapTvResult(
@@ -169,7 +178,8 @@ export const mapSearchResults = (
           media?.find(
             (req) =>
               req.tmdbId === result.id && req.mediaType === MainMediaType.TV
-          )
+          ),
+          remoteAvailability?.get(result.id)
         );
       case 'collection':
         return mapCollectionResult(result);

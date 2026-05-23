@@ -2,6 +2,7 @@ import Spinner from '@app/assets/spinner.svg';
 import BlocklistModal from '@app/components/BlocklistModal';
 import Button from '@app/components/Common/Button';
 import CachedImage from '@app/components/Common/CachedImage';
+import FriendBadge from '@app/components/Common/FriendBadge';
 import StatusBadgeMini from '@app/components/Common/StatusBadgeMini';
 import Tooltip from '@app/components/Common/Tooltip';
 import RequestModal from '@app/components/RequestModal';
@@ -22,6 +23,7 @@ import {
   StarIcon,
 } from '@heroicons/react/24/outline';
 import { MediaStatus } from '@server/constants/media';
+import type { RemoteAvailability } from '@server/interfaces/api/mediaInterfaces';
 import type { Watchlist } from '@server/entity/Watchlist';
 import type { MediaType } from '@server/models/Search';
 import axios from 'axios';
@@ -43,6 +45,7 @@ interface TitleCardProps {
   inProgress?: boolean;
   isAddedToWatchlist?: number | boolean;
   mutateParent?: () => void;
+  remoteAvailability?: RemoteAvailability[];
 }
 
 const messages = defineMessages('components.TitleCard', {
@@ -67,6 +70,7 @@ const TitleCard = ({
   inProgress = false,
   canExpand = false,
   mutateParent,
+  remoteAvailability,
 }: TitleCardProps) => {
   const isTouch = useIsTouch();
   const intl = useIntl();
@@ -464,6 +468,13 @@ const TitleCard = ({
                     inProgress={inProgress}
                     shrink
                   />
+                </div>
+              </div>
+            )}
+            {remoteAvailability && remoteAvailability.length > 0 && (
+              <div className="flex flex-col items-center gap-1">
+                <div className="pointer-events-none z-40 flex">
+                  <FriendBadge remoteAvailability={remoteAvailability} />
                 </div>
               </div>
             )}

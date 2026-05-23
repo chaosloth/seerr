@@ -1,5 +1,5 @@
 import type Media from '@server/entity/Media';
-import type { User } from '@server/entity/User';
+import { User } from '@server/entity/User';
 import type { PaginatedResponse } from './common';
 
 export interface MediaResultsResponse extends PaginatedResponse {
@@ -19,4 +19,12 @@ export interface MediaWatchDataResponse {
     playCount7Days: number;
     playCount30Days: number;
   };
+}
+
+export interface RemoteAvailability {
+  remoteLibraryId: number;
+  remoteLibraryName: string;
+  remoteLibraryType: string;
+  status: number;
+  remoteId?: string;
 }

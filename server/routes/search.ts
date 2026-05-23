@@ -1,6 +1,7 @@
 import TheMovieDb from '@server/api/themoviedb';
 import type { TmdbSearchMultiResponse } from '@server/api/themoviedb/interfaces';
 import Media from '@server/entity/Media';
+import { enrichWithAvailability } from '@server/routes/discover';
 import { findSearchProvider } from '@server/lib/search';
 import logger from '@server/logger';
 import { mapSearchResults } from '@server/models/Search';
@@ -33,7 +34,7 @@ searchRoutes.get('/', async (req, res, next) => {
       });
     }
 
-    const media = await Media.getRelatedMedia(
+    const { media, remoteAvailability } = await enrichWithAvailability(
       req.user,
       results.results.map((result) => ({
         tmdbId: result.id,
@@ -45,7 +46,7 @@ searchRoutes.get('/', async (req, res, next) => {
       page: results.page,
       totalPages: results.total_pages,
       totalResults: results.total_results,
-      results: mapSearchResults(results.results, media),
+      results: mapSearchResults(results.results, media, remoteAvailability),
     });
   } catch (e) {
     logger.debug('Something went wrong retrieving search results', {
