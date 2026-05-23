@@ -6,17 +6,14 @@ import {
   EyeSlashIcon,
   MinusSmallIcon,
   TrashIcon,
-  UsersIcon,
 } from '@heroicons/react/24/solid';
 import { MediaStatus } from '@server/constants/media';
-import type { RemoteAvailability } from '@server/interfaces/api/mediaInterfaces';
 
 interface StatusBadgeMiniProps {
   status: MediaStatus;
   is4k?: boolean;
   inProgress?: boolean;
   shrink?: boolean;
-  remoteAvailability?: RemoteAvailability[];
 }
 
 const StatusBadgeMini = ({
@@ -24,23 +21,7 @@ const StatusBadgeMini = ({
   is4k = false,
   inProgress = false,
   shrink = false,
-  remoteAvailability,
 }: StatusBadgeMiniProps) => {
-  const isRemoteOnly =
-    (status === MediaStatus.UNKNOWN || !status) &&
-    remoteAvailability &&
-    remoteAvailability.length > 0;
-
-  if (isRemoteOnly) {
-    return (
-      <div className="seerr-remote-badge relative inline-flex whitespace-nowrap rounded-full border-gray-700 text-xs font-semibold leading-5">
-        <div className="seerr-remote-badge-inner flex h-5 w-5 items-center justify-center rounded-full border border-teal-400 bg-teal-500/80 shadow-md ring-1 ring-teal-400">
-          <UsersIcon className="seerr-remote-badge-icon h-3 w-3 text-teal-100" />
-        </div>
-      </div>
-    );
-  }
-
   const badgeStyle = [
     `rounded-full shadow-md ${
       shrink ? 'w-4 sm:w-5 border p-0' : 'w-5 ring-1 p-0.5'
@@ -58,11 +39,9 @@ const StatusBadgeMini = ({
       break;
     case MediaStatus.AVAILABLE:
       badgeStyle.push(
-        'bg-green-500/80 border-green-400 ring-green-400 text-green-100 seerr-available-badge'
+        'bg-green-500/80 border-green-400 ring-green-400 text-green-100'
       );
-      indicatorIcon = (
-        <CheckCircleIcon className="seerr-available-badge-icon" />
-      );
+      indicatorIcon = <CheckCircleIcon />;
       break;
     case MediaStatus.PENDING:
       badgeStyle.push(
