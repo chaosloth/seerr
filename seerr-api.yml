@@ -8208,6 +8208,21 @@ paths:
       responses:
         '204':
           description: Remote library deleted
+  /remoteLibrary/{id}/sync:
+    post:
+      summary: Sync remote library
+      description: Triggers a manual sync of the specified remote library.
+      tags:
+        - settings
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Sync started
 security:
   - cookieAuth: []
   - apiKey: []
