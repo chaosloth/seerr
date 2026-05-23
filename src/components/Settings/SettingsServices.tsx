@@ -524,13 +524,13 @@ const SettingsServices = () => {
       <div className="section">
         <ul className="grid max-w-6xl grid-cols-1 gap-6 lg:grid-cols-2 xl:grid-cols-3">
           {friendarrData && (
-            <li className="min-h-[8rem] rounded-lg border border-gray-700 bg-gray-800/50 shadow">
-              <div className="flex h-full flex-col justify-between p-4">
-                <div>
-                  <div className="flex items-center space-x-2">
-                    <span className="text-lg font-medium text-gray-200">
+            <li className="col-span-1 rounded-lg bg-gray-800 shadow ring-1 ring-gray-500">
+              <div className="flex w-full items-center justify-between space-x-6 p-6">
+                <div className="flex-1 truncate">
+                  <div className="mb-2 flex items-center space-x-2">
+                    <h3 className="truncate font-medium leading-5 text-white">
                       {intl.formatMessage(messages.friendarrsettings)}
-                    </span>
+                    </h3>
                     {friendarrData.enabled ? (
                       <Badge badgeType="success">
                         {intl.formatMessage(messages.enabled)}
@@ -540,27 +540,41 @@ const SettingsServices = () => {
                         {intl.formatMessage(messages.disabled)}
                       </Badge>
                     )}
+                    {friendarrData.useSsl && (
+                      <Badge badgeType="success">
+                        {intl.formatMessage(messages.ssl)}
+                      </Badge>
+                    )}
                   </div>
                   {friendarrData.enabled && (
-                    <div className="mt-1 text-sm text-gray-400">
-                      {friendarrData.useSsl ? 'https' : 'http'}://
-                      {friendarrData.hostname}:{friendarrData.port}
-                      {friendarrData.baseUrl
-                        ? `/${friendarrData.baseUrl.replace(/^\/|\/$/g, '')}`
-                        : ''}
-                    </div>
+                    <p className="mt-1 truncate text-sm leading-5 text-gray-300">
+                      <span className="mr-2 font-bold">
+                        {intl.formatMessage(messages.address)}
+                      </span>
+                      <span className="text-gray-400">
+                        {friendarrData.useSsl ? 'https' : 'http'}://
+                        {friendarrData.hostname}:{friendarrData.port}
+                        {friendarrData.baseUrl
+                          ? `/${friendarrData.baseUrl.replace(/^\/|\/$/g, '')}`
+                          : ''}
+                      </span>
+                    </p>
                   )}
                 </div>
-                <div className="mt-4 flex space-x-2">
-                  <Button
-                    buttonType="ghost"
-                    onClick={() => setFriendarrModal(true)}
-                  >
-                    <PencilIcon className="mr-2 h-4 w-4" />
-                    <span>
-                      {intl.formatMessage(messages.configurefriendarr)}
-                    </span>
-                  </Button>
+              </div>
+              <div className="border-t border-gray-500">
+                <div className="-mt-px flex">
+                  <div className="flex w-0 flex-1">
+                    <button
+                      onClick={() => setFriendarrModal(true)}
+                      className="focus:ring-blue relative -mr-px inline-flex w-0 flex-1 items-center justify-center rounded-bl-lg border border-transparent py-4 text-sm font-medium leading-5 text-gray-200 transition duration-150 ease-in-out hover:text-white focus:z-10 focus:border-gray-500 focus:outline-none"
+                    >
+                      <PencilIcon className="mr-2 h-5 w-5" />
+                      <span>
+                        {intl.formatMessage(messages.configurefriendarr)}
+                      </span>
+                    </button>
+                  </div>
                 </div>
               </div>
             </li>
