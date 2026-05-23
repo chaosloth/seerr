@@ -2,6 +2,8 @@ import { RemoteLibraryType } from '@server/constants/server';
 import { getRepository } from '@server/datasource';
 import { RemoteLibrary } from '@server/entity/RemoteLibrary';
 import { Permission } from '@server/lib/permissions';
+import { embyJellyfinScanner } from '@server/lib/scanners/emby-jellyfin';
+import { seerrScanner } from '@server/lib/scanners/seerr';
 import logger from '@server/logger';
 import { isAuthenticated } from '@server/middleware/auth';
 import axios from 'axios';
@@ -159,5 +161,45 @@ remoteLibraryRoutes.delete<{ id: string }>('/:id', async (req, res, next) => {
 
   return res.status(204).send();
 });
+
+remoteLibraryRoutes.post<{ id: string }>(
+  '/:id/sync',
+  async (req, res, next) => {
+    const repository = getRepository(RemoteLibrary);
+
+    const library = await repository.findOne({
+      where: { id: Number(req.params.id) },
+    });
+
+    if (!library) {
+      return next({
+        status: 404,
+        message: 'Remote library not found',
+      });
+    }
+
+    // Trigger full scanner run (scans all enabled libraries of matching type)
+    if (library.type === RemoteLibraryType.SEERR) {
+      seerrScanner.run().catch((err) => {
+        logger.error('Failed to sync Seerr remote library', {
+          label: 'Remote Library',
+          errorMessage: err.message,
+        });
+      });
+    } else if (
+      library.type === RemoteLibraryType.JELLYFIN ||
+      library.type === RemoteLibraryType.EMBY
+    ) {
+      embyJellyfinScanner.run().catch((err) => {
+        logger.error('Failed to sync Emby/Jellyfin remote library', {
+          label: 'Remote Library',
+          errorMessage: err.message,
+        });
+      });
+    }
+
+    return res.status(200).json({ message: 'Sync started' });
+  }
+);
 
 export default remoteLibraryRoutes;

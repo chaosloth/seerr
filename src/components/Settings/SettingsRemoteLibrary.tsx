@@ -8,7 +8,12 @@ import useToasts from '@app/hooks/useToasts';
 import globalMessages from '@app/i18n/globalMessages';
 import defineMessages from '@app/utils/defineMessages';
 import { Transition } from '@headlessui/react';
-import { PencilIcon, PlusIcon, TrashIcon } from '@heroicons/react/24/solid';
+import {
+  ArrowPathIcon,
+  PencilIcon,
+  PlusIcon,
+  TrashIcon,
+} from '@heroicons/react/24/solid';
 import { RemoteLibraryType } from '@server/constants/server';
 import type { RemoteLibrary } from '@server/entity/RemoteLibrary';
 import axios from 'axios';
@@ -59,6 +64,9 @@ const messages = defineMessages('components.Settings.RemoteLibrary', {
   plexLabel: 'Plex',
   noRemoteLibraries: 'No remote libraries configured.',
   syncing: 'Syncing',
+  syncnow: 'Sync Now',
+  lastsynced: 'Last synced: {time}',
+  never: 'Never',
 });
 
 type LibraryTypeOption = {
@@ -81,6 +89,7 @@ const SettingsRemoteLibrary = () => {
     null
   );
   const [testResult, setTestResult] = useState<boolean | null>(null);
+  const [syncingIds, setSyncingIds] = useState<Set<number>>(new Set());
 
   const { data, error } = useSWR<RemoteLibrary[]>('/api/v1/remoteLibrary');
 
@@ -114,6 +123,27 @@ const SettingsRemoteLibrary = () => {
     } catch {
       addToast(intl.formatMessage(messages.toastRemoteLibraryDeleteFailure), {
         appearance: 'error',
+      });
+    }
+  };
+
+  const handleSync = async (library: RemoteLibrary) => {
+    setSyncingIds((prev) => new Set(prev).add(library.id));
+    try {
+      await axios.post(`/api/v1/remoteLibrary/${library.id}/sync`);
+      addToast(`Sync started for ${library.name}`, {
+        appearance: 'success',
+      });
+      // Poll for completion by refreshing the list
+      setTimeout(() => mutate('/api/v1/remoteLibrary'), 3000);
+      setTimeout(() => mutate('/api/v1/remoteLibrary'), 10000);
+    } catch {
+      addToast(`Failed to sync ${library.name}`, { appearance: 'error' });
+    } finally {
+      setSyncingIds((prev) => {
+        const next = new Set(prev);
+        next.delete(library.id);
+        return next;
       });
     }
   };
@@ -239,8 +269,10 @@ const SettingsRemoteLibrary = () => {
                   library={library}
                   typeLabel={getTypeLabel(library.type)}
                   address={buildUrl(library)}
+                  isSyncing={syncingIds.has(library.id)}
                   onEdit={() => openEditModal(library)}
                   onDelete={() => handleDelete(library)}
+                  onSync={() => handleSync(library)}
                   intl={intl}
                 />
               ))}
@@ -277,8 +309,10 @@ interface ServerInstanceProps {
   typeLabel: string;
   address: string;
   intl: ReturnType<typeof useIntl>;
+  isSyncing: boolean;
   onEdit: () => void;
   onDelete: () => void;
+  onSync: () => void;
 }
 
 const ServerInstance = ({
@@ -286,9 +320,23 @@ const ServerInstance = ({
   typeLabel,
   address,
   intl,
+  isSyncing,
   onEdit,
   onDelete,
+  onSync,
 }: ServerInstanceProps) => {
+  const formatRelativeTime = (date: Date | undefined): string => {
+    if (!date) return intl.formatMessage(messages.never);
+    const diffMs = Date.now() - date.getTime();
+    const diffMin = Math.floor(diffMs / 60000);
+    if (diffMin < 1) return 'Just now';
+    if (diffMin < 60) return `${diffMin}m ago`;
+    const diffHr = Math.floor(diffMin / 60);
+    if (diffHr < 24) return `${diffHr}h ago`;
+    const diffDay = Math.floor(diffHr / 24);
+    return `${diffDay}d ago`;
+  };
+
   return (
     <li className="rounded-lg border border-gray-700 bg-gray-800/50 p-4">
       <div className="flex items-center justify-between">
@@ -306,8 +354,29 @@ const ServerInstance = ({
           </div>
           <div className="mt-1 text-sm text-gray-400">{address}</div>
           {library.syncEnabled && (
-            <div className="mt-1 text-xs text-gray-500">
-              {intl.formatMessage(messages.syncing)}
+            <div className="mt-2 flex items-center space-x-3 text-xs text-gray-500">
+              <span>
+                {intl.formatMessage(messages.lastsynced, {
+                  time: formatRelativeTime(
+                    library.lastSyncAt
+                      ? new Date(library.lastSyncAt)
+                      : undefined
+                  ),
+                })}
+              </span>
+              <button
+                onClick={(e) => {
+                  e.preventDefault();
+                  onSync();
+                }}
+                disabled={isSyncing}
+                className="inline-flex items-center text-indigo-400 hover:text-indigo-300 disabled:opacity-50"
+              >
+                <ArrowPathIcon
+                  className={`mr-1 h-3 w-3 ${isSyncing ? 'animate-spin' : ''}`}
+                />
+                {intl.formatMessage(messages.syncnow)}
+              </button>
             </div>
           )}
         </div>
@@ -363,7 +432,7 @@ const RemoteLibraryModal = React.forwardRef<
   RemoteLibraryModalProps
 >(({ library, onClose, onTest, onSubmit, testResult, intl }, ref) => {
   const [name, setName] = useState(library?.name ?? '');
-  const [type, setType] = useState<RemoteLibraryType>(
+  const [type, setTypeState] = useState<RemoteLibraryType>(
     library?.type ?? RemoteLibraryType.SEERR
   );
   const [hostname, setHostname] = useState(library?.hostname ?? '');
@@ -374,6 +443,25 @@ const RemoteLibraryModal = React.forwardRef<
   const [plexToken, setPlexToken] = useState(library?.plexToken ?? '');
   const [syncEnabled, setSyncEnabled] = useState(library?.syncEnabled ?? true);
   const [isSubmitting, setSubmitting] = useState(false);
+
+  const setType = (newType: RemoteLibraryType) => {
+    setTypeState(newType);
+    // Set default port for service if user hasn't manually entered one yet
+    if (!library) {
+      switch (newType) {
+        case RemoteLibraryType.SEERR:
+          setPort('5055');
+          break;
+        case RemoteLibraryType.JELLYFIN:
+        case RemoteLibraryType.EMBY:
+          setPort('8096');
+          break;
+        case RemoteLibraryType.PLEX:
+          setPort('32400');
+          break;
+      }
+    }
+  };
 
   const handleSubmit = async () => {
     setSubmitting(true);
@@ -424,133 +512,184 @@ const RemoteLibraryModal = React.forwardRef<
           : intl.formatMessage(messages.addlibrary)
       }
     >
-      <div className="space-y-4">
-        <div>
-          <label className="text-label" htmlFor="name">
+      <div>
+        <div className="form-row">
+          <label htmlFor="name" className="text-label">
             {intl.formatMessage(messages.name)}
           </label>
-          <input
-            id="name"
-            type="text"
-            className="input-text mt-1 block w-full rounded-md"
-            placeholder={intl.formatMessage(messages.namePlaceholder)}
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-          />
+          <div className="form-input-area">
+            <div className="form-input-field">
+              <input
+                id="name"
+                type="text"
+                className="input-text rounded-md"
+                placeholder={intl.formatMessage(messages.namePlaceholder)}
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+              />
+            </div>
+          </div>
         </div>
-        <div>
-          <label className="text-label" htmlFor="type">
+        <div className="form-row">
+          <label htmlFor="type" className="text-label">
             {intl.formatMessage(messages.type)}
           </label>
-          <select
-            id="type"
-            className="input-select mt-1 block w-full rounded-md"
-            value={type}
-            onChange={(e) => setType(e.target.value as RemoteLibraryType)}
-          >
-            {libraryTypeOptions.map((opt) => (
-              <option key={opt.value} value={opt.value}>
-                {opt.label}
-              </option>
-            ))}
-          </select>
+          <div className="form-input-area">
+            <div className="form-input-field">
+              <select
+                id="type"
+                className="input-select rounded-md"
+                value={type}
+                onChange={(e) => setType(e.target.value as RemoteLibraryType)}
+              >
+                {libraryTypeOptions.map((opt) => (
+                  <option key={opt.value} value={opt.value}>
+                    {opt.label}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
         </div>
-        <div>
-          <label className="text-label" htmlFor="hostname">
+        <div className="form-row">
+          <label htmlFor="hostname" className="text-label">
             {intl.formatMessage(messages.hostname)}
           </label>
-          <input
-            id="hostname"
-            type="text"
-            className="input-text mt-1 block w-full rounded-md"
-            placeholder={intl.formatMessage(messages.hostnamePlaceholder)}
-            value={hostname}
-            onChange={(e) => setHostname(e.target.value)}
-          />
+          <div className="form-input-area">
+            <div className="form-input-field">
+              <input
+                id="hostname"
+                type="text"
+                className="input-text rounded-md"
+                placeholder={intl.formatMessage(messages.hostnamePlaceholder)}
+                value={hostname}
+                onChange={(e) => setHostname(e.target.value)}
+              />
+            </div>
+          </div>
         </div>
-        <div>
-          <label className="text-label" htmlFor="port">
+        <div className="form-row">
+          <label htmlFor="port" className="text-label">
             {intl.formatMessage(messages.port)}
           </label>
-          <input
-            id="port"
-            type="number"
-            className="input-text mt-1 block w-full rounded-md"
-            value={port}
-            onChange={(e) => setPort(e.target.value)}
-          />
+          <div className="form-input-area">
+            <div className="form-input-field">
+              <input
+                id="port"
+                type="number"
+                className="input-text rounded-md"
+                value={port}
+                onChange={(e) => setPort(e.target.value)}
+              />
+            </div>
+          </div>
         </div>
-        <div className="flex items-center">
-          <input
-            id="useSsl"
-            type="checkbox"
-            className="checkbox mr-2"
-            checked={useSsl}
-            onChange={(e) => setUseSsl(e.target.checked)}
-          />
-          <label className="text-label" htmlFor="useSsl">
+        <div className="form-row">
+          <label htmlFor="useSsl" className="text-label">
             {intl.formatMessage(messages.ssl)}
           </label>
+          <div className="form-input-area">
+            <div className="form-input-field">
+              <input
+                id="useSsl"
+                type="checkbox"
+                className="checkbox"
+                checked={useSsl}
+                onChange={(e) => setUseSsl(e.target.checked)}
+              />
+            </div>
+          </div>
         </div>
-        <div>
-          <label className="text-label" htmlFor="baseUrl">
+        <div className="form-row">
+          <label htmlFor="baseUrl" className="text-label">
             {intl.formatMessage(messages.baseUrl)}
           </label>
-          <input
-            id="baseUrl"
-            type="text"
-            className="input-text mt-1 block w-full rounded-md"
-            value={baseUrl}
-            onChange={(e) => setBaseUrl(e.target.value)}
-          />
+          <div className="form-input-area">
+            <div className="form-input-field">
+              <input
+                id="baseUrl"
+                type="text"
+                className="input-text rounded-md"
+                value={baseUrl}
+                onChange={(e) => setBaseUrl(e.target.value)}
+              />
+            </div>
+          </div>
         </div>
-        <div>
-          <label className="text-label" htmlFor="apiKey">
+        <div className="form-row">
+          <label htmlFor="apiKey" className="text-label">
             {intl.formatMessage(messages.apiKey)}
           </label>
-          <SensitiveInput
-            id="apiKey"
-            className="input-text mt-1 block w-full rounded-md"
-            value={apiKey}
-            onChange={(e) => setApiKey(e.target.value)}
-          />
+          <div className="form-input-area">
+            <div className="form-input-field">
+              <SensitiveInput
+                as="input"
+                type="text"
+                id="apiKey"
+                value={apiKey}
+                onChange={(e) =>
+                  setApiKey((e.target as HTMLInputElement).value)
+                }
+              />
+            </div>
+          </div>
         </div>
         {type === RemoteLibraryType.PLEX && (
-          <div>
-            <label className="text-label" htmlFor="plexToken">
+          <div className="form-row">
+            <label htmlFor="plexToken" className="text-label">
               {intl.formatMessage(messages.plexToken)}
             </label>
-            <SensitiveInput
-              id="plexToken"
-              className="input-text mt-1 block w-full rounded-md"
-              value={plexToken}
-              onChange={(e) => setPlexToken(e.target.value)}
-            />
+            <div className="form-input-area">
+              <div className="form-input-field">
+                <SensitiveInput
+                  as="input"
+                  type="text"
+                  id="plexToken"
+                  value={plexToken}
+                  onChange={(e) =>
+                    setPlexToken((e.target as HTMLInputElement).value)
+                  }
+                />
+              </div>
+            </div>
           </div>
         )}
-        <div className="flex items-center">
-          <input
-            id="syncEnabled"
-            type="checkbox"
-            className="checkbox mr-2"
-            checked={syncEnabled}
-            onChange={(e) => setSyncEnabled(e.target.checked)}
-          />
-          <label className="text-label" htmlFor="syncEnabled">
+        <div className="form-row">
+          <label htmlFor="syncEnabled" className="text-label">
             {intl.formatMessage(messages.syncEnabled)}
           </label>
+          <div className="form-input-area">
+            <div className="form-input-field">
+              <input
+                id="syncEnabled"
+                type="checkbox"
+                className="checkbox"
+                checked={syncEnabled}
+                onChange={(e) => setSyncEnabled(e.target.checked)}
+              />
+            </div>
+          </div>
         </div>
-        <div className="flex items-center space-x-2">
-          <Button buttonType="ghost" onClick={handleTest}>
-            {intl.formatMessage(messages.test)}
-          </Button>
-          {testResult !== null && (
-            <Badge badgeType={testResult ? 'success' : 'danger'}>
-              {testResult
-                ? intl.formatMessage(messages.toastRemoteLibraryTestSuccess)
-                : intl.formatMessage(messages.toastRemoteLibraryTestFailure)}
-            </Badge>
-          )}
+        <div className="form-row">
+          <div className="form-input-area">
+            <div className="form-input-field">
+              <Button buttonType="ghost" onClick={handleTest}>
+                {intl.formatMessage(messages.test)}
+              </Button>
+              {testResult !== null && (
+                <Badge
+                  badgeType={testResult ? 'success' : 'danger'}
+                  className="ml-2"
+                >
+                  {testResult
+                    ? intl.formatMessage(messages.toastRemoteLibraryTestSuccess)
+                    : intl.formatMessage(
+                        messages.toastRemoteLibraryTestFailure
+                      )}
+                </Badge>
+              )}
+            </div>
+          </div>
         </div>
       </div>
     </Modal>
