@@ -4,9 +4,10 @@ import Modal from '@app/components/Common/Modal';
 import SensitiveInput from '@app/components/Common/SensitiveInput';
 import useToasts from '@app/hooks/useToasts';
 import defineMessages from '@app/utils/defineMessages';
+import { Transition } from '@headlessui/react';
 import type { FriendarrSettings } from '@server/lib/settings';
 import axios from 'axios';
-import { useState } from 'react';
+import { Fragment, useState } from 'react';
 import { useIntl } from 'react-intl';
 
 const messages = defineMessages('components.Settings.FriendarrModal', {
@@ -104,150 +105,162 @@ const FriendarrModal = ({ settings, onSave }: FriendarrModalProps) => {
     : true;
 
   return (
-    <Modal
-      title={intl.formatMessage(messages.title)}
-      subTitle={intl.formatMessage(messages.description)}
-      onOk={handleSave}
-      okDisabled={!isValid || isSaving}
-      okText={intl.formatMessage(messages.save)}
-      okButtonType="primary"
+    <Transition
+      as={Fragment}
+      appear
+      show
+      enter="transition-opacity ease-in-out duration-300"
+      enterFrom="opacity-0"
+      enterTo="opacity-100"
+      leave="transition-opacity ease-in-out duration-300"
+      leaveFrom="opacity-100"
+      leaveTo="opacity-0"
     >
-      <div>
-        <div className="form-row">
-          <label htmlFor="enabled" className="text-label">
-            {intl.formatMessage(messages.enabed)}
-          </label>
-          <div className="form-input-area">
-            <div className="form-input-field">
-              <input
-                id="enabled"
-                type="checkbox"
-                className="checkbox"
-                checked={enabled}
-                onChange={(e) => setEnabled(e.target.checked)}
-              />
-            </div>
-            <div className="mt-1 text-sm text-gray-400">
-              {intl.formatMessage(messages.enabledDescription)}
+      <Modal
+        title={intl.formatMessage(messages.title)}
+        subTitle={intl.formatMessage(messages.description)}
+        onOk={handleSave}
+        okDisabled={!isValid || isSaving}
+        okText={intl.formatMessage(messages.save)}
+        okButtonType="primary"
+      >
+        <div>
+          <div className="form-row">
+            <label htmlFor="enabled" className="text-label">
+              {intl.formatMessage(messages.enabed)}
+            </label>
+            <div className="form-input-area">
+              <div className="form-input-field">
+                <input
+                  id="enabled"
+                  type="checkbox"
+                  className="checkbox"
+                  checked={enabled}
+                  onChange={(e) => setEnabled(e.target.checked)}
+                />
+              </div>
+              <div className="mt-1 text-sm text-gray-400">
+                {intl.formatMessage(messages.enabledDescription)}
+              </div>
             </div>
           </div>
-        </div>
-        {enabled && (
-          <>
-            <div className="form-row">
-              <label htmlFor="hostname" className="text-label">
-                {intl.formatMessage(messages.hostname)}
-              </label>
-              <div className="form-input-area">
-                <div className="form-input-field">
-                  <input
-                    id="hostname"
-                    type="text"
-                    className="input-text rounded-md"
-                    placeholder={intl.formatMessage(
-                      messages.hostnamePlaceholder
-                    )}
-                    value={hostname}
-                    onChange={(e) => setHostname(e.target.value)}
-                  />
+          {enabled && (
+            <>
+              <div className="form-row">
+                <label htmlFor="hostname" className="text-label">
+                  {intl.formatMessage(messages.hostname)}
+                </label>
+                <div className="form-input-area">
+                  <div className="form-input-field">
+                    <input
+                      id="hostname"
+                      type="text"
+                      className="input-text rounded-md"
+                      placeholder={intl.formatMessage(
+                        messages.hostnamePlaceholder
+                      )}
+                      value={hostname}
+                      onChange={(e) => setHostname(e.target.value)}
+                    />
+                  </div>
                 </div>
               </div>
-            </div>
-            <div className="form-row">
-              <label htmlFor="port" className="text-label">
-                {intl.formatMessage(messages.port)}
-              </label>
-              <div className="form-input-area">
-                <div className="form-input-field">
-                  <input
-                    id="port"
-                    type="number"
-                    className="input-text rounded-md"
-                    value={port}
-                    onChange={(e) => setPort(e.target.value)}
-                  />
+              <div className="form-row">
+                <label htmlFor="port" className="text-label">
+                  {intl.formatMessage(messages.port)}
+                </label>
+                <div className="form-input-area">
+                  <div className="form-input-field">
+                    <input
+                      id="port"
+                      type="number"
+                      className="input-text rounded-md"
+                      value={port}
+                      onChange={(e) => setPort(e.target.value)}
+                    />
+                  </div>
                 </div>
               </div>
-            </div>
-            <div className="form-row">
-              <label htmlFor="useSsl" className="text-label">
-                {intl.formatMessage(messages.ssl)}
-              </label>
-              <div className="form-input-area">
-                <div className="form-input-field">
-                  <input
-                    id="useSsl"
-                    type="checkbox"
-                    className="checkbox"
-                    checked={useSsl}
-                    onChange={(e) => setUseSsl(e.target.checked)}
-                  />
+              <div className="form-row">
+                <label htmlFor="useSsl" className="text-label">
+                  {intl.formatMessage(messages.ssl)}
+                </label>
+                <div className="form-input-area">
+                  <div className="form-input-field">
+                    <input
+                      id="useSsl"
+                      type="checkbox"
+                      className="checkbox"
+                      checked={useSsl}
+                      onChange={(e) => setUseSsl(e.target.checked)}
+                    />
+                  </div>
                 </div>
               </div>
-            </div>
-            <div className="form-row">
-              <label htmlFor="apiKey" className="text-label">
-                {intl.formatMessage(messages.apiKey)}
-              </label>
-              <div className="form-input-area">
-                <div className="form-input-field">
-                  <SensitiveInput
-                    as="input"
-                    type="text"
-                    id="apiKey"
-                    value={apiKey}
-                    onChange={(e) =>
-                      setApiKey((e.target as HTMLInputElement).value)
-                    }
-                  />
+              <div className="form-row">
+                <label htmlFor="apiKey" className="text-label">
+                  {intl.formatMessage(messages.apiKey)}
+                </label>
+                <div className="form-input-area">
+                  <div className="form-input-field">
+                    <SensitiveInput
+                      as="input"
+                      type="text"
+                      id="apiKey"
+                      value={apiKey}
+                      onChange={(e) =>
+                        setApiKey((e.target as HTMLInputElement).value)
+                      }
+                    />
+                  </div>
                 </div>
               </div>
-            </div>
-            <div className="form-row">
-              <label htmlFor="baseUrl" className="text-label">
-                {intl.formatMessage(messages.baseUrl)}
-              </label>
-              <div className="form-input-area">
-                <div className="form-input-field">
-                  <input
-                    id="baseUrl"
-                    type="text"
-                    className="input-text rounded-md"
-                    value={baseUrl}
-                    onChange={(e) => setBaseUrl(e.target.value)}
-                  />
+              <div className="form-row">
+                <label htmlFor="baseUrl" className="text-label">
+                  {intl.formatMessage(messages.baseUrl)}
+                </label>
+                <div className="form-input-area">
+                  <div className="form-input-field">
+                    <input
+                      id="baseUrl"
+                      type="text"
+                      className="input-text rounded-md"
+                      value={baseUrl}
+                      onChange={(e) => setBaseUrl(e.target.value)}
+                    />
+                  </div>
                 </div>
               </div>
-            </div>
-            <div className="form-row">
-              <div className="form-input-area">
-                <div className="form-input-field">
-                  <Button
-                    buttonType="ghost"
-                    onClick={handleTest}
-                    disabled={isTesting}
-                  >
-                    {isTesting
-                      ? intl.formatMessage(messages.testing)
-                      : intl.formatMessage(messages.test)}
-                  </Button>
-                  {testResult !== null && (
-                    <Badge
-                      badgeType={testResult ? 'success' : 'danger'}
-                      className="ml-2"
+              <div className="form-row">
+                <div className="form-input-area">
+                  <div className="form-input-field">
+                    <Button
+                      buttonType="ghost"
+                      onClick={handleTest}
+                      disabled={isTesting}
                     >
-                      {testResult
-                        ? intl.formatMessage(messages.testSuccess)
-                        : intl.formatMessage(messages.testFailure)}
-                    </Badge>
-                  )}
+                      {isTesting
+                        ? intl.formatMessage(messages.testing)
+                        : intl.formatMessage(messages.test)}
+                    </Button>
+                    {testResult !== null && (
+                      <Badge
+                        badgeType={testResult ? 'success' : 'danger'}
+                        className="ml-2"
+                      >
+                        {testResult
+                          ? intl.formatMessage(messages.testSuccess)
+                          : intl.formatMessage(messages.testFailure)}
+                      </Badge>
+                    )}
+                  </div>
                 </div>
               </div>
-            </div>
-          </>
-        )}
-      </div>
-    </Modal>
+            </>
+          )}
+        </div>
+      </Modal>
+    </Transition>
   );
 };
 
