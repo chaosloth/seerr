@@ -592,6 +592,7 @@ const SettingsServices = () => {
             setFriendarrModal(false);
             revalidateFriendarr();
           }}
+          onClose={() => setFriendarrModal(false)}
         />
       )}
       <div className="mb-6 mt-10">

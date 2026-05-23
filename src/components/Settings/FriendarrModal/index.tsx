@@ -1,8 +1,7 @@
-import Badge from '@app/components/Common/Badge';
-import Button from '@app/components/Common/Button';
 import Modal from '@app/components/Common/Modal';
 import SensitiveInput from '@app/components/Common/SensitiveInput';
 import useToasts from '@app/hooks/useToasts';
+import globalMessages from '@app/i18n/globalMessages';
 import defineMessages from '@app/utils/defineMessages';
 import { Transition } from '@headlessui/react';
 import type { FriendarrSettings } from '@server/lib/settings';
@@ -36,9 +35,10 @@ const messages = defineMessages('components.Settings.FriendarrModal', {
 interface FriendarrModalProps {
   settings: FriendarrSettings;
   onSave: () => void;
+  onClose: () => void;
 }
 
-const FriendarrModal = ({ settings, onSave }: FriendarrModalProps) => {
+const FriendarrModal = ({ settings, onSave, onClose }: FriendarrModalProps) => {
   const intl = useIntl();
   const { addToast } = useToasts();
   const [enabled, setEnabled] = useState(settings.enabled);
@@ -49,11 +49,9 @@ const FriendarrModal = ({ settings, onSave }: FriendarrModalProps) => {
   const [baseUrl, setBaseUrl] = useState(settings.baseUrl ?? '');
   const [isTesting, setIsTesting] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
-  const [testResult, setTestResult] = useState<boolean | null>(null);
 
   const handleTest = async () => {
     setIsTesting(true);
-    setTestResult(null);
     try {
       await axios.post('/api/v1/settings/friendarr/test', {
         hostname,
@@ -62,12 +60,10 @@ const FriendarrModal = ({ settings, onSave }: FriendarrModalProps) => {
         baseUrl: baseUrl || undefined,
         apiKey,
       });
-      setTestResult(true);
       addToast(intl.formatMessage(messages.testSuccess), {
         appearance: 'success',
       });
     } catch {
-      setTestResult(false);
       addToast(intl.formatMessage(messages.testFailure), {
         appearance: 'error',
       });
@@ -122,7 +118,15 @@ const FriendarrModal = ({ settings, onSave }: FriendarrModalProps) => {
         onOk={handleSave}
         okDisabled={!isValid || isSaving}
         okText={intl.formatMessage(messages.save)}
-        okButtonType="primary"
+        onSecondary={enabled ? handleTest : undefined}
+        secondaryDisabled={isTesting}
+        secondaryText={
+          isTesting
+            ? intl.formatMessage(messages.testing)
+            : intl.formatMessage(messages.test)
+        }
+        cancelText={intl.formatMessage(globalMessages.close)}
+        onCancel={onClose}
       >
         <div>
           <div className="form-row">
@@ -173,8 +177,9 @@ const FriendarrModal = ({ settings, onSave }: FriendarrModalProps) => {
                   <div className="form-input-field">
                     <input
                       id="port"
-                      type="number"
-                      className="input-text rounded-md"
+                      type="text"
+                      inputMode="numeric"
+                      className="short"
                       value={port}
                       onChange={(e) => setPort(e.target.value)}
                     />
@@ -228,31 +233,6 @@ const FriendarrModal = ({ settings, onSave }: FriendarrModalProps) => {
                       value={baseUrl}
                       onChange={(e) => setBaseUrl(e.target.value)}
                     />
-                  </div>
-                </div>
-              </div>
-              <div className="form-row">
-                <div className="form-input-area">
-                  <div className="form-input-field">
-                    <Button
-                      buttonType="ghost"
-                      onClick={handleTest}
-                      disabled={isTesting}
-                    >
-                      {isTesting
-                        ? intl.formatMessage(messages.testing)
-                        : intl.formatMessage(messages.test)}
-                    </Button>
-                    {testResult !== null && (
-                      <Badge
-                        badgeType={testResult ? 'success' : 'danger'}
-                        className="ml-2"
-                      >
-                        {testResult
-                          ? intl.formatMessage(messages.testSuccess)
-                          : intl.formatMessage(messages.testFailure)}
-                      </Badge>
-                    )}
                   </div>
                 </div>
               </div>

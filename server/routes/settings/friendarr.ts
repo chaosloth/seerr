@@ -40,6 +40,18 @@ friendarrRoutes.post('/test', async (req, res, next) => {
       timeout: 10000,
     });
 
+    if (
+      !response.data ||
+      response.data.status !== 'ok' ||
+      typeof response.data.activeDownloads !== 'number'
+    ) {
+      return next({
+        status: 500,
+        message:
+          'Connected but the server does not appear to be a Friendarr instance.',
+      });
+    }
+
     return res.status(200).json({
       success: true,
       data: response.data,
