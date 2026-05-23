@@ -63,8 +63,12 @@ const FriendarrModal = ({ settings, onSave, onClose }: FriendarrModalProps) => {
       addToast(intl.formatMessage(messages.testSuccess), {
         appearance: 'success',
       });
-    } catch {
-      addToast(intl.formatMessage(messages.testFailure), {
+    } catch (e) {
+      const message =
+        axios.isAxiosError(e) && e.response?.data?.message
+          ? e.response.data.message
+          : intl.formatMessage(messages.testFailure);
+      addToast(message, {
         appearance: 'error',
       });
     } finally {

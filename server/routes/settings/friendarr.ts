@@ -53,6 +53,40 @@ friendarrRoutes.post('/test', async (req, res, next) => {
       data: response.data,
     });
   } catch (e) {
+    if (axios.isAxiosError(e)) {
+      if (e.response) {
+        const status = e.response.status;
+        if (status === 401) {
+          return next({
+            status: 401,
+            message: 'Authentication required. Please provide a valid API key.',
+          });
+        }
+        if (status === 403) {
+          return next({
+            status: 403,
+            message:
+              'Invalid API key. Check your Friendarr API key and try again.',
+          });
+        }
+      }
+      if (e.code === 'ECONNREFUSED' || e.code === 'ENOTFOUND') {
+        return next({
+          status: 502,
+          message: 'Could not reach Friendarr. Check the hostname and port.',
+        });
+      }
+      logger.debug('Failed to test Friendarr connection', {
+        label: 'Friendarr',
+        status: e.response?.status,
+        errorMessage: e.message,
+      });
+      return next({
+        status: 502,
+        message: `Friendarr error: ${e.message}`,
+      });
+    }
+
     logger.debug('Failed to test Friendarr connection', {
       label: 'Friendarr',
       errorMessage: (e as Error).message,
