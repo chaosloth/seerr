@@ -518,11 +518,24 @@ const RemoteLibraryModal = React.forwardRef<
   RemoteLibraryModalProps
 >(({ library, onClose, onTest, onSubmit, testResult, intl }, ref) => {
   const [name, setName] = useState(library?.name ?? '');
-  const [type, setTypeState] = useState<RemoteLibraryType>(
-    library?.type ?? RemoteLibraryType.SEERR
-  );
+  const getDefaultPort = (t: RemoteLibraryType) => {
+    switch (t) {
+      case RemoteLibraryType.SEERR:
+        return '5055';
+      case RemoteLibraryType.JELLYFIN:
+      case RemoteLibraryType.EMBY:
+        return '8096';
+      case RemoteLibraryType.PLEX:
+        return '32400';
+    }
+  };
+
+  const initialType = library?.type ?? RemoteLibraryType.SEERR;
+  const [type, setTypeState] = useState<RemoteLibraryType>(initialType);
   const [hostname, setHostname] = useState(library?.hostname ?? '');
-  const [port, setPort] = useState(library?.port?.toString() ?? '5055');
+  const [port, setPort] = useState(
+    library?.port?.toString() ?? getDefaultPort(initialType)
+  );
   const [useSsl, setUseSsl] = useState(library?.useSsl ?? false);
   const [baseUrl, setBaseUrl] = useState(library?.baseUrl ?? '');
   const [apiKey, setApiKey] = useState(library?.apiKey ?? '');
@@ -533,21 +546,7 @@ const RemoteLibraryModal = React.forwardRef<
 
   const setType = (newType: RemoteLibraryType) => {
     setTypeState(newType);
-    // Set default port for service if user hasn't manually entered one yet
-    if (!library) {
-      switch (newType) {
-        case RemoteLibraryType.SEERR:
-          setPort('5055');
-          break;
-        case RemoteLibraryType.JELLYFIN:
-        case RemoteLibraryType.EMBY:
-          setPort('8096');
-          break;
-        case RemoteLibraryType.PLEX:
-          setPort('32400');
-          break;
-      }
-    }
+    setPort(getDefaultPort(newType));
   };
 
   const handleSubmit = async () => {
