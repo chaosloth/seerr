@@ -109,6 +109,12 @@ const SettingsRemoteLibrary = () => {
       total: number;
       currentLibrary: RemoteLibrary | null;
     };
+    plex: {
+      running: boolean;
+      progress: number;
+      total: number;
+      currentLibrary: RemoteLibrary | null;
+    };
   }>('/api/v1/remoteLibrary/sync/status', {
     refreshInterval: 1000,
   });
@@ -118,7 +124,9 @@ const SettingsRemoteLibrary = () => {
   }
 
   const isSyncing =
-    syncStatus?.seerr?.running || syncStatus?.embyJellyfin?.running;
+    syncStatus?.seerr?.running ||
+    syncStatus?.embyJellyfin?.running ||
+    syncStatus?.plex?.running;
 
   const closeModal = () => {
     setModalOpen(false);
@@ -297,7 +305,9 @@ const SettingsRemoteLibrary = () => {
                     ? `${syncStatus.seerr.progress} of ${syncStatus.seerr.total}`
                     : syncStatus?.embyJellyfin?.running
                       ? `${syncStatus.embyJellyfin.progress} of ${syncStatus.embyJellyfin.total}`
-                      : ''}
+                      : syncStatus?.plex?.running
+                        ? `${syncStatus.plex.progress} of ${syncStatus.plex.total}`
+                        : ''}
                 </span>
               </div>
               <div className="h-1.5 w-full overflow-hidden rounded-full bg-gray-700">
@@ -309,7 +319,9 @@ const SettingsRemoteLibrary = () => {
                         ? syncStatus.seerr
                         : syncStatus?.embyJellyfin?.running
                           ? syncStatus.embyJellyfin
-                          : null;
+                          : syncStatus?.plex?.running
+                            ? syncStatus.plex
+                            : null;
                       if (!status || status.total === 0) return 0;
                       return Math.round((status.progress / status.total) * 100);
                     })()}%`,
@@ -322,7 +334,10 @@ const SettingsRemoteLibrary = () => {
                   : syncStatus?.embyJellyfin?.running &&
                       syncStatus.embyJellyfin.currentLibrary
                     ? syncStatus.embyJellyfin.currentLibrary.name
-                    : ''}
+                    : syncStatus?.plex?.running &&
+                        syncStatus.plex.currentLibrary
+                      ? syncStatus.plex.currentLibrary.name
+                      : ''}
               </p>
             </div>
           )}

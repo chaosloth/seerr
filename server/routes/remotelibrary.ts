@@ -3,6 +3,7 @@ import { getRepository } from '@server/datasource';
 import { RemoteLibrary } from '@server/entity/RemoteLibrary';
 import { Permission } from '@server/lib/permissions';
 import { embyJellyfinScanner } from '@server/lib/scanners/emby-jellyfin';
+import { remotePlexScanner } from '@server/lib/scanners/remote-plex';
 import { seerrScanner } from '@server/lib/scanners/seerr';
 import logger from '@server/logger';
 import { isAuthenticated } from '@server/middleware/auth';
@@ -69,8 +70,16 @@ remoteLibraryRoutes.post<
 
 remoteLibraryRoutes.post('/test', async (req, res, next) => {
   try {
-    const { type, hostname, port, useSsl, baseUrl, apiKey, deviceId } =
-      req.body;
+    const {
+      type,
+      hostname,
+      port,
+      useSsl,
+      baseUrl,
+      apiKey,
+      deviceId,
+      plexToken,
+    } = req.body;
 
     const protocol = useSsl ? 'https' : 'http';
     const base = baseUrl ? `/${baseUrl.replace(/^\/|\/$/g, '')}` : '';
@@ -95,6 +104,14 @@ remoteLibraryRoutes.post('/test', async (req, res, next) => {
 
       await axios.get(`${url}/System/Info`, {
         headers,
+        timeout: 10000,
+      });
+    } else if (type === RemoteLibraryType.PLEX) {
+      await axios.get(`${url}/`, {
+        headers: {
+          'X-Plex-Token': plexToken ?? apiKey ?? '',
+          Accept: 'application/json',
+        },
         timeout: 10000,
       });
     } else {
@@ -169,16 +186,6 @@ remoteLibraryRoutes.delete<{ id: string }>('/:id', async (req, res, next) => {
   return res.status(204).send();
 });
 
-remoteLibraryRoutes.get('/sync/status', (_req, res) => {
-  const seerrStatus = seerrScanner.status();
-  const embyJellyfinStatus = embyJellyfinScanner.status();
-
-  return res.status(200).json({
-    seerr: seerrStatus,
-    embyJellyfin: embyJellyfinStatus,
-  });
-});
-
 remoteLibraryRoutes.post<{ id: string }>(
   '/:id/sync',
   async (req, res, next) => {
@@ -212,6 +219,13 @@ remoteLibraryRoutes.post<{ id: string }>(
           errorMessage: err.message,
         });
       });
+    } else if (library.type === RemoteLibraryType.PLEX) {
+      remotePlexScanner.run().catch((err) => {
+        logger.error('Failed to sync Plex remote library', {
+          label: 'Remote Library',
+          errorMessage: err.message,
+        });
+      });
     }
 
     return res.status(200).json({ message: 'Sync started' });
@@ -221,10 +235,12 @@ remoteLibraryRoutes.post<{ id: string }>(
 remoteLibraryRoutes.get('/sync/status', (_req, res) => {
   const seerrStatus = seerrScanner.status();
   const embyJellyfinStatus = embyJellyfinScanner.status();
+  const plexStatus = remotePlexScanner.status();
 
   return res.status(200).json({
     seerr: seerrStatus,
     embyJellyfin: embyJellyfinStatus,
+    plex: plexStatus,
   });
 });
 

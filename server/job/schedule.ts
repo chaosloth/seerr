@@ -11,6 +11,7 @@ import {
 } from '@server/lib/scanners/jellyfin';
 import { plexFullScanner, plexRecentScanner } from '@server/lib/scanners/plex';
 import { radarrScanner } from '@server/lib/scanners/radarr';
+import { remotePlexScanner } from '@server/lib/scanners/remote-plex';
 import { seerrScanner } from '@server/lib/scanners/seerr';
 import { sonarrScanner } from '@server/lib/scanners/sonarr';
 import type { JobId } from '@server/lib/settings';
@@ -274,9 +275,12 @@ export const startJobs = (): void => {
       });
       seerrScanner.run();
       embyJellyfinScanner.run();
+      remotePlexScanner.run();
     }),
     running: () =>
-      seerrScanner.status().running || embyJellyfinScanner.status().running,
+      seerrScanner.status().running ||
+      embyJellyfinScanner.status().running ||
+      remotePlexScanner.status().running,
   });
 
   logger.info('Scheduled jobs loaded', { label: 'Jobs' });
