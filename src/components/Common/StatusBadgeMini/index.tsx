@@ -43,42 +43,42 @@ const StatusBadgeMini = ({
     badgeStyle.push(
       'bg-teal-500/80 border-teal-400 ring-teal-400 text-teal-100'
     );
-    indicatorIcon = <UsersIcon />;
+    indicatorIcon = <UsersIcon className="h-3 w-3" />;
   } else {
     switch (status) {
       case MediaStatus.PROCESSING:
         badgeStyle.push(
           'bg-indigo-500/80 border-indigo-400 ring-indigo-400 text-indigo-100'
         );
-        indicatorIcon = <ClockIcon />;
+        indicatorIcon = <ClockIcon className="h-3 w-3" />;
         break;
       case MediaStatus.AVAILABLE:
         badgeStyle.push(
           'bg-green-500/80 border-green-400 ring-green-400 text-green-100'
         );
-        indicatorIcon = <CheckCircleIcon />;
+        indicatorIcon = <CheckCircleIcon className="h-3 w-3" />;
         break;
       case MediaStatus.PENDING:
         badgeStyle.push(
           'bg-yellow-500/80 border-yellow-400 ring-yellow-400 text-yellow-100'
         );
-        indicatorIcon = <BellIcon />;
+        indicatorIcon = <BellIcon className="h-3 w-3" />;
         break;
       case MediaStatus.BLOCKLISTED:
         badgeStyle.push('bg-red-500/80 border-white ring-white text-white');
-        indicatorIcon = <EyeSlashIcon />;
+        indicatorIcon = <EyeSlashIcon className="h-3 w-3" />;
         break;
       case MediaStatus.PARTIALLY_AVAILABLE:
         badgeStyle.push(
           'bg-green-500/80 border-green-400 ring-green-400 text-green-100'
         );
-        indicatorIcon = <MinusSmallIcon />;
+        indicatorIcon = <MinusSmallIcon className="h-3 w-3" />;
         break;
       case MediaStatus.DELETED:
         badgeStyle.push(
           'bg-red-500/80 border-red-400 ring-red-400 text-red-100'
         );
-        indicatorIcon = <TrashIcon />;
+        indicatorIcon = <TrashIcon className="h-3 w-3" />;
         break;
     }
   }
