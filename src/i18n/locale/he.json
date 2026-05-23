@@ -784,5 +784,8 @@
   "pages.serviceunavailable": "שירות לא זמין",
   "pages.somethingwentwrong": "משהו השתבש",
   "components.Settings.menuRemoteLibraries": "ספריות מרוחקות",
-  "components.Settings.RemoteLibrary.deviceId": "מזהה מכשיר"
+  "components.Settings.RemoteLibrary.deviceId": "מזהה מכשיר",
+  "components.RequestModal.friendlibrary": "הספרייה של {name}",
+  "components.RequestModal.nofriendsavailable": "לאף חבר אין את הכותר הזה",
+  "components.RequestModal.requestfromfriend": "בקש מחבר"
 }

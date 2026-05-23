@@ -1287,5 +1287,8 @@
   "pages.serviceunavailable": "伺服器無法使用",
   "pages.somethingwentwrong": "出了點問題",
   "components.Settings.menuRemoteLibraries": "遠端庫",
-  "components.Settings.RemoteLibrary.deviceId": "裝置ID"
+  "components.Settings.RemoteLibrary.deviceId": "裝置ID",
+  "components.RequestModal.friendlibrary": "{name}的庫",
+  "components.RequestModal.nofriendsavailable": "沒有朋友有此標題",
+  "components.RequestModal.requestfromfriend": "向朋友請求"
 }

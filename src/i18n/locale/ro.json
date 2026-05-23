@@ -1018,5 +1018,8 @@
   "pages.pagenotfound": "Pagina nu a fost găsită",
   "pages.returnHome": "Întoarce-te acasă",
   "components.Settings.menuRemoteLibraries": "Biblioteci la Distanță",
-  "components.Settings.RemoteLibrary.deviceId": "ID Dispozitiv"
+  "components.Settings.RemoteLibrary.deviceId": "ID Dispozitiv",
+  "components.RequestModal.friendlibrary": "Biblioteca lui {name}",
+  "components.RequestModal.nofriendsavailable": "Niciun prieten nu are acest titlu",
+  "components.RequestModal.requestfromfriend": "Cere de la un prieten"
 }

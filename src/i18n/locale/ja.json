@@ -1718,5 +1718,8 @@
   "pages.serviceunavailable": "サービスが利用できません",
   "pages.somethingwentwrong": "チケットが発生しました",
   "components.Settings.menuRemoteLibraries": "リモートライブラリ",
-  "components.Settings.RemoteLibrary.deviceId": "デバイスID"
+  "components.Settings.RemoteLibrary.deviceId": "デバイスID",
+  "components.RequestModal.friendlibrary": "{name}のライブラリ",
+  "components.RequestModal.nofriendsavailable": "このタイトルを持っている友達はいません",
+  "components.RequestModal.requestfromfriend": "友達にリクエスト"
 }

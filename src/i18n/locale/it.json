@@ -1688,5 +1688,8 @@
   "pages.serviceunavailable": "Servizio non disponibile",
   "pages.somethingwentwrong": "Qualcosa è andato storto",
   "components.Settings.menuRemoteLibraries": "Librerie Remote",
-  "components.Settings.RemoteLibrary.deviceId": "ID Dispositivo"
+  "components.Settings.RemoteLibrary.deviceId": "ID Dispositivo",
+  "components.RequestModal.friendlibrary": "Libreria di {name}",
+  "components.RequestModal.nofriendsavailable": "Nessun amico ha questo titolo",
+  "components.RequestModal.requestfromfriend": "Richiedi a un amico"
 }

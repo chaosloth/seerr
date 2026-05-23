@@ -1718,5 +1718,8 @@
   "pages.serviceunavailable": "Dienst nicht verfügbar",
   "pages.somethingwentwrong": "Etwas ist schief gelaufen",
   "components.Settings.menuRemoteLibraries": "Entfernte Bibliotheken",
-  "components.Settings.RemoteLibrary.deviceId": "Geräte-ID"
+  "components.Settings.RemoteLibrary.deviceId": "Geräte-ID",
+  "components.RequestModal.friendlibrary": "Bibliothek von {name}",
+  "components.RequestModal.nofriendsavailable": "Kein Freund hat diesen Titel",
+  "components.RequestModal.requestfromfriend": "Von Freund anfordern"
 }

@@ -1380,5 +1380,8 @@
   "pages.serviceunavailable": "Servei no disponible",
   "pages.somethingwentwrong": "Alguna cosa ha anat malament",
   "components.Settings.menuRemoteLibraries": "Biblioteques Remotes",
-  "components.Settings.RemoteLibrary.deviceId": "ID del Dispositiu"
+  "components.Settings.RemoteLibrary.deviceId": "ID del Dispositiu",
+  "components.RequestModal.friendlibrary": "Biblioteca de {name}",
+  "components.RequestModal.nofriendsavailable": "Cap amic te aquest títol",
+  "components.RequestModal.requestfromfriend": "Sol·licitar a un amic"
 }

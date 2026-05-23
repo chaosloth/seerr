@@ -1718,5 +1718,8 @@
   "pages.serviceunavailable": "Teenus pole saadaval",
   "pages.somethingwentwrong": "Midagi läks valesti",
   "components.Settings.menuRemoteLibraries": "Kaug-raamatukogud",
-  "components.Settings.RemoteLibrary.deviceId": "Seadme ID"
+  "components.Settings.RemoteLibrary.deviceId": "Seadme ID",
+  "components.RequestModal.friendlibrary": "{name} raamatukogu",
+  "components.RequestModal.nofriendsavailable": "Ühelgi sõbral pole seda pealkirja",
+  "components.RequestModal.requestfromfriend": "Küsi sõbralt"
 }

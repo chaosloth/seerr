@@ -1242,5 +1242,8 @@
   "pages.serviceunavailable": "서비스를 사용할 수 없음",
   "pages.somethingwentwrong": "문제가 발생했습니다",
   "components.Settings.menuRemoteLibraries": "원격 라이브러리",
-  "components.Settings.RemoteLibrary.deviceId": "장치 ID"
+  "components.Settings.RemoteLibrary.deviceId": "장치 ID",
+  "components.RequestModal.friendlibrary": "{name}의 라이브러리",
+  "components.RequestModal.nofriendsavailable": "이 제목을 가진 친구가 없습니다",
+  "components.RequestModal.requestfromfriend": "친구에게 요청"
 }

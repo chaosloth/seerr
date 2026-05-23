@@ -1718,5 +1718,8 @@
   "pages.serviceunavailable": "Služba není dostupná",
   "pages.somethingwentwrong": "Něco se pokazilo",
   "components.Settings.menuRemoteLibraries": "Vzdálené Knihovny",
-  "components.Settings.RemoteLibrary.deviceId": "ID Zařízení"
+  "components.Settings.RemoteLibrary.deviceId": "ID Zařízení",
+  "components.RequestModal.friendlibrary": "Knihovna {name}",
+  "components.RequestModal.nofriendsavailable": "Žadný přítel nemá tento titul",
+  "components.RequestModal.requestfromfriend": "Požádat přítele"
 }

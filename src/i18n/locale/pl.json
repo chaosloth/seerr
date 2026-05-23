@@ -1718,5 +1718,8 @@
   "pages.serviceunavailable": "Usługa niedostępna",
   "pages.somethingwentwrong": "Coś poszło nie tak",
   "components.Settings.menuRemoteLibraries": "Zdalne Biblioteki",
-  "components.Settings.RemoteLibrary.deviceId": "ID Urządzenia"
+  "components.Settings.RemoteLibrary.deviceId": "ID Urządzenia",
+  "components.RequestModal.friendlibrary": "Biblioteka {name}",
+  "components.RequestModal.nofriendsavailable": "Żaden znajomy nie ma tego tytułu",
+  "components.RequestModal.requestfromfriend": "Poproś znajomego"
 }

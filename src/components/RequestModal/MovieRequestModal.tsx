@@ -10,6 +10,7 @@ import defineMessages from '@app/utils/defineMessages';
 import { MediaStatus } from '@server/constants/media';
 import type { MediaRequest } from '@server/entity/MediaRequest';
 import type { NonFunctionProperties } from '@server/interfaces/api/common';
+import type { RemoteAvailability } from '@server/interfaces/api/mediaInterfaces';
 import type { QuotaResponse } from '@server/interfaces/api/userInterfaces';
 import { Permission } from '@server/lib/permissions';
 import type { MovieDetails } from '@server/models/Movie';
@@ -35,6 +36,9 @@ const messages = defineMessages('components.RequestModal', {
   requestApproved: 'Request for <strong>{title}</strong> approved!',
   requesterror: 'Something went wrong while submitting the request.',
   pendingapproval: 'Your request is pending approval.',
+  requestfromfriend: 'Request from Friend',
+  friendlibrary: "{name}'s Library",
+  nofriendsavailable: 'No friends have this title',
 });
 
 interface RequestModalProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -57,6 +61,9 @@ const MovieRequestModal = ({
   const [isUpdating, setIsUpdating] = useState(false);
   const [requestOverrides, setRequestOverrides] =
     useState<RequestOverrides | null>(null);
+  const [remoteLibraryId, setRemoteLibraryId] = useState<number | undefined>(
+    undefined
+  );
   const { addToast } = useToasts();
   const { data, error } = useSWR<MovieDetails>(`/api/v1/movie/${tmdbId}`, {
     revalidateOnMount: true,
@@ -88,6 +95,7 @@ const MovieRequestModal = ({
           rootFolder: requestOverrides.folder,
           userId: requestOverrides.user?.id,
           tags: requestOverrides.tags,
+          remoteLibraryId,
         };
       }
       const response = await axios.post<MediaRequest>('/api/v1/request', {
@@ -354,6 +362,55 @@ const MovieRequestModal = ({
           }
         />
       )}
+      {data &&
+        (
+          data as MovieDetails & {
+            remoteAvailability?: RemoteAvailability[];
+          }
+        ).remoteAvailability &&
+        (
+          data as MovieDetails & {
+            remoteAvailability: RemoteAvailability[];
+          }
+        ).remoteAvailability.length > 0 && (
+          <div className="form-row">
+            <label htmlFor="remoteLibrary" className="text-label">
+              {intl.formatMessage(messages.requestfromfriend)}
+            </label>
+            <div className="form-input-area">
+              <div className="form-input-field">
+                <select
+                  id="remoteLibrary"
+                  className="input-select rounded-md"
+                  value={remoteLibraryId ?? ''}
+                  onChange={(e) =>
+                    setRemoteLibraryId(
+                      e.target.value ? Number(e.target.value) : undefined
+                    )
+                  }
+                >
+                  <option value="">
+                    {intl.formatMessage(messages.nofriendsavailable)}
+                  </option>
+                  {(
+                    data as MovieDetails & {
+                      remoteAvailability: RemoteAvailability[];
+                    }
+                  ).remoteAvailability.map((lib) => (
+                    <option
+                      key={lib.remoteLibraryId}
+                      value={lib.remoteLibraryId}
+                    >
+                      {intl.formatMessage(messages.friendlibrary, {
+                        name: lib.remoteLibraryName,
+                      })}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+          </div>
+        )}
       {(hasPermission(Permission.REQUEST_ADVANCED) ||
         hasPermission(Permission.MANAGE_REQUESTS)) && (
         <AdvancedRequester

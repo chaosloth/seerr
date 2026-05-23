@@ -15,6 +15,7 @@ import { MediaRequestStatus, MediaStatus } from '@server/constants/media';
 import type { MediaRequest } from '@server/entity/MediaRequest';
 import type SeasonRequest from '@server/entity/SeasonRequest';
 import type { NonFunctionProperties } from '@server/interfaces/api/common';
+import type { RemoteAvailability } from '@server/interfaces/api/mediaInterfaces';
 import type { QuotaResponse } from '@server/interfaces/api/userInterfaces';
 import { Permission } from '@server/lib/permissions';
 import type { TvDetails } from '@server/models/Tv';
@@ -50,6 +51,9 @@ const messages = defineMessages('components.RequestModal', {
   autoapproval: 'Automatic Approval',
   requesterror: 'Something went wrong while submitting the request.',
   pendingapproval: 'Your request is pending approval.',
+  requestfromfriend: 'Request from Friend',
+  friendlibrary: "{name}'s Library",
+  nofriendsavailable: 'No friends have this title',
 });
 
 interface RequestModalProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -77,6 +81,9 @@ const TvRequestModal = ({
   const { data, error } = useSWR<TvDetails>(`/api/v1/tv/${tmdbId}`);
   const [requestOverrides, setRequestOverrides] =
     useState<RequestOverrides | null>(null);
+  const [remoteLibraryId, setRemoteLibraryId] = useState<number | undefined>(
+    undefined
+  );
   const [selectedSeasons, setSelectedSeasons] = useState<number[]>(
     editRequest ? editingSeasons : []
   );
@@ -192,6 +199,7 @@ const TvRequestModal = ({
           languageProfileId: requestOverrides.language,
           userId: requestOverrides?.user?.id,
           tags: requestOverrides.tags,
+          remoteLibraryId,
         };
       }
       const response = await axios.post<MediaRequest>('/api/v1/request', {
@@ -514,6 +522,55 @@ const TvRequestModal = ({
           }
         />
       )}
+      {data &&
+        (
+          data as TvDetails & {
+            remoteAvailability?: RemoteAvailability[];
+          }
+        ).remoteAvailability &&
+        (
+          data as TvDetails & {
+            remoteAvailability: RemoteAvailability[];
+          }
+        ).remoteAvailability.length > 0 && (
+          <div className="form-row">
+            <label htmlFor="remoteLibrary" className="text-label">
+              {intl.formatMessage(messages.requestfromfriend)}
+            </label>
+            <div className="form-input-area">
+              <div className="form-input-field">
+                <select
+                  id="remoteLibrary"
+                  className="input-select rounded-md"
+                  value={remoteLibraryId ?? ''}
+                  onChange={(e) =>
+                    setRemoteLibraryId(
+                      e.target.value ? Number(e.target.value) : undefined
+                    )
+                  }
+                >
+                  <option value="">
+                    {intl.formatMessage(messages.nofriendsavailable)}
+                  </option>
+                  {(
+                    data as TvDetails & {
+                      remoteAvailability: RemoteAvailability[];
+                    }
+                  ).remoteAvailability.map((lib) => (
+                    <option
+                      key={lib.remoteLibraryId}
+                      value={lib.remoteLibraryId}
+                    >
+                      {intl.formatMessage(messages.friendlibrary, {
+                        name: lib.remoteLibraryName,
+                      })}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+          </div>
+        )}
       <div className="flex flex-col">
         <div className="-mx-4 sm:mx-0">
           <div className="inline-block min-w-full py-2 align-middle">

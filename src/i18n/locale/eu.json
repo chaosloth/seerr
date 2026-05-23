@@ -1680,5 +1680,8 @@
   "pages.serviceunavailable": "Zerbitzua ez dago eskuragarri",
   "pages.somethingwentwrong": "Zerbait gaizki joan da",
   "components.Settings.menuRemoteLibraries": "Urruneko Liburutegiak",
-  "components.Settings.RemoteLibrary.deviceId": "Gailuaren IDa"
+  "components.Settings.RemoteLibrary.deviceId": "Gailuaren IDa",
+  "components.RequestModal.friendlibrary": "{name}-ren liburutegia",
+  "components.RequestModal.nofriendsavailable": "Lagunek ez dute titulu hau",
+  "components.RequestModal.requestfromfriend": "Lagun bati eskatu"
 }

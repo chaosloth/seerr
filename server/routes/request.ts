@@ -15,6 +15,7 @@ import {
   QuotaRestrictedError,
   RequestPermissionError,
 } from '@server/entity/MediaRequest';
+import { RemoteLibrary } from '@server/entity/RemoteLibrary';
 import SeasonRequest from '@server/entity/SeasonRequest';
 import { User } from '@server/entity/User';
 import type {
@@ -512,6 +513,15 @@ requestRoutes.put<{ requestId: string }>(
         request.tags = req.body.tags;
         request.requestedBy = requestUser as User;
 
+        if (req.body.remoteLibraryId) {
+          const remoteLibrary = await getRepository(RemoteLibrary).findOne({
+            where: { id: req.body.remoteLibraryId },
+          });
+          request.remoteLibrary = remoteLibrary ?? undefined;
+        } else if (req.body.remoteLibraryId === null) {
+          request.remoteLibrary = null;
+        }
+
         await requestRepository.save(request);
       } else if (req.body.mediaType === MediaType.TV) {
         const mediaRepository = getRepository(Media);
@@ -521,6 +531,15 @@ requestRoutes.put<{ requestId: string }>(
         request.languageProfileId = req.body.languageProfileId;
         request.tags = req.body.tags;
         request.requestedBy = requestUser as User;
+
+        if (req.body.remoteLibraryId) {
+          const remoteLibrary = await getRepository(RemoteLibrary).findOne({
+            where: { id: req.body.remoteLibraryId },
+          });
+          request.remoteLibrary = remoteLibrary ?? undefined;
+        } else if (req.body.remoteLibraryId === null) {
+          request.remoteLibrary = null;
+        }
 
         const requestedSeasons = req.body.seasons as number[] | undefined;
 
@@ -652,6 +671,61 @@ requestRoutes.post<{
       return res.status(200).json(request);
     } catch (e) {
       logger.error('Error processing request retry', {
+        label: 'Media Request',
+        message: e.message,
+      });
+      next({ status: 404, message: 'Request not found.' });
+    }
+  }
+);
+
+requestRoutes.post<{
+  requestId: string;
+}>(
+  '/:requestId/send-to-remote',
+  isAuthenticated(Permission.MANAGE_REQUESTS),
+  async (req, res, next) => {
+    const requestRepository = getRepository(MediaRequest);
+
+    try {
+      const request = await requestRepository.findOneOrFail({
+        where: { id: Number(req.params.requestId) },
+        relations: {
+          requestedBy: true,
+          modifiedBy: true,
+          remoteLibrary: true,
+          media: true,
+        },
+      });
+
+      if (!request.remoteLibrary) {
+        return next({
+          status: 400,
+          message: 'This request is not associated with a remote library.',
+        });
+      }
+
+      logger.info(
+        `Sending request ${request.id} to remote library: ${request.remoteLibrary.name}`,
+        {
+          label: 'Media Request',
+          type: request.type,
+          tmdbId: request.media.tmdbId,
+          remoteLibraryId: request.remoteLibrary.id,
+        }
+      );
+
+      return res.status(200).json({
+        message: `Request queued for download from ${request.remoteLibrary.name}`,
+        requestId: request.id,
+        remoteLibrary: {
+          id: request.remoteLibrary.id,
+          name: request.remoteLibrary.name,
+          type: request.remoteLibrary.type,
+        },
+      });
+    } catch (e) {
+      logger.error('Error processing remote request', {
         label: 'Media Request',
         message: e.message,
       });

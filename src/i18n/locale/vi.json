@@ -85,5 +85,8 @@
   "components.StatusBadge.alsoonfriendsserver": "Cũng có sẵn trên {names}",
   "components.StatusBadge.onfriendsserver": "Có sẵn trên {names}",
   "components.Settings.menuRemoteLibraries": "Thư Viện Từ Xa",
-  "components.Settings.RemoteLibrary.deviceId": "ID Thiết Bị"
+  "components.Settings.RemoteLibrary.deviceId": "ID Thiết Bị",
+  "components.RequestModal.friendlibrary": "Thư viện của {name}",
+  "components.RequestModal.nofriendsavailable": "Không bạn bè nào có tiêu đề này",
+  "components.RequestModal.requestfromfriend": "Yêu cầu từ bạn bè"
 }

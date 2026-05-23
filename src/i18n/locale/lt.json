@@ -770,5 +770,8 @@
   "pages.serviceunavailable": "Paslauga nepasiekiama",
   "pages.somethingwentwrong": "Kažkas nepavyko",
   "components.Settings.menuRemoteLibraries": "Nuotolinės Bibliotekos",
-  "components.Settings.RemoteLibrary.deviceId": "Įrenginio ID"
+  "components.Settings.RemoteLibrary.deviceId": "Įrenginio ID",
+  "components.RequestModal.friendlibrary": "{name} biblioteka",
+  "components.RequestModal.nofriendsavailable": "Joks draugas neturi šio pavadinimo",
+  "components.RequestModal.requestfromfriend": "Prašyti iš draugo"
 }

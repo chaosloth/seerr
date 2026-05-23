@@ -1055,5 +1055,8 @@
   "pages.serviceunavailable": "Shërbimi i paarritshëm",
   "pages.somethingwentwrong": "Diçka shkoi keq",
   "components.Settings.menuRemoteLibraries": "Biblioteka të Largëta",
-  "components.Settings.RemoteLibrary.deviceId": "ID e Pajisjes"
+  "components.Settings.RemoteLibrary.deviceId": "ID e Pajisjes",
+  "components.RequestModal.friendlibrary": "Biblioteka e {name}",
+  "components.RequestModal.nofriendsavailable": "Asnjë mik nuk e ka këtë titull",
+  "components.RequestModal.requestfromfriend": "Kërko nga një mik"
 }

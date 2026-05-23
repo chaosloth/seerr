@@ -1718,5 +1718,8 @@
   "pages.serviceunavailable": "Tjänsten är inte tillgänglig",
   "pages.somethingwentwrong": "Något gick fel",
   "components.Settings.menuRemoteLibraries": "Fjärrbibliotek",
-  "components.Settings.RemoteLibrary.deviceId": "Enhets-ID"
+  "components.Settings.RemoteLibrary.deviceId": "Enhets-ID",
+  "components.RequestModal.friendlibrary": "{name}s bibliotek",
+  "components.RequestModal.nofriendsavailable": "Ingen vän har denna titel",
+  "components.RequestModal.requestfromfriend": "Begär från vän"
 }

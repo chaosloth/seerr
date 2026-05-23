@@ -1718,5 +1718,8 @@
   "pages.serviceunavailable": "Услугата е недостъпна",
   "pages.somethingwentwrong": "Нещо се обърка",
   "components.Settings.menuRemoteLibraries": "Отдалечени библиотеки",
-  "components.Settings.RemoteLibrary.deviceId": "Идентификатор на устройство"
+  "components.Settings.RemoteLibrary.deviceId": "Идентификатор на устройство",
+  "components.RequestModal.friendlibrary": "Библиотека на {name}",
+  "components.RequestModal.nofriendsavailable": "Никой приятел няма това заглавие",
+  "components.RequestModal.requestfromfriend": "Заявка от приятел"
 }

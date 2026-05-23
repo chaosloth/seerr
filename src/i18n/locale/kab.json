@@ -124,5 +124,8 @@
   "components.UserProfile.UserSettings.menuNotifications": "Ilɣa",
   "i18n.usersettings": "Iɣewwaren n useqdac",
   "components.Settings.menuRemoteLibraries": "Tasdartin Tibeɛdin",
-  "components.Settings.RemoteLibrary.deviceId": "Asulay n Wenṭag"
+  "components.Settings.RemoteLibrary.deviceId": "Asulay n Wenṭag",
+  "components.RequestModal.friendlibrary": "Tasdart n {name}",
+  "components.RequestModal.nofriendsavailable": "Ula yiwen ur yesɛi azwel-a",
+  "components.RequestModal.requestfromfriend": "Suter i umeddakel"
 }

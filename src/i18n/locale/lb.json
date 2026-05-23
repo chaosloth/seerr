@@ -50,5 +50,8 @@
   "components.StatusBadge.alsoonfriendsserver": "Also available on {names}",
   "components.StatusBadge.onfriendsserver": "Available on {names}",
   "components.Settings.menuRemoteLibraries": "Fernbibliothéiken",
-  "components.Settings.RemoteLibrary.deviceId": "Geräter ID"
+  "components.Settings.RemoteLibrary.deviceId": "Geräter ID",
+  "components.RequestModal.friendlibrary": "{name} seng Bibliothéik",
+  "components.RequestModal.nofriendsavailable": "Kee Frënd huet dësen Titel",
+  "components.RequestModal.requestfromfriend": "Vum Frënd ufroen"
 }

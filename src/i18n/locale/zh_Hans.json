@@ -1511,5 +1511,8 @@
   "pages.serviceunavailable": "服务器无法使用",
   "pages.somethingwentwrong": "出了点问题",
   "components.Settings.menuRemoteLibraries": "远程库",
-  "components.Settings.RemoteLibrary.deviceId": "设备ID"
+  "components.Settings.RemoteLibrary.deviceId": "设备ID",
+  "components.RequestModal.friendlibrary": "{name}的库",
+  "components.RequestModal.nofriendsavailable": "没有朋友有此标题",
+  "components.RequestModal.requestfromfriend": "向朋友请求"
 }

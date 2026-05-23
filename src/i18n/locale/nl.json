@@ -1706,5 +1706,8 @@
   "pages.serviceunavailable": "Service niet beschikbaar",
   "pages.somethingwentwrong": "Er ging iets mis",
   "components.Settings.menuRemoteLibraries": "Externe Bibliotheken",
-  "components.Settings.RemoteLibrary.deviceId": "Apparaat-ID"
+  "components.Settings.RemoteLibrary.deviceId": "Apparaat-ID",
+  "components.RequestModal.friendlibrary": "Bibliotheek van {name}",
+  "components.RequestModal.nofriendsavailable": "Geen vrienden hebben deze titel",
+  "components.RequestModal.requestfromfriend": "Aanvragen bij vriend"
 }

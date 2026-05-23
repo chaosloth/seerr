@@ -1718,5 +1718,8 @@
   "pages.serviceunavailable": "Tjenesten er ikke tilgængelig",
   "pages.somethingwentwrong": "Noget gik galt",
   "components.Settings.menuRemoteLibraries": "Fjernbiblioteker",
-  "components.Settings.RemoteLibrary.deviceId": "Enheds-ID"
+  "components.Settings.RemoteLibrary.deviceId": "Enheds-ID",
+  "components.RequestModal.friendlibrary": "{name}s bibliotek",
+  "components.RequestModal.nofriendsavailable": "Ingen venner har denne titel",
+  "components.RequestModal.requestfromfriend": "Anmod fra ven"
 }

@@ -998,5 +998,8 @@
   "pages.serviceunavailable": "Palvelu ei saatavilla",
   "pages.somethingwentwrong": "Jokin meni pieleen",
   "components.Settings.menuRemoteLibraries": "Etäkirjastot",
-  "components.Settings.RemoteLibrary.deviceId": "Laitteen tunnus"
+  "components.Settings.RemoteLibrary.deviceId": "Laitteen tunnus",
+  "components.RequestModal.friendlibrary": "Käyttäjän {name} kirjasto",
+  "components.RequestModal.nofriendsavailable": "Kenelläkään kaverilla ei ole tätä nimikettä",
+  "components.RequestModal.requestfromfriend": "Pyydä kaverilta"
 }

@@ -1540,5 +1540,8 @@
   "pages.serviceunavailable": "Serviço Indisponível",
   "pages.somethingwentwrong": "Algo deu errado",
   "components.Settings.menuRemoteLibraries": "Bibliotecas Remotas",
-  "components.Settings.RemoteLibrary.deviceId": "ID do Dispositivo"
+  "components.Settings.RemoteLibrary.deviceId": "ID do Dispositivo",
+  "components.RequestModal.friendlibrary": "Biblioteca de {name}",
+  "components.RequestModal.nofriendsavailable": "Nenhum amigo tem este título",
+  "components.RequestModal.requestfromfriend": "Solicitar a um amigo"
 }

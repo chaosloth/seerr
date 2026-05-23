@@ -107,5 +107,8 @@
   "components.StatusBadge.alsoonfriendsserver": "Na voljo tudi na {names}",
   "components.StatusBadge.onfriendsserver": "Na voljo na {names}",
   "components.Settings.menuRemoteLibraries": "Oddaljene Knjižnice",
-  "components.Settings.RemoteLibrary.deviceId": "ID Naprave"
+  "components.Settings.RemoteLibrary.deviceId": "ID Naprave",
+  "components.RequestModal.friendlibrary": "Knjižnica od {name}",
+  "components.RequestModal.nofriendsavailable": "Noben prijatelj nima tega naslova",
+  "components.RequestModal.requestfromfriend": "Zaprosi prijatelja"
 }

@@ -1603,5 +1603,8 @@
   "pages.serviceunavailable": "Сервіс недоступний",
   "pages.somethingwentwrong": "Щось пішло не так",
   "components.Settings.menuRemoteLibraries": "Віддалені Бібліотеки",
-  "components.Settings.RemoteLibrary.deviceId": "ID Пристрою"
+  "components.Settings.RemoteLibrary.deviceId": "ID Пристрою",
+  "components.RequestModal.friendlibrary": "Бібліотека {name}",
+  "components.RequestModal.nofriendsavailable": "Ні в кого з друзів немає цієї назви",
+  "components.RequestModal.requestfromfriend": "Запитати у друга"
 }

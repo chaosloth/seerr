@@ -8,6 +8,7 @@ import {
 } from '@server/constants/media';
 import { getRepository } from '@server/datasource';
 import OverrideRule from '@server/entity/OverrideRule';
+import { RemoteLibrary } from '@server/entity/RemoteLibrary';
 import type { MediaRequestBody } from '@server/interfaces/api/requestInterfaces';
 import notificationManager, { Notification } from '@server/lib/notifications';
 import { Permission } from '@server/lib/permissions';
@@ -22,6 +23,7 @@ import {
   Column,
   Entity,
   Index,
+  JoinColumn,
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
@@ -331,6 +333,12 @@ export class MediaRequest {
       }
     }
 
+    const remoteLibrary = requestBody.remoteLibraryId
+      ? await getRepository(RemoteLibrary).findOne({
+          where: { id: requestBody.remoteLibraryId },
+        })
+      : null;
+
     if (requestBody.mediaType === MediaType.MOVIE) {
       await mediaRepository.save(media);
 
@@ -373,6 +381,7 @@ export class MediaRequest {
         rootFolder: rootFolder,
         tags: tags,
         isAutoRequest: options.isAutoRequest ?? false,
+        remoteLibrary: remoteLibrary ?? undefined,
       });
 
       await requestRepository.save(request);
@@ -504,6 +513,7 @@ export class MediaRequest {
             })
         ),
         isAutoRequest: options.isAutoRequest ?? false,
+        remoteLibrary: remoteLibrary ?? undefined,
       });
 
       await requestRepository.save(request);
@@ -606,6 +616,10 @@ export class MediaRequest {
     },
   })
   public tags?: number[];
+
+  @ManyToOne(() => RemoteLibrary, { nullable: true, onDelete: 'SET NULL' })
+  @JoinColumn()
+  public remoteLibrary?: RemoteLibrary | null;
 
   @Column({ default: false })
   public isAutoRequest: boolean;

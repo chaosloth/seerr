@@ -1688,5 +1688,8 @@
   "pages.serviceunavailable": "الخدمة غير متاحة",
   "pages.somethingwentwrong": "حدث خطأ ما",
   "components.Settings.menuRemoteLibraries": "المكتبات البعيدة",
-  "components.Settings.RemoteLibrary.deviceId": "معرّف الجهاز"
+  "components.Settings.RemoteLibrary.deviceId": "معرّف الجهاز",
+  "components.RequestModal.friendlibrary": "مكتبة {name}",
+  "components.RequestModal.nofriendsavailable": "لا يوجد لدى الأصدقاء هذا العنوان",
+  "components.RequestModal.requestfromfriend": "طلب من صديق"
 }

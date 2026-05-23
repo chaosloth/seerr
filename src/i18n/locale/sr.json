@@ -666,5 +666,8 @@
   "pages.serviceunavailable": "Servis nije dostupan",
   "pages.somethingwentwrong": "Nešto je pogrešno",
   "components.Settings.menuRemoteLibraries": "Удаљене Библиотеке",
-  "components.Settings.RemoteLibrary.deviceId": "ID Uređaja"
+  "components.Settings.RemoteLibrary.deviceId": "ID Uređaja",
+  "components.RequestModal.friendlibrary": "Библиотека од {name}",
+  "components.RequestModal.nofriendsavailable": "Nijedan prijatelj nema ovaj naslov",
+  "components.RequestModal.requestfromfriend": "Zatraži od prijatelja"
 }

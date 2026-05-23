@@ -1247,5 +1247,8 @@
   "pages.serviceunavailable": "Usluga nije dostupna",
   "pages.somethingwentwrong": "Dogodila se greška",
   "components.Settings.menuRemoteLibraries": "Udaljene Knjižnice",
-  "components.Settings.RemoteLibrary.deviceId": "ID Uređaja"
+  "components.Settings.RemoteLibrary.deviceId": "ID Uređaja",
+  "components.RequestModal.friendlibrary": "Knjižnica od {name}",
+  "components.RequestModal.nofriendsavailable": "Nijedan prijatelj nema ovaj naslov",
+  "components.RequestModal.requestfromfriend": "Zatraži od prijatelja"
 }

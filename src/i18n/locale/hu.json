@@ -1718,5 +1718,8 @@
   "pages.serviceunavailable": "A szolgáltatás nem elérhető",
   "pages.somethingwentwrong": "Valami hiba történt",
   "components.Settings.menuRemoteLibraries": "Távoli Könyvtárak",
-  "components.Settings.RemoteLibrary.deviceId": "Eszközazonosító"
+  "components.Settings.RemoteLibrary.deviceId": "Eszközazonosító",
+  "components.RequestModal.friendlibrary": "{name} könyvtára",
+  "components.RequestModal.nofriendsavailable": "Egyik barátnak sincs meg ez a cím",
+  "components.RequestModal.requestfromfriend": "Kérés baráttól"
 }

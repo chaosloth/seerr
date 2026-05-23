@@ -1234,5 +1234,8 @@
   "pages.serviceunavailable": "Tjenste Utilgjenglig",
   "pages.somethingwentwrong": "Noe gikk galt",
   "components.Settings.menuRemoteLibraries": "Eksterne Biblioteker",
-  "components.Settings.RemoteLibrary.deviceId": "Enhets-ID"
+  "components.Settings.RemoteLibrary.deviceId": "Enhets-ID",
+  "components.RequestModal.friendlibrary": "{name}s bibliotek",
+  "components.RequestModal.nofriendsavailable": "Ingen venner har denne tittelen",
+  "components.RequestModal.requestfromfriend": "Be om fra venn"
 }

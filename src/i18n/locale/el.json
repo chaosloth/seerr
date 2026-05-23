@@ -1251,5 +1251,8 @@
   "pages.serviceunavailable": "Η υπηρεσία δεν είναι διαθέσιμη",
   "pages.somethingwentwrong": "Κάτι πήγε στραβά",
   "components.Settings.menuRemoteLibraries": "Απομακρυσμένες Βιβλιοθήκες",
-  "components.Settings.RemoteLibrary.deviceId": "Αναγνωριστικό Συσκευής"
+  "components.Settings.RemoteLibrary.deviceId": "Αναγνωριστικό Συσκευής",
+  "components.RequestModal.friendlibrary": "Βιβλιοθήκη του {name}",
+  "components.RequestModal.nofriendsavailable": "Κανένας φίλος δεν έχει αυτόν τον τίτλο",
+  "components.RequestModal.requestfromfriend": "Αίτημα από φίλο"
 }
