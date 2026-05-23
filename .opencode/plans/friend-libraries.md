@@ -88,23 +88,23 @@
 
 | # | Task | Status | Notes |
 |---|---|---|---|
-| 2.2.1 | Implement download URL generation for Seerr sources | pending | Seerr's `/media/:id/download` endpoint |
-| 2.2.2 | Handle authentication for Seerr download requests | pending | Pass X-Api-Key to Downloading Service |
+| 2.2.1 | Implement download URL generation for Seerr sources | delegated | Handled by Friendarr: `GET {baseUrl}/api/v1/media/{id}/download` with X-Api-Key |
+| 2.2.2 | Handle authentication for Seerr download requests | delegated | Friendarr passes X-Api-Key from library config |
 
 ### Phase 2.3: Emby/Jellyfin Content Fetch
 
 | # | Task | Status | Notes |
 |---|---|---|---|
-| 2.3.1 | Implement download URL generation for Emby/Jellyfin sources | pending | Construct direct download URL from Emby/Jellyfin Items API |
-| 2.3.2 | Handle authentication for download requests | pending | Pass MediaBrowser auth token + deviceId to Downloading Service |
+| 2.3.1 | Implement download URL generation for Emby/Jellyfin sources | delegated | Handled by Friendarr: `GET {baseUrl}/Items/{id}/Download` with MediaBrowser auth |
+| 2.3.2 | Handle authentication for download requests | delegated | Friendarr passes deviceId and token from library config |
 
 ### Phase 2.4: Plex Content Fetch
 
 | # | Task | Status | Notes |
 |---|---|---|---|
-| 2.4.1 | Implement download URL generation for Plex sources | pending | Plex media parts URL: `/library/parts/:partId/file` |
-| 2.4.2 | Resolve media parts from ratingKey for downloading | pending | Query `/library/metadata/:key` to get Media.Part[].key |
-| 2.4.3 | Handle authentication for Plex download requests | pending | Pass X-Plex-Token to Downloading Service |
+| 2.4.1 | Implement download URL generation for Plex sources | delegated | Handled by Friendarr: 2-step resolve parts → download, multi-part concat |
+| 2.4.2 | Resolve media parts from ratingKey for downloading | delegated | Friendarr handles `/library/metadata/{key}?includeMedia=1` |
+| 2.4.3 | Handle authentication for Plex download requests | delegated | Friendarr passes X-Plex-Token from library config |
 
 ---
 
@@ -252,4 +252,4 @@ For multi-part files (multiple video files per item), the service should concate
 
 ## Current Progress
 
-**Status**: Phase 1 complete (all four source types: Seerr, Emby, Jellyfin, Plex). Phase 2 ready to begin.
+**Status**: Phase 1 complete (all four source types discoverable). Phase 2 Seerr-side complete (entity, routes, UI, handoff). Phases 2.2-2.4 delegated to Friendarr — the standalone Downloading Service at `/Users/cc/Development/friendarr`.
