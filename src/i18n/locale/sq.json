@@ -1053,5 +1053,6 @@
   "pages.pagenotfound": "Faqja nuk u gjet",
   "pages.returnHome": "Kthehu në shtëpi",
   "pages.serviceunavailable": "Shërbimi i paarritshëm",
-  "pages.somethingwentwrong": "Diçka shkoi keq"
+  "pages.somethingwentwrong": "Diçka shkoi keq",
+  "components.Settings.menuRemoteLibraries": "Biblioteka të Largëta"
 }

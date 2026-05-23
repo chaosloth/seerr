@@ -1378,5 +1378,6 @@
   "pages.pagenotfound": "No s'ha trobat la pàgina",
   "pages.returnHome": "Torna a l'inici",
   "pages.serviceunavailable": "Servei no disponible",
-  "pages.somethingwentwrong": "Alguna cosa ha anat malament"
+  "pages.somethingwentwrong": "Alguna cosa ha anat malament",
+  "components.Settings.menuRemoteLibraries": "Biblioteques Remotes"
 }

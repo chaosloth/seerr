@@ -1716,5 +1716,6 @@
   "pages.pagenotfound": "Siden blev ikke fundet",
   "pages.returnHome": "Gå hjem",
   "pages.serviceunavailable": "Tjenesten er ikke tilgængelig",
-  "pages.somethingwentwrong": "Noget gik galt"
+  "pages.somethingwentwrong": "Noget gik galt",
+  "components.Settings.menuRemoteLibraries": "Fjernbiblioteker"
 }

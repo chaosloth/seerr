@@ -1716,5 +1716,6 @@
   "pages.pagenotfound": "La page n'a pas été trouvée",
   "pages.returnHome": "Retourner à l'accueil",
   "pages.serviceunavailable": "Service indisponible",
-  "pages.somethingwentwrong": "Une erreur s'est produite"
+  "pages.somethingwentwrong": "Une erreur s'est produite",
+  "components.Settings.menuRemoteLibraries": "Bibliothèques Distantes"
 }

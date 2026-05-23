@@ -1716,5 +1716,6 @@
   "pages.pagenotfound": "Stránka nebyla nalezena",
   "pages.returnHome": "Vrátit se domů",
   "pages.serviceunavailable": "Služba není dostupná",
-  "pages.somethingwentwrong": "Něco se pokazilo"
+  "pages.somethingwentwrong": "Něco se pokazilo",
+  "components.Settings.menuRemoteLibraries": "Vzdálené Knihovny"
 }

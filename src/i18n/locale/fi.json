@@ -996,5 +996,6 @@
   "pages.pagenotfound": "Sivua ei löydy",
   "pages.returnHome": "Palaa etusivulle",
   "pages.serviceunavailable": "Palvelu ei saatavilla",
-  "pages.somethingwentwrong": "Jokin meni pieleen"
+  "pages.somethingwentwrong": "Jokin meni pieleen",
+  "components.Settings.menuRemoteLibraries": "Etäkirjastot"
 }

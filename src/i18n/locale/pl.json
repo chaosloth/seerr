@@ -1716,5 +1716,6 @@
   "pages.pagenotfound": "Nie znaleziono strony",
   "pages.returnHome": "Powrót do domu",
   "pages.serviceunavailable": "Usługa niedostępna",
-  "pages.somethingwentwrong": "Coś poszło nie tak"
+  "pages.somethingwentwrong": "Coś poszło nie tak",
+  "components.Settings.menuRemoteLibraries": "Zdalne Biblioteki"
 }

@@ -1538,5 +1538,6 @@
   "pages.pagenotfound": "Página Não Encontrada",
   "pages.returnHome": "Voltar Para Página Inicial",
   "pages.serviceunavailable": "Serviço Indisponível",
-  "pages.somethingwentwrong": "Algo deu errado"
+  "pages.somethingwentwrong": "Algo deu errado",
+  "components.Settings.menuRemoteLibraries": "Bibliotecas Remotas"
 }

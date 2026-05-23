@@ -1659,5 +1659,6 @@
   "pages.pagenotfound": "Página Não Encontrada",
   "pages.returnHome": "Voltar Para Página Inicial",
   "pages.serviceunavailable": "Serviço Indisponível",
-  "pages.somethingwentwrong": "Ocorreu um erro"
+  "pages.somethingwentwrong": "Ocorreu um erro",
+  "components.Settings.menuRemoteLibraries": "Bibliotecas Remotas"
 }

@@ -1716,5 +1716,6 @@
   "pages.pagenotfound": "Lehte ei leitud",
   "pages.returnHome": "Tagasi avalehele",
   "pages.serviceunavailable": "Teenus pole saadaval",
-  "pages.somethingwentwrong": "Midagi läks valesti"
+  "pages.somethingwentwrong": "Midagi läks valesti",
+  "components.Settings.menuRemoteLibraries": "Kaug-raamatukogud"
 }

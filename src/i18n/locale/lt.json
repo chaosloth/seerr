@@ -768,5 +768,6 @@
   "pages.pagenotfound": "Puslapis nerastas",
   "pages.returnHome": "Grįžti į pradžią",
   "pages.serviceunavailable": "Paslauga nepasiekiama",
-  "pages.somethingwentwrong": "Kažkas nepavyko"
+  "pages.somethingwentwrong": "Kažkas nepavyko",
+  "components.Settings.menuRemoteLibraries": "Nuotolinės Bibliotekos"
 }

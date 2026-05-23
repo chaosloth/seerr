@@ -83,5 +83,6 @@
   "components.Settings.RemoteLibrary.validationTypeRequired": "You must select a library type",
   "components.Settings.SettingsJobsCache.remote-library-scan": "Quét thư viện từ xa",
   "components.StatusBadge.alsoonfriendsserver": "Cũng có sẵn trên {names}",
-  "components.StatusBadge.onfriendsserver": "Có sẵn trên {names}"
+  "components.StatusBadge.onfriendsserver": "Có sẵn trên {names}",
+  "components.Settings.menuRemoteLibraries": "Thư Viện Từ Xa"
 }

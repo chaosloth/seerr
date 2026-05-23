@@ -1716,5 +1716,6 @@
   "pages.pagenotfound": "Страницата не е намерена",
   "pages.returnHome": "Връщане към Начало",
   "pages.serviceunavailable": "Услугата е недостъпна",
-  "pages.somethingwentwrong": "Нещо се обърка"
+  "pages.somethingwentwrong": "Нещо се обърка",
+  "components.Settings.menuRemoteLibraries": "Отдалечени библиотеки"
 }

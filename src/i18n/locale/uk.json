@@ -1601,5 +1601,6 @@
   "pages.pagenotfound": "Сторінку не знайдено",
   "pages.returnHome": "Повернутись додому",
   "pages.serviceunavailable": "Сервіс недоступний",
-  "pages.somethingwentwrong": "Щось пішло не так"
+  "pages.somethingwentwrong": "Щось пішло не так",
+  "components.Settings.menuRemoteLibraries": "Віддалені Бібліотеки"
 }

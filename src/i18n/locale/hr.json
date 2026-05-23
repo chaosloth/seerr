@@ -1245,5 +1245,6 @@
   "pages.pagenotfound": "Stranica nije pronađena",
   "pages.returnHome": "Vrati se na početnu stranicu",
   "pages.serviceunavailable": "Usluga nije dostupna",
-  "pages.somethingwentwrong": "Dogodila se greška"
+  "pages.somethingwentwrong": "Dogodila se greška",
+  "components.Settings.menuRemoteLibraries": "Udaljene Knjižnice"
 }

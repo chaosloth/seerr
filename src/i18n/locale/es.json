@@ -1492,5 +1492,6 @@
   "pages.pagenotfound": "Página No Encontrada",
   "pages.returnHome": "Volver al Inicio",
   "pages.serviceunavailable": "Servicio No Disponible",
-  "pages.somethingwentwrong": "Algo fue mal"
+  "pages.somethingwentwrong": "Algo fue mal",
+  "components.Settings.menuRemoteLibraries": "Bibliotecas Remotas"
 }

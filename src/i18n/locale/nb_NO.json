@@ -1232,5 +1232,6 @@
   "pages.pagenotfound": "Side ble ikke funnet",
   "pages.returnHome": "Gå hjem",
   "pages.serviceunavailable": "Tjenste Utilgjenglig",
-  "pages.somethingwentwrong": "Noe gikk galt"
+  "pages.somethingwentwrong": "Noe gikk galt",
+  "components.Settings.menuRemoteLibraries": "Eksterne Biblioteker"
 }

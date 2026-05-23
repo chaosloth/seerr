@@ -1704,5 +1704,6 @@
   "pages.pagenotfound": "Pagina niet gevonden",
   "pages.returnHome": "Terug naar de startpagina",
   "pages.serviceunavailable": "Service niet beschikbaar",
-  "pages.somethingwentwrong": "Er ging iets mis"
+  "pages.somethingwentwrong": "Er ging iets mis",
+  "components.Settings.menuRemoteLibraries": "Externe Bibliotheken"
 }

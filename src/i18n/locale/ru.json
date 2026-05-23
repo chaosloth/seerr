@@ -1716,5 +1716,6 @@
   "pages.pagenotfound": "Страница не найдена",
   "pages.returnHome": "Вернуться домой",
   "pages.serviceunavailable": "Сервис недоступен",
-  "pages.somethingwentwrong": "Что-то пошло не так"
+  "pages.somethingwentwrong": "Что-то пошло не так",
+  "components.Settings.menuRemoteLibraries": "Удаленные Библиотеки"
 }

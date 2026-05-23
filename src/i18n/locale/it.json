@@ -1686,5 +1686,6 @@
   "pages.pagenotfound": "Pagina non trovata",
   "pages.returnHome": "Ritorna alla pagina iniziale",
   "pages.serviceunavailable": "Servizio non disponibile",
-  "pages.somethingwentwrong": "Qualcosa è andato storto"
+  "pages.somethingwentwrong": "Qualcosa è andato storto",
+  "components.Settings.menuRemoteLibraries": "Librerie Remote"
 }

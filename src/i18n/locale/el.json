@@ -1249,5 +1249,6 @@
   "pages.pagenotfound": "Η σελίδα δεν βρέθηκε",
   "pages.returnHome": "Επιστροφή στην Αρχική",
   "pages.serviceunavailable": "Η υπηρεσία δεν είναι διαθέσιμη",
-  "pages.somethingwentwrong": "Κάτι πήγε στραβά"
+  "pages.somethingwentwrong": "Κάτι πήγε στραβά",
+  "components.Settings.menuRemoteLibraries": "Απομακρυσμένες Βιβλιοθήκες"
 }

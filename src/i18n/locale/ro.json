@@ -1016,5 +1016,6 @@
   "pages.internalservererror": "Internal Server Error",
   "pages.oops": "Oops",
   "pages.pagenotfound": "Pagina nu a fost găsită",
-  "pages.returnHome": "Întoarce-te acasă"
+  "pages.returnHome": "Întoarce-te acasă",
+  "components.Settings.menuRemoteLibraries": "Biblioteci la Distanță"
 }

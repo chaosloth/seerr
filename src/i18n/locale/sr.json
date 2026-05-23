@@ -664,5 +664,6 @@
   "pages.pagenotfound": "Stranica nije pronađena",
   "pages.returnHome": "Povratak na glavnu stranicu",
   "pages.serviceunavailable": "Servis nije dostupan",
-  "pages.somethingwentwrong": "Nešto je pogrešno"
+  "pages.somethingwentwrong": "Nešto je pogrešno",
+  "components.Settings.menuRemoteLibraries": "Удаљене Библиотеке"
 }

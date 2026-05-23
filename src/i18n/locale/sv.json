@@ -1716,5 +1716,6 @@
   "pages.pagenotfound": "Sidan hittas inte",
   "pages.returnHome": "Gå tillbaka till startsidan",
   "pages.serviceunavailable": "Tjänsten är inte tillgänglig",
-  "pages.somethingwentwrong": "Något gick fel"
+  "pages.somethingwentwrong": "Något gick fel",
+  "components.Settings.menuRemoteLibraries": "Fjärrbibliotek"
 }

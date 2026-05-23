@@ -1678,5 +1678,6 @@
   "pages.pagenotfound": "Orria ez da aurkitu",
   "pages.returnHome": "Itzuli hasierara",
   "pages.serviceunavailable": "Zerbitzua ez dago eskuragarri",
-  "pages.somethingwentwrong": "Zerbait gaizki joan da"
+  "pages.somethingwentwrong": "Zerbait gaizki joan da",
+  "components.Settings.menuRemoteLibraries": "Urruneko Liburutegiak"
 }

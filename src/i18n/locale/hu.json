@@ -1716,5 +1716,6 @@
   "pages.pagenotfound": "Oldal nem található",
   "pages.returnHome": "Vissza a kezdőképernyőre",
   "pages.serviceunavailable": "A szolgáltatás nem elérhető",
-  "pages.somethingwentwrong": "Valami hiba történt"
+  "pages.somethingwentwrong": "Valami hiba történt",
+  "components.Settings.menuRemoteLibraries": "Távoli Könyvtárak"
 }

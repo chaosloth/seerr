@@ -48,5 +48,6 @@
   "components.Settings.RemoteLibrary.validationTypeRequired": "You must select a library type",
   "components.Settings.SettingsJobsCache.remote-library-scan": "Extern Bibliothéik Scan",
   "components.StatusBadge.alsoonfriendsserver": "Also available on {names}",
-  "components.StatusBadge.onfriendsserver": "Available on {names}"
+  "components.StatusBadge.onfriendsserver": "Available on {names}",
+  "components.Settings.menuRemoteLibraries": "Fernbibliothéiken"
 }

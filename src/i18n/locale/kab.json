@@ -122,5 +122,6 @@
   "components.UserProfile.UserSettings.menuChangePass": "Awal n uɛeddi",
   "components.UserProfile.UserSettings.menuGeneralSettings": "Amatu",
   "components.UserProfile.UserSettings.menuNotifications": "Ilɣa",
-  "i18n.usersettings": "Iɣewwaren n useqdac"
+  "i18n.usersettings": "Iɣewwaren n useqdac",
+  "components.Settings.menuRemoteLibraries": "Tasdartin Tibeɛdin"
 }

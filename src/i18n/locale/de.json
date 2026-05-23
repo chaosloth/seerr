@@ -1716,5 +1716,6 @@
   "pages.pagenotfound": "Seite nicht gefunden",
   "pages.returnHome": "Zurück zur Startseite",
   "pages.serviceunavailable": "Dienst nicht verfügbar",
-  "pages.somethingwentwrong": "Etwas ist schief gelaufen"
+  "pages.somethingwentwrong": "Etwas ist schief gelaufen",
+  "components.Settings.menuRemoteLibraries": "Entfernte Bibliotheken"
 }
