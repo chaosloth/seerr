@@ -21,6 +21,7 @@ const messages = defineMessages('components.StatusBadge', {
   seasonnumber: 'S{seasonNumber}',
   seasonepisodenumber: 'S{seasonNumber}E{episodeNumber}',
   onfriendsserver: 'Available on {names}',
+  alsoonfriendsserver: 'Also available on {names}',
 });
 
 interface StatusBadgeProps {
@@ -176,132 +177,158 @@ const StatusBadge = ({
 
     case MediaStatus.AVAILABLE:
       return (
-        <Tooltip
-          content={inProgress ? tooltipContent : mediaLinkDescription}
-          className={`${
-            inProgress && 'hidden max-h-96 w-96 overflow-y-auto sm:block'
-          }`}
-          tooltipConfig={{
-            ...(inProgress && { interactive: true, delayHide: 100 }),
-          }}
-        >
-          <Badge
-            badgeType="success"
-            href={mediaLink}
+        <>
+          <Tooltip
+            content={inProgress ? tooltipContent : mediaLinkDescription}
             className={`${
-              inProgress && 'relative !bg-gray-700/80 !px-0 hover:!bg-gray-700'
-            } overflow-hidden`}
+              inProgress && 'hidden max-h-96 w-96 overflow-y-auto sm:block'
+            }`}
+            tooltipConfig={{
+              ...(inProgress && { interactive: true, delayHide: 100 }),
+            }}
           >
-            {inProgress && badgeDownloadProgress}
-            <div
-              className={`relative z-20 flex items-center ${
-                inProgress && 'px-2'
-              }`}
+            <Badge
+              badgeType="success"
+              href={mediaLink}
+              className={`${
+                inProgress &&
+                'relative !bg-gray-700/80 !px-0 hover:!bg-gray-700'
+              } overflow-hidden`}
             >
-              <span>
-                {intl.formatMessage(
-                  is4k ? messages.status4k : messages.status,
-                  {
-                    status: inProgress
-                      ? intl.formatMessage(globalMessages.processing)
-                      : intl.formatMessage(globalMessages.available),
-                  }
+              {inProgress && badgeDownloadProgress}
+              <div
+                className={`relative z-20 flex items-center ${
+                  inProgress && 'px-2'
+                }`}
+              >
+                <span>
+                  {intl.formatMessage(
+                    is4k ? messages.status4k : messages.status,
+                    {
+                      status: inProgress
+                        ? intl.formatMessage(globalMessages.processing)
+                        : intl.formatMessage(globalMessages.available),
+                    }
+                  )}
+                </span>
+                {inProgress && (
+                  <>
+                    {mediaType === 'tv' &&
+                      downloadItem[0].episode &&
+                      (downloadItem.length > 1 &&
+                      downloadItem.every(
+                        (item) =>
+                          item.downloadId &&
+                          item.downloadId === downloadItem[0].downloadId
+                      ) ? (
+                        <span className="ml-1">
+                          {intl.formatMessage(messages.seasonnumber, {
+                            seasonNumber: downloadItem[0].episode.seasonNumber,
+                          })}
+                        </span>
+                      ) : (
+                        <span className="ml-1">
+                          {intl.formatMessage(messages.seasonepisodenumber, {
+                            seasonNumber: downloadItem[0].episode.seasonNumber,
+                            episodeNumber:
+                              downloadItem[0].episode.episodeNumber,
+                          })}
+                        </span>
+                      ))}
+                    <Spinner className="ml-1 h-3 w-3" />
+                  </>
                 )}
-              </span>
-              {inProgress && (
-                <>
-                  {mediaType === 'tv' &&
-                    downloadItem[0].episode &&
-                    (downloadItem.length > 1 &&
-                    downloadItem.every(
-                      (item) =>
-                        item.downloadId &&
-                        item.downloadId === downloadItem[0].downloadId
-                    ) ? (
-                      <span className="ml-1">
-                        {intl.formatMessage(messages.seasonnumber, {
-                          seasonNumber: downloadItem[0].episode.seasonNumber,
-                        })}
-                      </span>
-                    ) : (
-                      <span className="ml-1">
-                        {intl.formatMessage(messages.seasonepisodenumber, {
-                          seasonNumber: downloadItem[0].episode.seasonNumber,
-                          episodeNumber: downloadItem[0].episode.episodeNumber,
-                        })}
-                      </span>
-                    ))}
-                  <Spinner className="ml-1 h-3 w-3" />
-                </>
-              )}
-            </div>
-          </Badge>
-        </Tooltip>
+              </div>
+            </Badge>
+          </Tooltip>
+          {remoteAvailability && remoteAvailability.length > 0 && (
+            <Badge badgeType="primary" className="mt-1">
+              {intl.formatMessage(messages.alsoonfriendsserver, {
+                names: remoteAvailability
+                  .map((r) => r.remoteLibraryName)
+                  .join(', '),
+              })}
+            </Badge>
+          )}
+        </>
       );
 
     case MediaStatus.PARTIALLY_AVAILABLE:
       return (
-        <Tooltip
-          content={inProgress ? tooltipContent : mediaLinkDescription}
-          className={`${
-            inProgress && 'hidden max-h-96 w-96 overflow-y-auto sm:block'
-          }`}
-          tooltipConfig={{
-            ...(inProgress && { interactive: true, delayHide: 100 }),
-          }}
-        >
-          <Badge
-            badgeType="success"
-            href={mediaLink}
+        <>
+          <Tooltip
+            content={inProgress ? tooltipContent : mediaLinkDescription}
             className={`${
-              inProgress && 'relative !bg-gray-700/80 !px-0 hover:!bg-gray-700'
-            } overflow-hidden`}
+              inProgress && 'hidden max-h-96 w-96 overflow-y-auto sm:block'
+            }`}
+            tooltipConfig={{
+              ...(inProgress && { interactive: true, delayHide: 100 }),
+            }}
           >
-            {inProgress && badgeDownloadProgress}
-            <div
-              className={`relative z-20 flex items-center ${
-                inProgress && 'px-2'
-              }`}
+            <Badge
+              badgeType="success"
+              href={mediaLink}
+              className={`${
+                inProgress &&
+                'relative !bg-gray-700/80 !px-0 hover:!bg-gray-700'
+              } overflow-hidden`}
             >
-              <span>
-                {intl.formatMessage(
-                  is4k ? messages.status4k : messages.status,
-                  {
-                    status: inProgress
-                      ? intl.formatMessage(globalMessages.processing)
-                      : intl.formatMessage(globalMessages.partiallyavailable),
-                  }
+              {inProgress && badgeDownloadProgress}
+              <div
+                className={`relative z-20 flex items-center ${
+                  inProgress && 'px-2'
+                }`}
+              >
+                <span>
+                  {intl.formatMessage(
+                    is4k ? messages.status4k : messages.status,
+                    {
+                      status: inProgress
+                        ? intl.formatMessage(globalMessages.processing)
+                        : intl.formatMessage(globalMessages.partiallyavailable),
+                    }
+                  )}
+                </span>
+                {inProgress && (
+                  <>
+                    {mediaType === 'tv' &&
+                      downloadItem[0].episode &&
+                      (downloadItem.length > 1 &&
+                      downloadItem.every(
+                        (item) =>
+                          item.downloadId &&
+                          item.downloadId === downloadItem[0].downloadId
+                      ) ? (
+                        <span className="ml-1">
+                          {intl.formatMessage(messages.seasonnumber, {
+                            seasonNumber: downloadItem[0].episode.seasonNumber,
+                          })}
+                        </span>
+                      ) : (
+                        <span className="ml-1">
+                          {intl.formatMessage(messages.seasonepisodenumber, {
+                            seasonNumber: downloadItem[0].episode.seasonNumber,
+                            episodeNumber:
+                              downloadItem[0].episode.episodeNumber,
+                          })}
+                        </span>
+                      ))}
+                    <Spinner className="ml-1 h-3 w-3" />
+                  </>
                 )}
-              </span>
-              {inProgress && (
-                <>
-                  {mediaType === 'tv' &&
-                    downloadItem[0].episode &&
-                    (downloadItem.length > 1 &&
-                    downloadItem.every(
-                      (item) =>
-                        item.downloadId &&
-                        item.downloadId === downloadItem[0].downloadId
-                    ) ? (
-                      <span className="ml-1">
-                        {intl.formatMessage(messages.seasonnumber, {
-                          seasonNumber: downloadItem[0].episode.seasonNumber,
-                        })}
-                      </span>
-                    ) : (
-                      <span className="ml-1">
-                        {intl.formatMessage(messages.seasonepisodenumber, {
-                          seasonNumber: downloadItem[0].episode.seasonNumber,
-                          episodeNumber: downloadItem[0].episode.episodeNumber,
-                        })}
-                      </span>
-                    ))}
-                  <Spinner className="ml-1 h-3 w-3" />
-                </>
-              )}
-            </div>
-          </Badge>
-        </Tooltip>
+              </div>
+            </Badge>
+          </Tooltip>
+          {remoteAvailability && remoteAvailability.length > 0 && (
+            <Badge badgeType="primary" className="mt-1">
+              {intl.formatMessage(messages.alsoonfriendsserver, {
+                names: remoteAvailability
+                  .map((r) => r.remoteLibraryName)
+                  .join(', '),
+              })}
+            </Badge>
+          )}
+        </>
       );
 
     case MediaStatus.PROCESSING:
