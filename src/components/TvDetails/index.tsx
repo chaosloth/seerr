@@ -56,6 +56,7 @@ import {
   MediaType,
 } from '@server/constants/media';
 import { MediaServerType } from '@server/constants/server';
+import type { RemoteAvailability } from '@server/interfaces/api/mediaInterfaces';
 import type { TvDetails as TvDetailsType } from '@server/models/Tv';
 import type { Crew } from '@server/models/common';
 import axios from 'axios';
@@ -555,6 +556,10 @@ const TvDetails = ({ tv }: TvDetailsProps) => {
               mediaType="tv"
               plexUrl={plexUrl}
               serviceUrl={data.mediaInfo?.serviceUrl}
+              remoteAvailability={
+                (data as unknown as Record<string, unknown>)
+                  .remoteAvailability as RemoteAvailability[] | undefined
+              }
             />
             {settings.currentSettings.series4kEnabled &&
               hasPermission(

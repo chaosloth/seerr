@@ -9,3 +9,10 @@ export enum ServerType {
   JELLYFIN = 'Jellyfin',
   EMBY = 'Emby',
 }
+
+export enum RemoteLibraryType {
+  SEERR = 'seerr',
+  JELLYFIN = 'jellyfin',
+  EMBY = 'emby',
+  PLEX = 'plex',
+}

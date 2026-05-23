@@ -704,6 +704,91 @@ components:
         label:
           type: string
           example: A Label
+    RemoteLibrary:
+      type: object
+      required:
+        - name
+        - type
+        - hostname
+        - port
+      properties:
+        id:
+          type: number
+          readOnly: true
+          example: 1
+        name:
+          type: string
+          example: My Friend's Seerr
+        type:
+          type: string
+          enum: [seerr, jellyfin, emby, plex]
+        hostname:
+          type: string
+          example: 192.168.1.100
+        port:
+          type: number
+          example: 5055
+        useSsl:
+          type: boolean
+          example: false
+        baseUrl:
+          type: string
+          nullable: true
+          example: /seerr
+        apiKey:
+          type: string
+          nullable: true
+        plexToken:
+          type: string
+          nullable: true
+        deviceId:
+          type: string
+          nullable: true
+          example: Seerr-script
+        isEnabled:
+          type: boolean
+          example: true
+        syncEnabled:
+          type: boolean
+          example: true
+        lastSyncAt:
+          type: string
+          format: date-time
+          nullable: true
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+        updatedAt:
+          type: string
+          format: date-time
+          readOnly: true
+    RemoteMedia:
+      type: object
+      properties:
+        id:
+          type: number
+          readOnly: true
+        mediaId:
+          type: number
+          example: 1
+        remoteLibraryId:
+          type: number
+          example: 1
+        status:
+          type: number
+          example: 5
+        remoteId:
+          type: string
+          nullable: true
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+        updatedAt:
+          type: string
+          format: date-time
+          readOnly: true
     PublicSettings:
       type: object
       required:
@@ -767,6 +852,28 @@ components:
           example: false
         mediaInfo:
           $ref: '#/components/schemas/MediaInfo'
+        remoteAvailability:
+          type: array
+          items:
+            $ref: '#/components/schemas/RemoteAvailability'
+    RemoteAvailability:
+      type: object
+      properties:
+        remoteLibraryId:
+          type: number
+          example: 1
+        remoteLibraryName:
+          type: string
+          example: My Friend's Server
+        remoteLibraryType:
+          type: string
+          example: seerr
+        status:
+          type: number
+          example: 5
+        remoteId:
+          type: string
+          nullable: true
     TvResult:
       type: object
       properties:
@@ -810,6 +917,10 @@ components:
           type: string
         mediaInfo:
           $ref: '#/components/schemas/MediaInfo'
+        remoteAvailability:
+          type: array
+          items:
+            $ref: '#/components/schemas/RemoteAvailability'
     PersonResult:
       type: object
       properties:
@@ -8014,6 +8125,117 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/OverrideRule'
+  /remoteLibrary:
+    get:
+      summary: Get all remote libraries
+      description: Returns all configured remote libraries in a JSON array.
+      tags:
+        - settings
+      responses:
+        '200':
+          description: Remote libraries returned
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/RemoteLibrary'
+    post:
+      summary: Create remote library
+      description: Creates a new remote library configuration.
+      tags:
+        - settings
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RemoteLibrary'
+      responses:
+        '201':
+          description: Remote library created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RemoteLibrary'
+  /remoteLibrary/test:
+    post:
+      summary: Test remote library connection
+      description: Tests connectivity to a remote library configuration without saving it.
+      tags:
+        - settings
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RemoteLibrary'
+      responses:
+        '200':
+          description: Connection successful
+  /remoteLibrary/{id}:
+    put:
+      summary: Update remote library
+      description: Updates an existing remote library configuration by ID.
+      tags:
+        - settings
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RemoteLibrary'
+      responses:
+        '200':
+          description: Remote library updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RemoteLibrary'
+    delete:
+      summary: Delete remote library
+      description: Deletes a remote library configuration by ID.
+      tags:
+        - settings
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Remote library deleted
+  /remoteLibrary/{id}/sync:
+    post:
+      summary: Sync remote library
+      description: Triggers a manual sync of the specified remote library.
+      tags:
+        - settings
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Sync started
+  /remoteLibrary/sync/status:
+    get:
+      summary: Get remote library sync status
+      description: Returns the current status of remote library scanners.
+      tags:
+        - settings
+      responses:
+        '200':
+          description: Sync status returned
 security:
   - cookieAuth: []
   - apiKey: []

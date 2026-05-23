@@ -4,12 +4,15 @@ import availabilitySync from '@server/lib/availabilitySync';
 import downloadTracker from '@server/lib/downloadtracker';
 import ImageProxy from '@server/lib/imageproxy';
 import refreshToken from '@server/lib/refreshToken';
+import { embyJellyfinScanner } from '@server/lib/scanners/emby-jellyfin';
 import {
   jellyfinFullScanner,
   jellyfinRecentScanner,
 } from '@server/lib/scanners/jellyfin';
 import { plexFullScanner, plexRecentScanner } from '@server/lib/scanners/plex';
 import { radarrScanner } from '@server/lib/scanners/radarr';
+import { remotePlexScanner } from '@server/lib/scanners/remote-plex';
+import { seerrScanner } from '@server/lib/scanners/seerr';
 import { sonarrScanner } from '@server/lib/scanners/sonarr';
 import type { JobId } from '@server/lib/settings';
 import { getSettings } from '@server/lib/settings';
@@ -257,6 +260,27 @@ export const startJobs = (): void => {
     }),
     running: () => blocklistedTagsProcessor.status().running,
     cancelFn: () => blocklistedTagsProcessor.cancel(),
+  });
+
+  // Scan remote libraries every 24 hours
+  scheduledJobs.push({
+    id: 'remote-library-scan',
+    name: 'Remote Library Scan',
+    type: 'process',
+    interval: 'hours',
+    cronSchedule: jobs['remote-library-scan'].schedule,
+    job: schedule.scheduleJob(jobs['remote-library-scan'].schedule, () => {
+      logger.info('Starting scheduled job: Remote Library Scan', {
+        label: 'Jobs',
+      });
+      seerrScanner.run();
+      embyJellyfinScanner.run();
+      remotePlexScanner.run();
+    }),
+    running: () =>
+      seerrScanner.status().running ||
+      embyJellyfinScanner.status().running ||
+      remotePlexScanner.status().running,
   });
 
   logger.info('Scheduled jobs loaded', { label: 'Jobs' });

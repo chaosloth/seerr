@@ -13,7 +13,6 @@ interface StatusBadgeMiniProps {
   status: MediaStatus;
   is4k?: boolean;
   inProgress?: boolean;
-  // Should the badge shrink on mobile to a smaller size? (TitleCard)
   shrink?: boolean;
 }
 

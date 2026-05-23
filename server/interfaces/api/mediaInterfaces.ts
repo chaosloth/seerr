@@ -20,3 +20,11 @@ export interface MediaWatchDataResponse {
     playCount30Days: number;
   };
 }
+
+export interface RemoteAvailability {
+  remoteLibraryId: number;
+  remoteLibraryName: string;
+  remoteLibraryType: string;
+  status: number;
+  remoteId?: string;
+}
