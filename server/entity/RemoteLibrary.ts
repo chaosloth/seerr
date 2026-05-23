@@ -36,6 +36,9 @@ export class RemoteLibrary {
   @Column({ nullable: true })
   public plexToken?: string;
 
+  @Column({ nullable: true })
+  public deviceId?: string;
+
   @Column({ default: true })
   public isEnabled: boolean;
 

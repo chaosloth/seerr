@@ -665,5 +665,6 @@
   "pages.returnHome": "Povratak na glavnu stranicu",
   "pages.serviceunavailable": "Servis nije dostupan",
   "pages.somethingwentwrong": "Nešto je pogrešno",
-  "components.Settings.menuRemoteLibraries": "Удаљене Библиотеке"
+  "components.Settings.menuRemoteLibraries": "Удаљене Библиотеке",
+  "components.Settings.RemoteLibrary.deviceId": "ID Uređaja"
 }

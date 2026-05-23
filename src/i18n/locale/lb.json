@@ -49,5 +49,6 @@
   "components.Settings.SettingsJobsCache.remote-library-scan": "Extern Bibliothéik Scan",
   "components.StatusBadge.alsoonfriendsserver": "Also available on {names}",
   "components.StatusBadge.onfriendsserver": "Available on {names}",
-  "components.Settings.menuRemoteLibraries": "Fernbibliothéiken"
+  "components.Settings.menuRemoteLibraries": "Fernbibliothéiken",
+  "components.Settings.RemoteLibrary.deviceId": "Geräter ID"
 }

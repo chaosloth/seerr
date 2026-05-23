@@ -1241,5 +1241,6 @@
   "pages.returnHome": "홈으로 돌아가기",
   "pages.serviceunavailable": "서비스를 사용할 수 없음",
   "pages.somethingwentwrong": "문제가 발생했습니다",
-  "components.Settings.menuRemoteLibraries": "원격 라이브러리"
+  "components.Settings.menuRemoteLibraries": "원격 라이브러리",
+  "components.Settings.RemoteLibrary.deviceId": "장치 ID"
 }

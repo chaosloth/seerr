@@ -1717,5 +1717,6 @@
   "pages.returnHome": "Retourner à l'accueil",
   "pages.serviceunavailable": "Service indisponible",
   "pages.somethingwentwrong": "Une erreur s'est produite",
-  "components.Settings.menuRemoteLibraries": "Bibliothèques Distantes"
+  "components.Settings.menuRemoteLibraries": "Bibliothèques Distantes",
+  "components.Settings.RemoteLibrary.deviceId": "ID de l'Appareil"
 }

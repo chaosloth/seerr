@@ -1717,5 +1717,6 @@
   "pages.returnHome": "Gå hjem",
   "pages.serviceunavailable": "Tjenesten er ikke tilgængelig",
   "pages.somethingwentwrong": "Noget gik galt",
-  "components.Settings.menuRemoteLibraries": "Fjernbiblioteker"
+  "components.Settings.menuRemoteLibraries": "Fjernbiblioteker",
+  "components.Settings.RemoteLibrary.deviceId": "Enheds-ID"
 }

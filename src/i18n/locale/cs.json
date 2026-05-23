@@ -1717,5 +1717,6 @@
   "pages.returnHome": "Vrátit se domů",
   "pages.serviceunavailable": "Služba není dostupná",
   "pages.somethingwentwrong": "Něco se pokazilo",
-  "components.Settings.menuRemoteLibraries": "Vzdálené Knihovny"
+  "components.Settings.menuRemoteLibraries": "Vzdálené Knihovny",
+  "components.Settings.RemoteLibrary.deviceId": "ID Zařízení"
 }

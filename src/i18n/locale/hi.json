@@ -190,5 +190,6 @@
   "components.UserProfile.ProfileHeader.settings": "सेटिंग्स बदलें",
   "pages.serviceunavailable": "सेवा अनुपलब्ध है",
   "pages.somethingwentwrong": "कुछ गलत हो गया",
-  "components.Settings.menuRemoteLibraries": "दूरस्थ पुस्तकालय"
+  "components.Settings.menuRemoteLibraries": "दूरस्थ पुस्तकालय",
+  "components.Settings.RemoteLibrary.deviceId": "डिवाइस आईडी"
 }

@@ -1233,5 +1233,6 @@
   "pages.returnHome": "Gå hjem",
   "pages.serviceunavailable": "Tjenste Utilgjenglig",
   "pages.somethingwentwrong": "Noe gikk galt",
-  "components.Settings.menuRemoteLibraries": "Eksterne Biblioteker"
+  "components.Settings.menuRemoteLibraries": "Eksterne Biblioteker",
+  "components.Settings.RemoteLibrary.deviceId": "Enhets-ID"
 }

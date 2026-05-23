@@ -1687,5 +1687,6 @@
   "pages.returnHome": "Ritorna alla pagina iniziale",
   "pages.serviceunavailable": "Servizio non disponibile",
   "pages.somethingwentwrong": "Qualcosa è andato storto",
-  "components.Settings.menuRemoteLibraries": "Librerie Remote"
+  "components.Settings.menuRemoteLibraries": "Librerie Remote",
+  "components.Settings.RemoteLibrary.deviceId": "ID Dispositivo"
 }

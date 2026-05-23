@@ -1717,5 +1717,6 @@
   "pages.returnHome": "Vissza a kezdőképernyőre",
   "pages.serviceunavailable": "A szolgáltatás nem elérhető",
   "pages.somethingwentwrong": "Valami hiba történt",
-  "components.Settings.menuRemoteLibraries": "Távoli Könyvtárak"
+  "components.Settings.menuRemoteLibraries": "Távoli Könyvtárak",
+  "components.Settings.RemoteLibrary.deviceId": "Eszközazonosító"
 }

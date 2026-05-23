@@ -1017,5 +1017,6 @@
   "pages.oops": "Oops",
   "pages.pagenotfound": "Pagina nu a fost găsită",
   "pages.returnHome": "Întoarce-te acasă",
-  "components.Settings.menuRemoteLibraries": "Biblioteci la Distanță"
+  "components.Settings.menuRemoteLibraries": "Biblioteci la Distanță",
+  "components.Settings.RemoteLibrary.deviceId": "ID Dispozitiv"
 }

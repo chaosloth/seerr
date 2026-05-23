@@ -35,6 +35,7 @@ remoteLibraryRoutes.post<
     baseUrl?: string;
     apiKey?: string;
     plexToken?: string;
+    deviceId?: string;
     syncEnabled?: boolean;
   }
 >('/', async (req, res, next) => {
@@ -56,6 +57,7 @@ remoteLibraryRoutes.post<
     baseUrl: req.body.baseUrl,
     apiKey: req.body.apiKey,
     plexToken: req.body.plexToken,
+    deviceId: req.body.deviceId,
     syncEnabled: req.body.syncEnabled ?? true,
     isEnabled: true,
   });
@@ -67,7 +69,8 @@ remoteLibraryRoutes.post<
 
 remoteLibraryRoutes.post('/test', async (req, res, next) => {
   try {
-    const { type, hostname, port, useSsl, baseUrl, apiKey } = req.body;
+    const { type, hostname, port, useSsl, baseUrl, apiKey, deviceId } =
+      req.body;
 
     const protocol = useSsl ? 'https' : 'http';
     const base = baseUrl ? `/${baseUrl.replace(/^\/|\/$/g, '')}` : '';
@@ -77,13 +80,17 @@ remoteLibraryRoutes.post('/test', async (req, res, next) => {
       type === RemoteLibraryType.JELLYFIN ||
       type === RemoteLibraryType.EMBY
     ) {
+      const safeDeviceId =
+        deviceId && deviceId.length > 0
+          ? deviceId
+          : Buffer.from('BOT_seerr').toString('base64');
       const headers: Record<string, string> = {
         'Content-Type': 'application/json',
         Accept: 'application/json',
       };
       if (apiKey) {
         headers['Authorization'] =
-          `MediaBrowser Client="Seerr", Device="Seerr", DeviceId="test", Version="1.0.0", Token="${apiKey}"`;
+          `MediaBrowser Client="Seerr", Device="Seerr", DeviceId="${safeDeviceId}", Version="1.0.0", Token="${apiKey}"`;
       }
 
       await axios.get(`${url}/System/Info`, {

@@ -891,6 +891,7 @@
   "components.Settings.RemoteLibrary.baseUrl": "URL Base",
   "components.Settings.RemoteLibrary.delete": "Delete",
   "components.Settings.RemoteLibrary.deleteremoteconfirm": "Are you sure you want to delete this remote library?",
+  "components.Settings.RemoteLibrary.deviceId": "Device ID",
   "components.Settings.RemoteLibrary.editremote": "Edit Remote Library",
   "components.Settings.RemoteLibrary.embyLabel": "Emby",
   "components.Settings.RemoteLibrary.hostname": "Hostname or IP Address",

@@ -1717,5 +1717,6 @@
   "pages.returnHome": "ホームへ戻る",
   "pages.serviceunavailable": "サービスが利用できません",
   "pages.somethingwentwrong": "チケットが発生しました",
-  "components.Settings.menuRemoteLibraries": "リモートライブラリ"
+  "components.Settings.menuRemoteLibraries": "リモートライブラリ",
+  "components.Settings.RemoteLibrary.deviceId": "デバイスID"
 }

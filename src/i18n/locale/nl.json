@@ -1705,5 +1705,6 @@
   "pages.returnHome": "Terug naar de startpagina",
   "pages.serviceunavailable": "Service niet beschikbaar",
   "pages.somethingwentwrong": "Er ging iets mis",
-  "components.Settings.menuRemoteLibraries": "Externe Bibliotheken"
+  "components.Settings.menuRemoteLibraries": "Externe Bibliotheken",
+  "components.Settings.RemoteLibrary.deviceId": "Apparaat-ID"
 }

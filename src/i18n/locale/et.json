@@ -1717,5 +1717,6 @@
   "pages.returnHome": "Tagasi avalehele",
   "pages.serviceunavailable": "Teenus pole saadaval",
   "pages.somethingwentwrong": "Midagi läks valesti",
-  "components.Settings.menuRemoteLibraries": "Kaug-raamatukogud"
+  "components.Settings.menuRemoteLibraries": "Kaug-raamatukogud",
+  "components.Settings.RemoteLibrary.deviceId": "Seadme ID"
 }

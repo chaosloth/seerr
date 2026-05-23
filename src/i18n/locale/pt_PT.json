@@ -1660,5 +1660,6 @@
   "pages.returnHome": "Voltar Para Página Inicial",
   "pages.serviceunavailable": "Serviço Indisponível",
   "pages.somethingwentwrong": "Ocorreu um erro",
-  "components.Settings.menuRemoteLibraries": "Bibliotecas Remotas"
+  "components.Settings.menuRemoteLibraries": "Bibliotecas Remotas",
+  "components.Settings.RemoteLibrary.deviceId": "ID do Dispositivo"
 }

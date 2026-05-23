@@ -91,7 +91,11 @@ class EmbyJellyfinScanner implements RunnableScanner<EmbyJellyfinSyncStatus> {
     const seenIds: Set<number> = new Set();
 
     try {
-      const api = new JellyfinAPI(url, library.apiKey ?? '');
+      const api = new JellyfinAPI(
+        url,
+        library.apiKey ?? null,
+        library.deviceId ?? null
+      );
 
       const libraries = await api.getLibraries();
 

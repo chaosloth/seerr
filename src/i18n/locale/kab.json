@@ -123,5 +123,6 @@
   "components.UserProfile.UserSettings.menuGeneralSettings": "Amatu",
   "components.UserProfile.UserSettings.menuNotifications": "Ilɣa",
   "i18n.usersettings": "Iɣewwaren n useqdac",
-  "components.Settings.menuRemoteLibraries": "Tasdartin Tibeɛdin"
+  "components.Settings.menuRemoteLibraries": "Tasdartin Tibeɛdin",
+  "components.Settings.RemoteLibrary.deviceId": "Asulay n Wenṭag"
 }

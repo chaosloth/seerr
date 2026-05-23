@@ -1717,5 +1717,6 @@
   "pages.returnHome": "Връщане към Начало",
   "pages.serviceunavailable": "Услугата е недостъпна",
   "pages.somethingwentwrong": "Нещо се обърка",
-  "components.Settings.menuRemoteLibraries": "Отдалечени библиотеки"
+  "components.Settings.menuRemoteLibraries": "Отдалечени библиотеки",
+  "components.Settings.RemoteLibrary.deviceId": "Идентификатор на устройство"
 }

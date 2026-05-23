@@ -741,6 +741,10 @@ components:
         plexToken:
           type: string
           nullable: true
+        deviceId:
+          type: string
+          nullable: true
+          example: Seerr-script
         isEnabled:
           type: boolean
           example: true

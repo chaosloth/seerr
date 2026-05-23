@@ -1484,5 +1484,6 @@
   "pages.returnHome": "Anasayfaya Dön",
   "pages.serviceunavailable": "Hizmet Erişilebilir Değil",
   "pages.somethingwentwrong": "Bir Şeyler Ters Gitti",
-  "components.Settings.menuRemoteLibraries": "Uzak Kütüphaneler"
+  "components.Settings.menuRemoteLibraries": "Uzak Kütüphaneler",
+  "components.Settings.RemoteLibrary.deviceId": "Cihaz Kimliği"
 }

@@ -49,5 +49,6 @@
   "components.Settings.SettingsJobsCache.remote-library-scan": "Skenovanie vzdialených knižníc",
   "components.StatusBadge.alsoonfriendsserver": "Dostupné aj na {names}",
   "components.StatusBadge.onfriendsserver": "Dostupné na {names}",
-  "components.Settings.menuRemoteLibraries": "Vzdialené Knižnice"
+  "components.Settings.menuRemoteLibraries": "Vzdialené Knižnice",
+  "components.Settings.RemoteLibrary.deviceId": "ID Zariadenia"
 }

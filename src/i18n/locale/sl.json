@@ -106,5 +106,6 @@
   "components.Settings.SettingsJobsCache.remote-library-scan": "Pregled oddaljenih knjižnic",
   "components.StatusBadge.alsoonfriendsserver": "Na voljo tudi na {names}",
   "components.StatusBadge.onfriendsserver": "Na voljo na {names}",
-  "components.Settings.menuRemoteLibraries": "Oddaljene Knjižnice"
+  "components.Settings.menuRemoteLibraries": "Oddaljene Knjižnice",
+  "components.Settings.RemoteLibrary.deviceId": "ID Naprave"
 }

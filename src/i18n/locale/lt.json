@@ -769,5 +769,6 @@
   "pages.returnHome": "Grįžti į pradžią",
   "pages.serviceunavailable": "Paslauga nepasiekiama",
   "pages.somethingwentwrong": "Kažkas nepavyko",
-  "components.Settings.menuRemoteLibraries": "Nuotolinės Bibliotekos"
+  "components.Settings.menuRemoteLibraries": "Nuotolinės Bibliotekos",
+  "components.Settings.RemoteLibrary.deviceId": "Įrenginio ID"
 }

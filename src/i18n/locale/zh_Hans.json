@@ -1510,5 +1510,6 @@
   "pages.returnHome": "返回首页",
   "pages.serviceunavailable": "服务器无法使用",
   "pages.somethingwentwrong": "出了点问题",
-  "components.Settings.menuRemoteLibraries": "远程库"
+  "components.Settings.menuRemoteLibraries": "远程库",
+  "components.Settings.RemoteLibrary.deviceId": "设备ID"
 }

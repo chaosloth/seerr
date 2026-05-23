@@ -1246,5 +1246,6 @@
   "pages.returnHome": "Vrati se na početnu stranicu",
   "pages.serviceunavailable": "Usluga nije dostupna",
   "pages.somethingwentwrong": "Dogodila se greška",
-  "components.Settings.menuRemoteLibraries": "Udaljene Knjižnice"
+  "components.Settings.menuRemoteLibraries": "Udaljene Knjižnice",
+  "components.Settings.RemoteLibrary.deviceId": "ID Uređaja"
 }

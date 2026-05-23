@@ -39,6 +39,7 @@ const messages = defineMessages('components.Settings.RemoteLibrary', {
   baseUrl: 'URL Base',
   syncEnabled: 'Enable Sync',
   plexToken: 'Plex Token',
+  deviceId: 'Device ID',
   address: 'Address',
   sslLabel: 'SSL',
   actions: 'Actions',
@@ -182,6 +183,7 @@ const SettingsRemoteLibrary = () => {
     useSsl: boolean;
     baseUrl?: string;
     apiKey?: string;
+    deviceId?: string;
   }) => {
     try {
       await axios.post('/api/v1/remoteLibrary/test', values);
@@ -206,6 +208,7 @@ const SettingsRemoteLibrary = () => {
     baseUrl?: string;
     apiKey?: string;
     plexToken?: string;
+    deviceId?: string;
     syncEnabled: boolean;
   }) => {
     try {
@@ -477,6 +480,7 @@ interface RemoteLibraryModalProps {
     useSsl: boolean;
     baseUrl?: string;
     apiKey?: string;
+    deviceId?: string;
   }) => Promise<void>;
   onSubmit: (values: {
     name: string;
@@ -487,6 +491,7 @@ interface RemoteLibraryModalProps {
     baseUrl?: string;
     apiKey?: string;
     plexToken?: string;
+    deviceId?: string;
     syncEnabled: boolean;
   }) => Promise<void>;
   testResult: boolean | null;
@@ -507,6 +512,7 @@ const RemoteLibraryModal = React.forwardRef<
   const [baseUrl, setBaseUrl] = useState(library?.baseUrl ?? '');
   const [apiKey, setApiKey] = useState(library?.apiKey ?? '');
   const [plexToken, setPlexToken] = useState(library?.plexToken ?? '');
+  const [deviceId, setDeviceId] = useState(library?.deviceId ?? '');
   const [syncEnabled, setSyncEnabled] = useState(library?.syncEnabled ?? true);
   const [isSubmitting, setSubmitting] = useState(false);
 
@@ -541,6 +547,10 @@ const RemoteLibraryModal = React.forwardRef<
       apiKey: apiKey || undefined,
       plexToken:
         type === RemoteLibraryType.PLEX ? plexToken || undefined : undefined,
+      deviceId:
+        type === RemoteLibraryType.JELLYFIN || type === RemoteLibraryType.EMBY
+          ? deviceId || undefined
+          : undefined,
       syncEnabled,
     });
     setSubmitting(false);
@@ -555,6 +565,10 @@ const RemoteLibraryModal = React.forwardRef<
       useSsl,
       baseUrl: baseUrl || undefined,
       apiKey: apiKey || undefined,
+      deviceId:
+        type === RemoteLibraryType.JELLYFIN || type === RemoteLibraryType.EMBY
+          ? deviceId || undefined
+          : undefined,
     });
   };
 
@@ -715,6 +729,26 @@ const RemoteLibraryModal = React.forwardRef<
                   onChange={(e) =>
                     setPlexToken((e.target as HTMLInputElement).value)
                   }
+                />
+              </div>
+            </div>
+          </div>
+        )}
+        {(type === RemoteLibraryType.JELLYFIN ||
+          type === RemoteLibraryType.EMBY) && (
+          <div className="form-row">
+            <label htmlFor="deviceId" className="text-label">
+              {intl.formatMessage(messages.deviceId)}
+            </label>
+            <div className="form-input-area">
+              <div className="form-input-field">
+                <input
+                  id="deviceId"
+                  type="text"
+                  className="input-text rounded-md"
+                  placeholder="Seerr-script"
+                  value={deviceId}
+                  onChange={(e) => setDeviceId(e.target.value)}
                 />
               </div>
             </div>

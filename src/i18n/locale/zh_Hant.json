@@ -1286,5 +1286,6 @@
   "pages.returnHome": "返回首頁",
   "pages.serviceunavailable": "伺服器無法使用",
   "pages.somethingwentwrong": "出了點問題",
-  "components.Settings.menuRemoteLibraries": "遠端庫"
+  "components.Settings.menuRemoteLibraries": "遠端庫",
+  "components.Settings.RemoteLibrary.deviceId": "裝置ID"
 }

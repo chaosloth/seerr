@@ -783,5 +783,6 @@
   "pages.returnHome": "חזרה לדף הבית",
   "pages.serviceunavailable": "שירות לא זמין",
   "pages.somethingwentwrong": "משהו השתבש",
-  "components.Settings.menuRemoteLibraries": "ספריות מרוחקות"
+  "components.Settings.menuRemoteLibraries": "ספריות מרוחקות",
+  "components.Settings.RemoteLibrary.deviceId": "מזהה מכשיר"
 }

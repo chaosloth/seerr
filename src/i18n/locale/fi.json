@@ -997,5 +997,6 @@
   "pages.returnHome": "Palaa etusivulle",
   "pages.serviceunavailable": "Palvelu ei saatavilla",
   "pages.somethingwentwrong": "Jokin meni pieleen",
-  "components.Settings.menuRemoteLibraries": "Etäkirjastot"
+  "components.Settings.menuRemoteLibraries": "Etäkirjastot",
+  "components.Settings.RemoteLibrary.deviceId": "Laitteen tunnus"
 }

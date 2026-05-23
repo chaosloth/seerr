@@ -1235,5 +1235,6 @@
   "pages.returnHome": "Volver al Inicio",
   "pages.serviceunavailable": "Servicio No Disponible",
   "pages.somethingwentwrong": "Algo fue mal",
-  "components.Settings.menuRemoteLibraries": "Bibliotecas Remotas"
+  "components.Settings.menuRemoteLibraries": "Bibliotecas Remotas",
+  "components.Settings.RemoteLibrary.deviceId": "ID del Dispositivo"
 }

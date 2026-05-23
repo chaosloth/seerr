@@ -1379,5 +1379,6 @@
   "pages.returnHome": "Torna a l'inici",
   "pages.serviceunavailable": "Servei no disponible",
   "pages.somethingwentwrong": "Alguna cosa ha anat malament",
-  "components.Settings.menuRemoteLibraries": "Biblioteques Remotes"
+  "components.Settings.menuRemoteLibraries": "Biblioteques Remotes",
+  "components.Settings.RemoteLibrary.deviceId": "ID del Dispositiu"
 }

@@ -1687,5 +1687,6 @@
   "pages.returnHome": "عودة للقائمة الرئيسية",
   "pages.serviceunavailable": "الخدمة غير متاحة",
   "pages.somethingwentwrong": "حدث خطأ ما",
-  "components.Settings.menuRemoteLibraries": "المكتبات البعيدة"
+  "components.Settings.menuRemoteLibraries": "المكتبات البعيدة",
+  "components.Settings.RemoteLibrary.deviceId": "معرّف الجهاز"
 }
