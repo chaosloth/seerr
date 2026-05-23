@@ -46,7 +46,7 @@ export async function sendToFriendarr(
       destination: {
         mediaType,
         tmdbId,
-        title: '',
+        title: `TMDB-${tmdbId}`,
         year: 0,
         libraryPath: '',
       },
