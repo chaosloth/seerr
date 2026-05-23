@@ -705,19 +705,55 @@ requestRoutes.post<{
         });
       }
 
+      const protocol = request.remoteLibrary.useSsl ? 'https' : 'http';
+      const base = request.remoteLibrary.baseUrl
+        ? `/${request.remoteLibrary.baseUrl.replace(/^\/|\/$/g, '')}`
+        : '';
+      const remoteUrl = `${protocol}://${request.remoteLibrary.hostname}:${request.remoteLibrary.port}${base}`;
+
       logger.info(
-        `Sending request ${request.id} to remote library: ${request.remoteLibrary.name}`,
+        `Handing off request ${request.id} to Downloading Service for ${request.remoteLibrary.name}`,
         {
           label: 'Media Request',
           type: request.type,
           tmdbId: request.media.tmdbId,
           remoteLibraryId: request.remoteLibrary.id,
+          remoteUrl,
+          authToken:
+            request.remoteLibrary.apiKey ??
+            request.remoteLibrary.plexToken ??
+            'none',
+          deviceId: request.remoteLibrary.deviceId ?? undefined,
         }
       );
 
       return res.status(200).json({
-        message: `Request queued for download from ${request.remoteLibrary.name}`,
+        message: `Request handed off to Downloading Service from ${request.remoteLibrary.name}`,
         requestId: request.id,
+        downloadServicePayload: {
+          source: {
+            type: request.remoteLibrary.type,
+            url: remoteUrl,
+            authToken:
+              request.remoteLibrary.apiKey ??
+              request.remoteLibrary.plexToken ??
+              undefined,
+            deviceId: request.remoteLibrary.deviceId ?? undefined,
+            mediaId: String(request.media.tmdbId),
+          },
+          destination: {
+            mediaType: request.type,
+            tmdbId: request.media.tmdbId,
+            title: '',
+            year: 0,
+            libraryPath: '',
+          },
+          metadata: {
+            nfo: true,
+            poster: true,
+            fanart: true,
+          },
+        },
         remoteLibrary: {
           id: request.remoteLibrary.id,
           name: request.remoteLibrary.name,
