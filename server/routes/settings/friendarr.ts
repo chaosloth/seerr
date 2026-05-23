@@ -35,16 +35,12 @@ friendarrRoutes.post('/test', async (req, res, next) => {
     const base = baseUrl ? `/${baseUrl.replace(/^\/|\/$/g, '')}` : '';
     const url = `${protocol}://${hostname}:${port}${base}`;
 
-    const response = await axios.get(`${url}/api/v1/health`, {
+    const response = await axios.get(`${url}/api/v1/verify`, {
       headers: apiKey ? { Authorization: `Bearer ${apiKey}` } : {},
       timeout: 10000,
     });
 
-    if (
-      !response.data ||
-      response.data.status !== 'ok' ||
-      typeof response.data.activeDownloads !== 'number'
-    ) {
+    if (!response.data || response.data.status !== 'ok') {
       return next({
         status: 500,
         message:
