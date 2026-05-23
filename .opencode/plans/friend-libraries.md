@@ -250,6 +250,19 @@ For multi-part files (multiple video files per item), the service should concate
 
 ---
 
+## Phase 3: Friendarr Connection Configuration
+
+| # | Task | Status | Notes |
+|---|---|---|---|
+| 3.0.1 | Add `FriendarrSettings` interface to settings storage | completed | Single object (not array); fields: enabled, hostname, port, apiKey, useSsl, baseUrl; defaults: disabled, localhost:5056 |
+| 3.0.2 | Create API routes for Friendarr config | completed | `GET/POST /api/v1/settings/friendarr` (admin), `POST /api/v1/settings/friendarr/test` (hits Friendarr `/api/v1/health`) |
+| 3.0.3 | Create FriendarrModal UI component | completed | Enable toggle, hostname/port/SSL/API key/baseUrl fields, Test button, Save |
+| 3.0.4 | Add Friendarr card to Settings → Services page | completed | Shows enabled/disabled badge, connection URL, Configure button |
+| 3.0.5 | Update send-to-remote to read from settings | completed | Settings first, falls back to `FRIENDARR_URL`/`FRIENDARR_API_KEY` env vars |
+| 3.0.6 | Setup wizard shows Friendarr (automatic) | completed | Step 4 renders `<SettingsServices />` which now includes the Friendarr card |
+| 3.0.7 | Update OpenAPI spec | completed | `FriendarrSettings` schema + 3 route definitions |
+| 3.0.8 | i18n strings | completed | 22 new keys added to all 40 locales (English fallback) |
+
 ## Current Progress
 
-**Status**: Phase 1 complete (all four source types discoverable). Phase 2 Seerr-side complete (entity, routes, UI, handoff). Phases 2.2-2.4 delegated to Friendarr — the standalone Downloading Service at `/Users/cc/Development/friendarr`.
+**Status**: Phase 1 complete (discovery). Phase 2 complete (Seerr-side routing + Friendarr handoff). Phase 3 complete (Friendarr connection UI). Phases 2.2-2.4 (source-specific content fetch) delegated to the standalone Friendarr Downloading Service at `/Users/cc/Development/friendarr`.
