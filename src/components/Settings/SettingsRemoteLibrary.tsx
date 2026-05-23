@@ -93,9 +93,29 @@ const SettingsRemoteLibrary = () => {
 
   const { data, error } = useSWR<RemoteLibrary[]>('/api/v1/remoteLibrary');
 
+  const { data: syncStatus } = useSWR<{
+    seerr: {
+      running: boolean;
+      progress: number;
+      total: number;
+      currentLibrary: RemoteLibrary | null;
+    };
+    embyJellyfin: {
+      running: boolean;
+      progress: number;
+      total: number;
+      currentLibrary: RemoteLibrary | null;
+    };
+  }>('/api/v1/remoteLibrary/sync/status', {
+    refreshInterval: 1000,
+  });
+
   if (!data && !error) {
     return <LoadingSpinner />;
   }
+
+  const isSyncing =
+    syncStatus?.seerr?.running || syncStatus?.embyJellyfin?.running;
 
   const closeModal = () => {
     setModalOpen(false);
@@ -257,6 +277,46 @@ const SettingsRemoteLibrary = () => {
           </div>
         </div>
         <div>
+          {isSyncing && (
+            <div className="mb-4 rounded-lg border border-indigo-500/30 bg-indigo-900/20 p-4">
+              <div className="mb-2 flex items-center justify-between text-sm">
+                <span className="text-indigo-300">
+                  {intl.formatMessage(messages.syncing)}
+                </span>
+                <span className="text-gray-400">
+                  {syncStatus?.seerr?.running
+                    ? `${syncStatus.seerr.progress} of ${syncStatus.seerr.total}`
+                    : syncStatus?.embyJellyfin?.running
+                      ? `${syncStatus.embyJellyfin.progress} of ${syncStatus.embyJellyfin.total}`
+                      : ''}
+                </span>
+              </div>
+              <div className="h-1.5 w-full overflow-hidden rounded-full bg-gray-700">
+                <div
+                  className="h-full rounded-full bg-indigo-500 transition-all duration-300"
+                  style={{
+                    width: `${(() => {
+                      const status = syncStatus?.seerr?.running
+                        ? syncStatus.seerr
+                        : syncStatus?.embyJellyfin?.running
+                          ? syncStatus.embyJellyfin
+                          : null;
+                      if (!status || status.total === 0) return 0;
+                      return Math.round((status.progress / status.total) * 100);
+                    })()}%`,
+                  }}
+                />
+              </div>
+              <p className="mt-1 text-xs text-gray-500">
+                {syncStatus?.seerr?.running && syncStatus.seerr.currentLibrary
+                  ? syncStatus.seerr.currentLibrary.name
+                  : syncStatus?.embyJellyfin?.running &&
+                      syncStatus.embyJellyfin.currentLibrary
+                    ? syncStatus.embyJellyfin.currentLibrary.name
+                    : ''}
+              </p>
+            </div>
+          )}
           {data?.length === 0 ? (
             <div className="text-gray-500">
               {intl.formatMessage(messages.noRemoteLibraries)}

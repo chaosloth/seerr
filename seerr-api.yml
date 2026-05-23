@@ -8223,6 +8223,15 @@ paths:
       responses:
         '200':
           description: Sync started
+  /remoteLibrary/sync/status:
+    get:
+      summary: Get remote library sync status
+      description: Returns the current status of remote library scanners.
+      tags:
+        - settings
+      responses:
+        '200':
+          description: Sync status returned
 security:
   - cookieAuth: []
   - apiKey: []

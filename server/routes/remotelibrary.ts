@@ -162,6 +162,16 @@ remoteLibraryRoutes.delete<{ id: string }>('/:id', async (req, res, next) => {
   return res.status(204).send();
 });
 
+remoteLibraryRoutes.get('/sync/status', (_req, res) => {
+  const seerrStatus = seerrScanner.status();
+  const embyJellyfinStatus = embyJellyfinScanner.status();
+
+  return res.status(200).json({
+    seerr: seerrStatus,
+    embyJellyfin: embyJellyfinStatus,
+  });
+});
+
 remoteLibraryRoutes.post<{ id: string }>(
   '/:id/sync',
   async (req, res, next) => {
@@ -178,7 +188,6 @@ remoteLibraryRoutes.post<{ id: string }>(
       });
     }
 
-    // Trigger full scanner run (scans all enabled libraries of matching type)
     if (library.type === RemoteLibraryType.SEERR) {
       seerrScanner.run().catch((err) => {
         logger.error('Failed to sync Seerr remote library', {
@@ -201,5 +210,15 @@ remoteLibraryRoutes.post<{ id: string }>(
     return res.status(200).json({ message: 'Sync started' });
   }
 );
+
+remoteLibraryRoutes.get('/sync/status', (_req, res) => {
+  const seerrStatus = seerrScanner.status();
+  const embyJellyfinStatus = embyJellyfinScanner.status();
+
+  return res.status(200).json({
+    seerr: seerrStatus,
+    embyJellyfin: embyJellyfinStatus,
+  });
+});
 
 export default remoteLibraryRoutes;
