@@ -26,6 +26,7 @@ import { Permission } from '@server/lib/permissions';
 import { getSettings } from '@server/lib/settings';
 import logger from '@server/logger';
 import { isAuthenticated } from '@server/middleware/auth';
+import axios from 'axios';
 import { Router } from 'express';
 
 const requestRoutes = Router();
@@ -712,54 +713,96 @@ requestRoutes.post<{
       const remoteUrl = `${protocol}://${request.remoteLibrary.hostname}:${request.remoteLibrary.port}${base}`;
 
       logger.info(
-        `Handing off request ${request.id} to Downloading Service for ${request.remoteLibrary.name}`,
+        `Handing off request ${request.id} to Friendarr for ${request.remoteLibrary.name}`,
         {
           label: 'Media Request',
           type: request.type,
           tmdbId: request.media.tmdbId,
           remoteLibraryId: request.remoteLibrary.id,
           remoteUrl,
-          authToken:
-            request.remoteLibrary.apiKey ??
-            request.remoteLibrary.plexToken ??
-            'none',
-          deviceId: request.remoteLibrary.deviceId ?? undefined,
         }
       );
 
-      return res.status(200).json({
-        message: `Request handed off to Downloading Service from ${request.remoteLibrary.name}`,
-        requestId: request.id,
-        downloadServicePayload: {
-          source: {
+      const friendarrUrl = process.env.FRIENDARR_URL ?? 'http://localhost:5056';
+      const friendarrApiKey = process.env.FRIENDARR_API_KEY;
+
+      try {
+        const friendarrResponse = await axios.post(
+          `${friendarrUrl}/api/v1/download`,
+          {
+            source: {
+              type: request.remoteLibrary.type,
+              url: remoteUrl,
+              authToken:
+                request.remoteLibrary.apiKey ??
+                request.remoteLibrary.plexToken ??
+                undefined,
+              deviceId: request.remoteLibrary.deviceId ?? undefined,
+              mediaId: String(request.media.tmdbId),
+            },
+            destination: {
+              mediaType: request.type,
+              tmdbId: request.media.tmdbId,
+              title: '',
+              year: 0,
+              libraryPath: '',
+            },
+            metadata: {
+              nfo: true,
+              poster: true,
+              fanart: true,
+            },
+          },
+          {
+            headers: friendarrApiKey
+              ? { Authorization: `Bearer ${friendarrApiKey}` }
+              : {},
+            timeout: 10000,
+          }
+        );
+
+        logger.info(
+          `Friendarr accepted download ${friendarrResponse.data.id} for request ${request.id}`,
+          {
+            label: 'Media Request',
+            friendarrDownloadId: friendarrResponse.data.id,
+          }
+        );
+
+        return res.status(200).json({
+          message: `Download queued in Friendarr from ${request.remoteLibrary.name}`,
+          requestId: request.id,
+          friendarrDownloadId: friendarrResponse.data.id,
+          downloadStatusUrl: `${friendarrUrl}/api/v1/status/${friendarrResponse.data.id}`,
+          remoteLibrary: {
+            id: request.remoteLibrary.id,
+            name: request.remoteLibrary.name,
             type: request.remoteLibrary.type,
-            url: remoteUrl,
-            authToken:
-              request.remoteLibrary.apiKey ??
-              request.remoteLibrary.plexToken ??
-              undefined,
-            deviceId: request.remoteLibrary.deviceId ?? undefined,
-            mediaId: String(request.media.tmdbId),
           },
-          destination: {
-            mediaType: request.type,
-            tmdbId: request.media.tmdbId,
-            title: '',
-            year: 0,
-            libraryPath: '',
-          },
-          metadata: {
-            nfo: true,
-            poster: true,
-            fanart: true,
-          },
-        },
-        remoteLibrary: {
-          id: request.remoteLibrary.id,
-          name: request.remoteLibrary.name,
-          type: request.remoteLibrary.type,
-        },
-      });
+        });
+      } catch (e) {
+        if (axios.isAxiosError(e) && e.response) {
+          logger.error('Friendarr rejected download request', {
+            label: 'Media Request',
+            status: e.response.status,
+            errorMessage: e.response.data?.error ?? e.message,
+          });
+          return next({
+            status: 502,
+            message: `Friendarr error: ${e.response.data?.error ?? e.message}`,
+          });
+        }
+
+        logger.error('Failed to connect to Friendarr', {
+          label: 'Media Request',
+          errorMessage: (e as Error).message,
+        });
+        return next({
+          status: 502,
+          message:
+            'Failed to connect to Friendarr. Is the service running? Set FRIENDARR_URL if deployed remotely.',
+        });
+      }
     } catch (e) {
       logger.error('Error processing remote request', {
         label: 'Media Request',
