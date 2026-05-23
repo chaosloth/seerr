@@ -16,6 +16,7 @@ import {
   RequestPermissionError,
 } from '@server/entity/MediaRequest';
 import { RemoteLibrary } from '@server/entity/RemoteLibrary';
+import { RemoteMedia } from '@server/entity/RemoteMedia';
 import SeasonRequest from '@server/entity/SeasonRequest';
 import { User } from '@server/entity/User';
 import type {
@@ -708,12 +709,24 @@ requestRoutes.post<{
         });
       }
 
+      let remoteId: string | undefined;
+      if (request.media && request.remoteLibrary) {
+        const remoteMedia = await getRepository(RemoteMedia).findOne({
+          where: {
+            media: { id: request.media.id },
+            remoteLibrary: { id: request.remoteLibrary.id },
+          },
+        });
+        remoteId = remoteMedia?.remoteId ?? undefined;
+      }
+
       try {
         const result = await sendToFriendarr(
           request.id,
           request.type,
           request.media.tmdbId,
-          request.remoteLibrary
+          request.remoteLibrary,
+          remoteId
         );
 
         return res.status(200).json({

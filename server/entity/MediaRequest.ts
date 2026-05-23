@@ -9,6 +9,7 @@ import {
 import { getRepository } from '@server/datasource';
 import OverrideRule from '@server/entity/OverrideRule';
 import { RemoteLibrary } from '@server/entity/RemoteLibrary';
+import { RemoteMedia } from '@server/entity/RemoteMedia';
 import type { MediaRequestBody } from '@server/interfaces/api/requestInterfaces';
 import notificationManager, { Notification } from '@server/lib/notifications';
 import { Permission } from '@server/lib/permissions';
@@ -658,11 +659,23 @@ export class MediaRequest {
 
     if (this.status === MediaRequestStatus.APPROVED && this.remoteLibrary) {
       try {
+        let remoteId: string | undefined;
+        if (this.media) {
+          const remoteMedia = await getRepository(RemoteMedia).findOne({
+            where: {
+              media: { id: this.media.id },
+              remoteLibrary: { id: this.remoteLibrary.id },
+            },
+          });
+          remoteId = remoteMedia?.remoteId ?? undefined;
+        }
+
         const result = await sendToFriendarr(
           this.id,
           this.type,
           this.media.tmdbId,
-          this.remoteLibrary
+          this.remoteLibrary,
+          remoteId
         );
         logger.info(
           `Auto-sent approved request ${this.id} to Friendarr: ${result.friendarrDownloadId}`,

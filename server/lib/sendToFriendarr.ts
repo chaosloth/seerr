@@ -7,7 +7,8 @@ export async function sendToFriendarr(
   requestId: number,
   mediaType: string,
   tmdbId: number,
-  remoteLibrary: RemoteLibrary
+  remoteLibrary: RemoteLibrary,
+  remoteId?: string
 ): Promise<{ friendarrDownloadId: string; downloadStatusUrl: string }> {
   const settings = getSettings();
   const friendarr = settings.friendarr;
@@ -33,16 +34,30 @@ export async function sendToFriendarr(
     : '';
   const remoteUrl = `${protocol}://${remoteLibrary.hostname}:${remoteLibrary.port}${base}`;
 
+  const source: Record<string, unknown> = {
+    type: remoteLibrary.type,
+    url: remoteUrl,
+    authToken: remoteLibrary.apiKey ?? remoteLibrary.plexToken ?? undefined,
+    deviceId: remoteLibrary.deviceId ?? undefined,
+  };
+
+  if (remoteLibrary.type === 'plex') {
+    source.ratingKey = remoteId;
+  } else if (
+    remoteLibrary.type === 'emby' ||
+    remoteLibrary.type === 'jellyfin'
+  ) {
+    source.mediaId = remoteId;
+  } else if (remoteLibrary.type === 'seerr') {
+    throw new Error(
+      'Seerr is not a media server. Configure a Plex, Emby, or Jellyfin remote library.'
+    );
+  }
+
   const response = await axios.post(
     `${friendarrUrl}/api/v1/download`,
     {
-      source: {
-        type: remoteLibrary.type,
-        url: remoteUrl,
-        authToken: remoteLibrary.apiKey ?? remoteLibrary.plexToken ?? undefined,
-        deviceId: remoteLibrary.deviceId ?? undefined,
-        mediaId: String(tmdbId),
-      },
+      source: source,
       destination: {
         mediaType,
         tmdbId,
