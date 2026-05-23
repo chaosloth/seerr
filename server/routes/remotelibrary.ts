@@ -65,7 +65,7 @@ remoteLibraryRoutes.post<
 
 remoteLibraryRoutes.post('/test', async (req, res, next) => {
   try {
-    const { hostname, port, useSsl, baseUrl, apiKey } = req.body;
+    const { type, hostname, port, useSsl, baseUrl, apiKey } = req.body;
 
     const protocol = useSsl ? 'https' : 'http';
     const base = baseUrl
@@ -73,10 +73,30 @@ remoteLibraryRoutes.post('/test', async (req, res, next) => {
       : '';
     const url = `${protocol}://${hostname}:${port}${base}`;
 
-    await axios.get(`${url}/api/v1/status`, {
-      headers: apiKey ? { 'X-Api-Key': apiKey } : {},
-      timeout: 10000,
-    });
+    if (
+      type === RemoteLibraryType.JELLYFIN ||
+      type === RemoteLibraryType.EMBY
+    ) {
+      const headers: Record<string, string> = {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+      };
+      if (apiKey) {
+        headers[
+          'Authorization'
+        ] = `MediaBrowser Client="Seerr", Device="Seerr", DeviceId="test", Version="1.0.0", Token="${apiKey}"`;
+      }
+
+      await axios.get(`${url}/System/Info`, {
+        headers,
+        timeout: 10000,
+      });
+    } else {
+      await axios.get(`${url}/api/v1/status`, {
+        headers: apiKey ? { 'X-Api-Key': apiKey } : {},
+        timeout: 10000,
+      });
+    }
 
     return res.status(200).json({ success: true });
   } catch (e) {
