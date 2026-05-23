@@ -57,6 +57,8 @@ const messages = defineMessages('components.Settings.RemoteLibrary', {
   toastRemoteLibraryUpdateFailure: 'Failed to update remote library.',
   toastRemoteLibraryDeleteSuccess: 'Remote library deleted successfully!',
   toastRemoteLibraryDeleteFailure: 'Failed to delete remote library.',
+  toastSyncStarted: 'Sync started for {name}',
+  toastSyncFailed: 'Failed to sync {name}',
   test: 'Test',
   seerrLabel: 'Seerr',
   jellyfinLabel: 'Jellyfin',
@@ -151,14 +153,18 @@ const SettingsRemoteLibrary = () => {
     setSyncingIds((prev) => new Set(prev).add(library.id));
     try {
       await axios.post(`/api/v1/remoteLibrary/${library.id}/sync`);
-      addToast(`Sync started for ${library.name}`, {
-        appearance: 'success',
-      });
+      addToast(
+        intl.formatMessage(messages.toastSyncStarted, { name: library.name }),
+        { appearance: 'success' }
+      );
       // Poll for completion by refreshing the list
       setTimeout(() => mutate('/api/v1/remoteLibrary'), 3000);
       setTimeout(() => mutate('/api/v1/remoteLibrary'), 10000);
     } catch {
-      addToast(`Failed to sync ${library.name}`, { appearance: 'error' });
+      addToast(
+        intl.formatMessage(messages.toastSyncFailed, { name: library.name }),
+        { appearance: 'error' }
+      );
     } finally {
       setSyncingIds((prev) => {
         const next = new Set(prev);
