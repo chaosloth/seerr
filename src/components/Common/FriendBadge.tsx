@@ -15,13 +15,12 @@ const FriendBadge = ({ remoteAvailability }: FriendBadgeProps) => {
   const names = remoteAvailability.map((r) => r.remoteLibraryName).join(', ');
 
   return (
-    <span
-      title={`Available on: ${names}`}
-      className="relative inline-flex items-center"
-    >
+    <span title={`Available on: ${names}`} className="inline-flex items-center">
       <Badge badgeType="primary" className="seerr-friends-badge">
-        <UsersIcon className="seerr-friends-badge-icon mr-0.5 inline h-3 w-3 align-[-2px]" />
-        {count}
+        <span className="inline-flex items-center gap-0.5">
+          <UsersIcon className="seerr-friends-badge-icon h-3 w-3" />
+          <span>{count}</span>
+        </span>
       </Badge>
     </span>
   );

@@ -26,63 +26,64 @@ const StatusBadgeMini = ({
   shrink = false,
   remoteAvailability,
 }: StatusBadgeMiniProps) => {
+  const isRemoteOnly =
+    (status === MediaStatus.UNKNOWN || !status) &&
+    remoteAvailability &&
+    remoteAvailability.length > 0;
+
+  if (isRemoteOnly) {
+    return (
+      <div className="seerr-remote-badge relative inline-flex whitespace-nowrap rounded-full border-gray-700 text-xs font-semibold leading-5">
+        <div className="seerr-remote-badge-inner flex h-5 w-5 items-center justify-center rounded-full border border-teal-400 bg-teal-500/80 shadow-md ring-1 ring-teal-400">
+          <UsersIcon className="seerr-remote-badge-icon h-3 w-3 text-teal-100" />
+        </div>
+      </div>
+    );
+  }
+
   const badgeStyle = [
     `rounded-full shadow-md ${
       shrink ? 'w-4 sm:w-5 border p-0' : 'w-5 ring-1 p-0.5'
     }`,
   ];
 
-  const isRemoteOnly =
-    (status === MediaStatus.UNKNOWN || !status) &&
-    remoteAvailability &&
-    remoteAvailability.length > 0;
-
   let indicatorIcon: React.ReactNode;
 
-  if (isRemoteOnly) {
-    badgeStyle.push(
-      'bg-teal-500/80 border-teal-400 ring-teal-400 text-teal-100 seerr-remote-badge flex items-center justify-center'
-    );
-    indicatorIcon = <UsersIcon className="seerr-remote-badge-icon h-3 w-3" />;
-  } else {
-    switch (status) {
-      case MediaStatus.PROCESSING:
-        badgeStyle.push(
-          'bg-indigo-500/80 border-indigo-400 ring-indigo-400 text-indigo-100'
-        );
-        indicatorIcon = <ClockIcon />;
-        break;
-      case MediaStatus.AVAILABLE:
-        badgeStyle.push(
-          'bg-green-500/80 border-green-400 ring-green-400 text-green-100 seerr-available-badge'
-        );
-        indicatorIcon = (
-          <CheckCircleIcon className="seerr-available-badge-icon" />
-        );
-        break;
-      case MediaStatus.PENDING:
-        badgeStyle.push(
-          'bg-yellow-500/80 border-yellow-400 ring-yellow-400 text-yellow-100'
-        );
-        indicatorIcon = <BellIcon />;
-        break;
-      case MediaStatus.BLOCKLISTED:
-        badgeStyle.push('bg-red-500/80 border-white ring-white text-white');
-        indicatorIcon = <EyeSlashIcon />;
-        break;
-      case MediaStatus.PARTIALLY_AVAILABLE:
-        badgeStyle.push(
-          'bg-green-500/80 border-green-400 ring-green-400 text-green-100'
-        );
-        indicatorIcon = <MinusSmallIcon />;
-        break;
-      case MediaStatus.DELETED:
-        badgeStyle.push(
-          'bg-red-500/80 border-red-400 ring-red-400 text-red-100'
-        );
-        indicatorIcon = <TrashIcon />;
-        break;
-    }
+  switch (status) {
+    case MediaStatus.PROCESSING:
+      badgeStyle.push(
+        'bg-indigo-500/80 border-indigo-400 ring-indigo-400 text-indigo-100'
+      );
+      indicatorIcon = <ClockIcon />;
+      break;
+    case MediaStatus.AVAILABLE:
+      badgeStyle.push(
+        'bg-green-500/80 border-green-400 ring-green-400 text-green-100 seerr-available-badge'
+      );
+      indicatorIcon = (
+        <CheckCircleIcon className="seerr-available-badge-icon" />
+      );
+      break;
+    case MediaStatus.PENDING:
+      badgeStyle.push(
+        'bg-yellow-500/80 border-yellow-400 ring-yellow-400 text-yellow-100'
+      );
+      indicatorIcon = <BellIcon />;
+      break;
+    case MediaStatus.BLOCKLISTED:
+      badgeStyle.push('bg-red-500/80 border-white ring-white text-white');
+      indicatorIcon = <EyeSlashIcon />;
+      break;
+    case MediaStatus.PARTIALLY_AVAILABLE:
+      badgeStyle.push(
+        'bg-green-500/80 border-green-400 ring-green-400 text-green-100'
+      );
+      indicatorIcon = <MinusSmallIcon />;
+      break;
+    case MediaStatus.DELETED:
+      badgeStyle.push('bg-red-500/80 border-red-400 ring-red-400 text-red-100');
+      indicatorIcon = <TrashIcon />;
+      break;
   }
 
   if (inProgress) {
