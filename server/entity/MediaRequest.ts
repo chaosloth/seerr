@@ -12,6 +12,7 @@ import { RemoteLibrary } from '@server/entity/RemoteLibrary';
 import type { MediaRequestBody } from '@server/interfaces/api/requestInterfaces';
 import notificationManager, { Notification } from '@server/lib/notifications';
 import { Permission } from '@server/lib/permissions';
+import { sendToFriendarr } from '@server/lib/sendToFriendarr';
 import { getSettings } from '@server/lib/settings';
 import logger from '@server/logger';
 import { DbAwareColumn, resolveDbType } from '@server/utils/DbColumnHelper';
@@ -652,6 +653,26 @@ export class MediaRequest {
           media,
           Notification.MEDIA_AUTO_REQUESTED
         );
+      }
+    }
+
+    if (this.status === MediaRequestStatus.APPROVED && this.remoteLibrary) {
+      try {
+        const result = await sendToFriendarr(
+          this.id,
+          this.type,
+          this.media.tmdbId,
+          this.remoteLibrary
+        );
+        logger.info(
+          `Auto-sent approved request ${this.id} to Friendarr: ${result.friendarrDownloadId}`,
+          { label: 'Media Request' }
+        );
+      } catch (e) {
+        logger.error(`Failed to auto-send request ${this.id} to Friendarr`, {
+          label: 'Media Request',
+          errorMessage: (e as Error).message,
+        });
       }
     }
   }

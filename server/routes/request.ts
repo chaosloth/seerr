@@ -23,6 +23,7 @@ import type {
   RequestResultsResponse,
 } from '@server/interfaces/api/requestInterfaces';
 import { Permission } from '@server/lib/permissions';
+import { sendToFriendarr } from '@server/lib/sendToFriendarr';
 import { getSettings } from '@server/lib/settings';
 import logger from '@server/logger';
 import { isAuthenticated } from '@server/middleware/auth';
@@ -707,89 +708,19 @@ requestRoutes.post<{
         });
       }
 
-      const protocol = request.remoteLibrary.useSsl ? 'https' : 'http';
-      const base = request.remoteLibrary.baseUrl
-        ? `/${request.remoteLibrary.baseUrl.replace(/^\/|\/$/g, '')}`
-        : '';
-      const remoteUrl = `${protocol}://${request.remoteLibrary.hostname}:${request.remoteLibrary.port}${base}`;
-
-      logger.info(
-        `Handing off request ${request.id} to Friendarr for ${request.remoteLibrary.name}`,
-        {
-          label: 'Media Request',
-          type: request.type,
-          tmdbId: request.media.tmdbId,
-          remoteLibraryId: request.remoteLibrary.id,
-          remoteUrl,
-        }
-      );
-
-      const settings = getSettings();
-      const friendarr = settings.friendarr;
-
-      let friendarrUrl: string;
-      let friendarrApiKey: string | undefined;
-
-      if (friendarr.enabled) {
-        const protocol = friendarr.useSsl ? 'https' : 'http';
-        const base = friendarr.baseUrl
-          ? `/${friendarr.baseUrl.replace(/^\/|\/$/g, '')}`
-          : '';
-        friendarrUrl = `${protocol}://${friendarr.hostname}:${friendarr.port}${base}`;
-        friendarrApiKey = friendarr.apiKey || undefined;
-      } else {
-        friendarrUrl = process.env.FRIENDARR_URL ?? 'http://localhost:5056';
-        friendarrApiKey = process.env.FRIENDARR_API_KEY;
-      }
-
       try {
-        const friendarrResponse = await axios.post(
-          `${friendarrUrl}/api/v1/download`,
-          {
-            source: {
-              type: request.remoteLibrary.type,
-              url: remoteUrl,
-              authToken:
-                request.remoteLibrary.apiKey ??
-                request.remoteLibrary.plexToken ??
-                undefined,
-              deviceId: request.remoteLibrary.deviceId ?? undefined,
-              mediaId: String(request.media.tmdbId),
-            },
-            destination: {
-              mediaType: request.type,
-              tmdbId: request.media.tmdbId,
-              title: '',
-              year: 0,
-              libraryPath: '',
-            },
-            metadata: {
-              nfo: true,
-              poster: true,
-              fanart: true,
-            },
-          },
-          {
-            headers: friendarrApiKey
-              ? { Authorization: `Bearer ${friendarrApiKey}` }
-              : {},
-            timeout: 10000,
-          }
-        );
-
-        logger.info(
-          `Friendarr accepted download ${friendarrResponse.data.id} for request ${request.id}`,
-          {
-            label: 'Media Request',
-            friendarrDownloadId: friendarrResponse.data.id,
-          }
+        const result = await sendToFriendarr(
+          request.id,
+          request.type,
+          request.media.tmdbId,
+          request.remoteLibrary
         );
 
         return res.status(200).json({
           message: `Download queued in Friendarr from ${request.remoteLibrary.name}`,
           requestId: request.id,
-          friendarrDownloadId: friendarrResponse.data.id,
-          downloadStatusUrl: `${friendarrUrl}/api/v1/status/${friendarrResponse.data.id}`,
+          friendarrDownloadId: result.friendarrDownloadId,
+          downloadStatusUrl: result.downloadStatusUrl,
           remoteLibrary: {
             id: request.remoteLibrary.id,
             name: request.remoteLibrary.name,
@@ -815,8 +746,7 @@ requestRoutes.post<{
         });
         return next({
           status: 502,
-          message:
-            'Failed to connect to Friendarr. Is the service running? Set FRIENDARR_URL if deployed remotely.',
+          message: 'Failed to connect to Friendarr. Is the service running?',
         });
       }
     } catch (e) {
