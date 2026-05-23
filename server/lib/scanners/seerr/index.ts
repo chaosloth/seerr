@@ -119,7 +119,7 @@ class SeerrScanner implements RunnableScanner<RemoteLibrarySyncStatus> {
         }
 
         for (const remoteItem of results) {
-          const localMedia = await mediaRepository.findOne({
+          let localMedia = await mediaRepository.findOne({
             where: {
               tmdbId: remoteItem.tmdbId,
               mediaType: remoteItem.mediaType as MediaType,
@@ -127,29 +127,36 @@ class SeerrScanner implements RunnableScanner<RemoteLibrarySyncStatus> {
             select: { id: true },
           });
 
-          if (localMedia) {
-            let remoteMedia = await remoteMediaRepository.findOne({
-              where: {
-                media: { id: localMedia.id },
-                remoteLibrary: { id: library.id },
-              },
+          if (!localMedia) {
+            localMedia = mediaRepository.create({
+              tmdbId: remoteItem.tmdbId,
+              mediaType: remoteItem.mediaType as MediaType,
+              status: 5,
             });
-
-            if (!remoteMedia) {
-              remoteMedia = remoteMediaRepository.create({
-                media: { id: localMedia.id } as Media,
-                remoteLibrary: library,
-                status: remoteItem.mediaType === 'movie' ? 5 : 5,
-                remoteId: String(remoteItem.id),
-              });
-            } else {
-              remoteMedia.status = 5;
-              remoteMedia.remoteId = String(remoteItem.id);
-            }
-
-            await remoteMediaRepository.save(remoteMedia);
-            seenIds.add(remoteMedia.id);
+            await mediaRepository.save(localMedia);
           }
+
+          let remoteMedia = await remoteMediaRepository.findOne({
+            where: {
+              media: { id: localMedia.id },
+              remoteLibrary: { id: library.id },
+            },
+          });
+
+          if (!remoteMedia) {
+            remoteMedia = remoteMediaRepository.create({
+              media: { id: localMedia.id } as Media,
+              remoteLibrary: library,
+              status: 5,
+              remoteId: String(remoteItem.id),
+            });
+          } else {
+            remoteMedia.status = 5;
+            remoteMedia.remoteId = String(remoteItem.id);
+          }
+
+          await remoteMediaRepository.save(remoteMedia);
+          seenIds.add(remoteMedia.id);
         }
 
         this.progress = skip + results.length;

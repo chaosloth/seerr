@@ -138,29 +138,39 @@ class EmbyJellyfinScanner implements RunnableScanner<EmbyJellyfinSyncStatus> {
                 select: { id: true },
               });
 
-              if (localMedia) {
-                let remoteMedia = await remoteMediaRepository.findOne({
-                  where: {
-                    media: { id: localMedia.id },
-                    remoteLibrary: { id: library.id },
-                  },
+              const resolvedMedia =
+                localMedia ??
+                mediaRepository.create({
+                  tmdbId,
+                  mediaType,
+                  status: 5,
                 });
 
-                if (!remoteMedia) {
-                  remoteMedia = remoteMediaRepository.create({
-                    media: { id: localMedia.id } as Media,
-                    remoteLibrary: library,
-                    status: 5,
-                    remoteId: metadata.Id,
-                  });
-                } else {
-                  remoteMedia.status = 5;
-                  remoteMedia.remoteId = metadata.Id;
-                }
-
-                await remoteMediaRepository.save(remoteMedia);
-                seenIds.add(remoteMedia.id);
+              if (!localMedia) {
+                await mediaRepository.save(resolvedMedia);
               }
+
+              let remoteMedia = await remoteMediaRepository.findOne({
+                where: {
+                  media: { id: resolvedMedia.id },
+                  remoteLibrary: { id: library.id },
+                },
+              });
+
+              if (!remoteMedia) {
+                remoteMedia = remoteMediaRepository.create({
+                  media: { id: resolvedMedia.id } as Media,
+                  remoteLibrary: library,
+                  status: 5,
+                  remoteId: metadata.Id,
+                });
+              } else {
+                remoteMedia.status = 5;
+                remoteMedia.remoteId = metadata.Id;
+              }
+
+              await remoteMediaRepository.save(remoteMedia);
+              seenIds.add(remoteMedia.id);
 
               this.progress++;
             } catch {
