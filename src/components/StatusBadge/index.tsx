@@ -8,6 +8,7 @@ import globalMessages from '@app/i18n/globalMessages';
 import defineMessages from '@app/utils/defineMessages';
 import { MediaStatus } from '@server/constants/media';
 import { MediaServerType } from '@server/constants/server';
+import type { RemoteAvailability } from '@server/interfaces/api/mediaInterfaces';
 import type { DownloadingItem } from '@server/lib/downloadtracker';
 import { useIntl } from 'react-intl';
 
@@ -19,6 +20,7 @@ const messages = defineMessages('components.StatusBadge', {
   managemedia: 'Manage {mediaType}',
   seasonnumber: 'S{seasonNumber}',
   seasonepisodenumber: 'S{seasonNumber}E{episodeNumber}',
+  onfriendsserver: 'Available on {names}',
 });
 
 interface StatusBadgeProps {
@@ -32,6 +34,7 @@ interface StatusBadgeProps {
   mediaType?: 'movie' | 'tv';
   title?: string | string[];
   statusLabelOverride?: string;
+  remoteAvailability?: RemoteAvailability[];
 }
 
 const StatusBadge = ({
@@ -45,6 +48,7 @@ const StatusBadge = ({
   mediaType,
   title,
   statusLabelOverride,
+  remoteAvailability,
 }: StatusBadgeProps) => {
   const intl = useIntl();
   const { hasPermission } = useUser();
@@ -155,6 +159,21 @@ const StatusBadge = ({
   );
 
   switch (status) {
+    case undefined:
+    case MediaStatus.UNKNOWN:
+      if (remoteAvailability && remoteAvailability.length > 0) {
+        return (
+          <Badge badgeType="primary">
+            {intl.formatMessage(messages.onfriendsserver, {
+              names: remoteAvailability
+                .map((r) => r.remoteLibraryName)
+                .join(', '),
+            })}
+          </Badge>
+        );
+      }
+      return null;
+
     case MediaStatus.AVAILABLE:
       return (
         <Tooltip

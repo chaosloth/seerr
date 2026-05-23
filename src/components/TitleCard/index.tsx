@@ -460,13 +460,14 @@ const TitleCard = ({
                   </Button>
                 </Tooltip>
               )}
-            {currentStatus && currentStatus !== MediaStatus.UNKNOWN && (
+            {(currentStatus || remoteAvailability) && (
               <div className="flex flex-col items-center gap-1">
                 <div className="pointer-events-none z-40 flex">
                   <StatusBadgeMini
-                    status={currentStatus}
+                    status={currentStatus ?? MediaStatus.UNKNOWN}
                     inProgress={inProgress}
                     shrink
+                    remoteAvailability={remoteAvailability}
                   />
                 </div>
               </div>

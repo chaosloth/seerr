@@ -6,15 +6,17 @@ import {
   EyeSlashIcon,
   MinusSmallIcon,
   TrashIcon,
+  UsersIcon,
 } from '@heroicons/react/24/solid';
 import { MediaStatus } from '@server/constants/media';
+import type { RemoteAvailability } from '@server/interfaces/api/mediaInterfaces';
 
 interface StatusBadgeMiniProps {
   status: MediaStatus;
   is4k?: boolean;
   inProgress?: boolean;
-  // Should the badge shrink on mobile to a smaller size? (TitleCard)
   shrink?: boolean;
+  remoteAvailability?: RemoteAvailability[];
 }
 
 const StatusBadgeMini = ({
@@ -22,6 +24,7 @@ const StatusBadgeMini = ({
   is4k = false,
   inProgress = false,
   shrink = false,
+  remoteAvailability,
 }: StatusBadgeMiniProps) => {
   const badgeStyle = [
     `rounded-full shadow-md ${
@@ -29,41 +32,55 @@ const StatusBadgeMini = ({
     }`,
   ];
 
+  const isRemoteOnly =
+    (status === MediaStatus.UNKNOWN || !status) &&
+    remoteAvailability &&
+    remoteAvailability.length > 0;
+
   let indicatorIcon: React.ReactNode;
 
-  switch (status) {
-    case MediaStatus.PROCESSING:
-      badgeStyle.push(
-        'bg-indigo-500/80 border-indigo-400 ring-indigo-400 text-indigo-100'
-      );
-      indicatorIcon = <ClockIcon />;
-      break;
-    case MediaStatus.AVAILABLE:
-      badgeStyle.push(
-        'bg-green-500/80 border-green-400 ring-green-400 text-green-100'
-      );
-      indicatorIcon = <CheckCircleIcon />;
-      break;
-    case MediaStatus.PENDING:
-      badgeStyle.push(
-        'bg-yellow-500/80 border-yellow-400 ring-yellow-400 text-yellow-100'
-      );
-      indicatorIcon = <BellIcon />;
-      break;
-    case MediaStatus.BLOCKLISTED:
-      badgeStyle.push('bg-red-500/80 border-white ring-white text-white');
-      indicatorIcon = <EyeSlashIcon />;
-      break;
-    case MediaStatus.PARTIALLY_AVAILABLE:
-      badgeStyle.push(
-        'bg-green-500/80 border-green-400 ring-green-400 text-green-100'
-      );
-      indicatorIcon = <MinusSmallIcon />;
-      break;
-    case MediaStatus.DELETED:
-      badgeStyle.push('bg-red-500/80 border-red-400 ring-red-400 text-red-100');
-      indicatorIcon = <TrashIcon />;
-      break;
+  if (isRemoteOnly) {
+    badgeStyle.push(
+      'bg-teal-500/80 border-teal-400 ring-teal-400 text-teal-100'
+    );
+    indicatorIcon = <UsersIcon />;
+  } else {
+    switch (status) {
+      case MediaStatus.PROCESSING:
+        badgeStyle.push(
+          'bg-indigo-500/80 border-indigo-400 ring-indigo-400 text-indigo-100'
+        );
+        indicatorIcon = <ClockIcon />;
+        break;
+      case MediaStatus.AVAILABLE:
+        badgeStyle.push(
+          'bg-green-500/80 border-green-400 ring-green-400 text-green-100'
+        );
+        indicatorIcon = <CheckCircleIcon />;
+        break;
+      case MediaStatus.PENDING:
+        badgeStyle.push(
+          'bg-yellow-500/80 border-yellow-400 ring-yellow-400 text-yellow-100'
+        );
+        indicatorIcon = <BellIcon />;
+        break;
+      case MediaStatus.BLOCKLISTED:
+        badgeStyle.push('bg-red-500/80 border-white ring-white text-white');
+        indicatorIcon = <EyeSlashIcon />;
+        break;
+      case MediaStatus.PARTIALLY_AVAILABLE:
+        badgeStyle.push(
+          'bg-green-500/80 border-green-400 ring-green-400 text-green-100'
+        );
+        indicatorIcon = <MinusSmallIcon />;
+        break;
+      case MediaStatus.DELETED:
+        badgeStyle.push(
+          'bg-red-500/80 border-red-400 ring-red-400 text-red-100'
+        );
+        indicatorIcon = <TrashIcon />;
+        break;
+    }
   }
 
   if (inProgress) {

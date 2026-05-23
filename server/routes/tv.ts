@@ -32,6 +32,10 @@ tvRoutes.get('/:id', async (req, res, next) => {
     });
     const media = await Media.getMedia(tv.id, MediaType.TV);
 
+    const remoteAvailability = await Media.getRemoteAvailability([
+      { tmdbId: tv.id, mediaType: MediaType.TV },
+    ]);
+
     const onUserWatchlist = await getRepository(Watchlist).exist({
       where: {
         tmdbId: Number(req.params.id),
@@ -43,6 +47,8 @@ tvRoutes.get('/:id', async (req, res, next) => {
     });
 
     const data = mapTvDetails(tv, media, onUserWatchlist);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (data as any).remoteAvailability = remoteAvailability.get(tv.id);
 
     // TMDB issue where it doesnt fallback to English when no overview is available in requested locale.
     if (!data.overview) {

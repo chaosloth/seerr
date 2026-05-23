@@ -52,6 +52,7 @@ import { type RatingResponse } from '@server/api/ratings';
 import { IssueStatus } from '@server/constants/issue';
 import { MediaStatus, MediaType } from '@server/constants/media';
 import { MediaServerType } from '@server/constants/server';
+import type { RemoteAvailability } from '@server/interfaces/api/mediaInterfaces';
 import type { MovieDetails as MovieDetailsType } from '@server/models/Movie';
 import axios from 'axios';
 import { countries } from 'country-flag-icons';
@@ -513,6 +514,10 @@ const MovieDetails = ({ movie }: MovieDetailsProps) => {
               mediaType="movie"
               plexUrl={plexUrl}
               serviceUrl={data.mediaInfo?.serviceUrl}
+              remoteAvailability={
+                (data as unknown as Record<string, unknown>)
+                  .remoteAvailability as RemoteAvailability[] | undefined
+              }
             />
             {settings.currentSettings.movie4kEnabled &&
               hasPermission(

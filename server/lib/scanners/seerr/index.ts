@@ -131,7 +131,7 @@ class SeerrScanner implements RunnableScanner<RemoteLibrarySyncStatus> {
             localMedia = mediaRepository.create({
               tmdbId: remoteItem.tmdbId,
               mediaType: remoteItem.mediaType as MediaType,
-              status: 5,
+              status: 1,
             });
             await mediaRepository.save(localMedia);
           }

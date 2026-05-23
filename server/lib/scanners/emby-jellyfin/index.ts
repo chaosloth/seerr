@@ -143,7 +143,7 @@ class EmbyJellyfinScanner implements RunnableScanner<EmbyJellyfinSyncStatus> {
                 mediaRepository.create({
                   tmdbId,
                   mediaType,
-                  status: 5,
+                  status: 1,
                 });
 
               if (!localMedia) {
