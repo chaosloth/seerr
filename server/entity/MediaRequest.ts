@@ -669,10 +669,26 @@ export class MediaRequest {
           { label: 'Media Request' }
         );
       } catch (e) {
-        logger.error(`Failed to auto-send request ${this.id} to Friendarr`, {
-          label: 'Media Request',
-          errorMessage: (e as Error).message,
-        });
+        const err = e as Error & {
+          response?: { status: number; data?: { error?: string } };
+        };
+        const errorMessage = err.response
+          ? `${err.response.status} — ${err.response.data?.error ?? err.message}`
+          : err.message;
+
+        logger.error(
+          `Failed to auto-send request ${this.id} to Friendarr: ${errorMessage}`,
+          {
+            label: 'Media Request',
+            errorMessage,
+            hint:
+              err.response?.status === 403
+                ? "The API key in Settings → Services → Friendarr does not match Friendarr's master key (API_KEY env var)."
+                : err.response?.status === 401
+                  ? 'No API key configured in Settings → Services → Friendarr. Enable Friendarr and set an API key, or set FRIENDARR_API_KEY as an environment variable.'
+                  : undefined,
+          }
+        );
       }
     }
   }

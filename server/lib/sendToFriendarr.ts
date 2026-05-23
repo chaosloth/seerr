@@ -65,10 +65,12 @@ export async function sendToFriendarr(
   );
 
   logger.info(
-    `Auto-sent request ${requestId} to Friendarr from ${remoteLibrary.name}`,
+    `Sent request ${requestId} to Friendarr from ${remoteLibrary.name}`,
     {
       label: 'Media Request',
+      friendarrUrl,
       friendarrDownloadId: response.data.id,
+      hasApiKey: !!friendarrApiKey,
     }
   );
 
