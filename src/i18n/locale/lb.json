@@ -2,7 +2,7 @@
   "components.Common.FriendBadge.availableOn": "Available on: {names}",
   "components.Settings.RemoteLibrary.actions": "Actions",
   "components.Settings.RemoteLibrary.addlibrary": "Add Library",
-  "components.Settings.RemoteLibrary.addremote": "Add Remote Library",
+  "components.Settings.RemoteLibrary.addremote": "Extern Bibliothéik bäifügen",
   "components.Settings.RemoteLibrary.address": "Address",
   "components.Settings.RemoteLibrary.apiKey": "API Key",
   "components.Settings.RemoteLibrary.baseUrl": "URL Base",
@@ -21,7 +21,7 @@
   "components.Settings.RemoteLibrary.plexLabel": "Plex",
   "components.Settings.RemoteLibrary.plexToken": "Plex Token",
   "components.Settings.RemoteLibrary.port": "Port",
-  "components.Settings.RemoteLibrary.remotesettings": "Remote Libraries",
+  "components.Settings.RemoteLibrary.remotesettings": "Extern Bibliothéiken",
   "components.Settings.RemoteLibrary.remotesettingsDescription": "Configure remote libraries to discover content available on your friends' servers. Remote libraries will appear as availability badges on the discovery page.",
   "components.Settings.RemoteLibrary.savelibrary": "Save Library",
   "components.Settings.RemoteLibrary.seerrLabel": "Seerr",
@@ -46,7 +46,7 @@
   "components.Settings.RemoteLibrary.validationNameRequired": "You must provide a library name",
   "components.Settings.RemoteLibrary.validationPortRequired": "You must provide a valid port number",
   "components.Settings.RemoteLibrary.validationTypeRequired": "You must select a library type",
-  "components.Settings.SettingsJobsCache.remote-library-scan": "Remote Library Scan",
+  "components.Settings.SettingsJobsCache.remote-library-scan": "Extern Bibliothéik Scan",
   "components.StatusBadge.alsoonfriendsserver": "Also available on {names}",
   "components.StatusBadge.onfriendsserver": "Available on {names}"
 }
