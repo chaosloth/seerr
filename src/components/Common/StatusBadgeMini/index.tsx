@@ -50,35 +50,35 @@ const StatusBadgeMini = ({
         badgeStyle.push(
           'bg-indigo-500/80 border-indigo-400 ring-indigo-400 text-indigo-100'
         );
-        indicatorIcon = <ClockIcon className="h-3 w-3" />;
+        indicatorIcon = <ClockIcon />;
         break;
       case MediaStatus.AVAILABLE:
         badgeStyle.push(
           'bg-green-500/80 border-green-400 ring-green-400 text-green-100'
         );
-        indicatorIcon = <CheckCircleIcon className="h-3 w-3" />;
+        indicatorIcon = <CheckCircleIcon />;
         break;
       case MediaStatus.PENDING:
         badgeStyle.push(
           'bg-yellow-500/80 border-yellow-400 ring-yellow-400 text-yellow-100'
         );
-        indicatorIcon = <BellIcon className="h-3 w-3" />;
+        indicatorIcon = <BellIcon />;
         break;
       case MediaStatus.BLOCKLISTED:
         badgeStyle.push('bg-red-500/80 border-white ring-white text-white');
-        indicatorIcon = <EyeSlashIcon className="h-3 w-3" />;
+        indicatorIcon = <EyeSlashIcon />;
         break;
       case MediaStatus.PARTIALLY_AVAILABLE:
         badgeStyle.push(
           'bg-green-500/80 border-green-400 ring-green-400 text-green-100'
         );
-        indicatorIcon = <MinusSmallIcon className="h-3 w-3" />;
+        indicatorIcon = <MinusSmallIcon />;
         break;
       case MediaStatus.DELETED:
         badgeStyle.push(
           'bg-red-500/80 border-red-400 ring-red-400 text-red-100'
         );
-        indicatorIcon = <TrashIcon className="h-3 w-3" />;
+        indicatorIcon = <TrashIcon />;
         break;
     }
   }
@@ -93,11 +93,7 @@ const StatusBadgeMini = ({
         shrink ? '' : 'ring-1'
       }`}
     >
-      <div
-        className={`${badgeStyle.join(' ')} flex items-center justify-center`}
-      >
-        {indicatorIcon}
-      </div>
+      <div className={badgeStyle.join(' ')}>{indicatorIcon}</div>
       {is4k && <span className="pl-1 pr-2 text-gray-200">4K</span>}
     </div>
   );
