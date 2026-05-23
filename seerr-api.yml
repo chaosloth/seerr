@@ -553,6 +553,32 @@ components:
         externalUrl:
           type: string
           nullable: true
+    FriendarrSettings:
+      type: object
+      required:
+        - enabled
+        - hostname
+        - port
+        - apiKey
+        - useSsl
+      properties:
+        enabled:
+          type: boolean
+          example: false
+        hostname:
+          type: string
+          example: localhost
+        port:
+          type: number
+          example: 5056
+        apiKey:
+          type: string
+        useSsl:
+          type: boolean
+          example: false
+        baseUrl:
+          type: string
+          nullable: true
     RadarrSettings:
       type: object
       properties:
@@ -2800,6 +2826,78 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/TautulliSettings'
+  /settings/friendarr:
+    get:
+      summary: Get Friendarr settings
+      description: Returns current Friendarr configuration.
+      tags:
+        - settings
+      security:
+        - cookieAuth: []
+        - apiKey: []
+      responses:
+        '200':
+          description: Friendarr settings
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FriendarrSettings'
+    post:
+      summary: Update Friendarr settings
+      description: Saves Friendarr configuration.
+      tags:
+        - settings
+      security:
+        - cookieAuth: []
+        - apiKey: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FriendarrSettings'
+      responses:
+        '200':
+          description: Settings saved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FriendarrSettings'
+  /settings/friendarr/test:
+    post:
+      summary: Test Friendarr connection
+      description: Tests connectivity to the Friendarr downloading service.
+      tags:
+        - settings
+      security:
+        - cookieAuth: []
+        - apiKey: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - hostname
+                - port
+                - apiKey
+                - useSsl
+              properties:
+                hostname:
+                  type: string
+                port:
+                  type: number
+                apiKey:
+                  type: string
+                useSsl:
+                  type: boolean
+                baseUrl:
+                  type: string
+                  nullable: true
+      responses:
+        '200':
+          description: Connection successful
   /settings/radarr:
     get:
       summary: Get Radarr settings

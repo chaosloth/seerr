@@ -65,6 +65,15 @@ export interface TautulliSettings {
   externalUrl?: string;
 }
 
+export interface FriendarrSettings {
+  enabled: boolean;
+  hostname: string;
+  port: number;
+  apiKey: string;
+  useSsl: boolean;
+  baseUrl?: string;
+}
+
 export interface DVRSettings {
   id: number;
   name: string;
@@ -378,6 +387,7 @@ export interface AllSettings {
   plex: PlexSettings;
   jellyfin: JellyfinSettings;
   tautulli: TautulliSettings;
+  friendarr: FriendarrSettings;
   radarr: RadarrSettings[];
   sonarr: SonarrSettings[];
   public: PublicSettings;
@@ -450,6 +460,13 @@ class Settings {
         apiKey: '',
       },
       tautulli: {},
+      friendarr: {
+        enabled: false,
+        hostname: 'localhost',
+        port: 5056,
+        apiKey: '',
+        useSsl: false,
+      },
       metadataSettings: {
         tv: MetadataProviderType.TMDB,
         anime: MetadataProviderType.TMDB,
@@ -668,6 +685,14 @@ class Settings {
 
   set tautulli(data: TautulliSettings) {
     this.data.tautulli = mergeSettings(this.data.tautulli, data);
+  }
+
+  get friendarr(): FriendarrSettings {
+    return this.data.friendarr;
+  }
+
+  set friendarr(data: FriendarrSettings) {
+    this.data.friendarr = mergeSettings(this.data.friendarr, data);
   }
 
   get metadataSettings(): MetadataSettings {

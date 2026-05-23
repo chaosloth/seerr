@@ -723,8 +723,23 @@ requestRoutes.post<{
         }
       );
 
-      const friendarrUrl = process.env.FRIENDARR_URL ?? 'http://localhost:5056';
-      const friendarrApiKey = process.env.FRIENDARR_API_KEY;
+      const settings = getSettings();
+      const friendarr = settings.friendarr;
+
+      let friendarrUrl: string;
+      let friendarrApiKey: string | undefined;
+
+      if (friendarr.enabled) {
+        const protocol = friendarr.useSsl ? 'https' : 'http';
+        const base = friendarr.baseUrl
+          ? `/${friendarr.baseUrl.replace(/^\/|\/$/g, '')}`
+          : '';
+        friendarrUrl = `${protocol}://${friendarr.hostname}:${friendarr.port}${base}`;
+        friendarrApiKey = friendarr.apiKey || undefined;
+      } else {
+        friendarrUrl = process.env.FRIENDARR_URL ?? 'http://localhost:5056';
+        friendarrApiKey = process.env.FRIENDARR_API_KEY;
+      }
 
       try {
         const friendarrResponse = await axios.post(

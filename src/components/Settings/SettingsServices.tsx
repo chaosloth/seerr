@@ -6,6 +6,7 @@ import Button from '@app/components/Common/Button';
 import LoadingSpinner from '@app/components/Common/LoadingSpinner';
 import Modal from '@app/components/Common/Modal';
 import PageTitle from '@app/components/Common/PageTitle';
+import FriendarrModal from '@app/components/Settings/FriendarrModal';
 import OverrideRuleModal from '@app/components/Settings/OverrideRule/OverrideRuleModal';
 import OverrideRuleTiles from '@app/components/Settings/OverrideRule/OverrideRuleTiles';
 import RadarrModal from '@app/components/Settings/RadarrModal';
@@ -16,7 +17,11 @@ import { Transition } from '@headlessui/react';
 import { PencilIcon, PlusIcon, TrashIcon } from '@heroicons/react/24/solid';
 import type OverrideRule from '@server/entity/OverrideRule';
 import type { OverrideRuleResultsResponse } from '@server/interfaces/api/overrideRuleInterfaces';
-import type { RadarrSettings, SonarrSettings } from '@server/lib/settings';
+import type {
+  FriendarrSettings,
+  RadarrSettings,
+  SonarrSettings,
+} from '@server/lib/settings';
 import axios from 'axios';
 import { Fragment, useState } from 'react';
 import { useIntl } from 'react-intl';
@@ -50,6 +55,10 @@ const messages = defineMessages('components.Settings', {
   overrideRulesDescription:
     'Override rules allow you to specify properties that will be replaced if a request matches the rule.',
   addrule: 'New Override Rule',
+  friendarrsettings: 'Friendarr Settings',
+  friendarrDescription:
+    "Configure the downloading service for remote library requests. Friendarr handles downloading media from friends' libraries and placing it in the correct directory for Radarr/Sonarr to import.",
+  configurefriendarr: 'Configure Friendarr',
 });
 
 interface ServerInstanceProps {
@@ -217,6 +226,9 @@ const SettingsServices = () => {
   } = useSWR<SonarrSettings[]>('/api/v1/settings/sonarr');
   const { data: rules, mutate: revalidate } =
     useSWR<OverrideRuleResultsResponse>('/api/v1/overrideRule');
+  const { data: friendarrData, mutate: revalidateFriendarr } =
+    useSWR<FriendarrSettings>('/api/v1/settings/friendarr');
+  const [friendarrModal, setFriendarrModal] = useState(false);
   const [editRadarrModal, setEditRadarrModal] = useState<{
     open: boolean;
     radarr: RadarrSettings | null;
@@ -499,6 +511,65 @@ const SettingsServices = () => {
           </>
         )}
       </div>
+      <div className="mb-6 mt-10">
+        <h3 className="heading">
+          {intl.formatMessage(messages.friendarrsettings)}
+        </h3>
+        <p className="description">
+          {intl.formatMessage(messages.friendarrDescription)}
+        </p>
+      </div>
+      <div className="section">
+        <ul className="grid max-w-6xl grid-cols-1 gap-6 lg:grid-cols-2 xl:grid-cols-3">
+          {friendarrData && (
+            <li className="min-h-[8rem] rounded-lg border border-gray-700 bg-gray-800/50 shadow">
+              <div className="flex h-full flex-col justify-between p-4">
+                <div>
+                  <div className="flex items-center space-x-2">
+                    <span className="text-lg font-medium text-gray-200">
+                      Friendarr
+                    </span>
+                    {friendarrData.enabled ? (
+                      <Badge badgeType="success">Enabled</Badge>
+                    ) : (
+                      <Badge badgeType="danger">Disabled</Badge>
+                    )}
+                  </div>
+                  {friendarrData.enabled && (
+                    <div className="mt-1 text-sm text-gray-400">
+                      {friendarrData.useSsl ? 'https' : 'http'}://
+                      {friendarrData.hostname}:{friendarrData.port}
+                      {friendarrData.baseUrl
+                        ? `/${friendarrData.baseUrl.replace(/^\/|\/$/g, '')}`
+                        : ''}
+                    </div>
+                  )}
+                </div>
+                <div className="mt-4 flex space-x-2">
+                  <Button
+                    buttonType="ghost"
+                    onClick={() => setFriendarrModal(true)}
+                  >
+                    <PencilIcon className="mr-2 h-4 w-4" />
+                    <span>
+                      {intl.formatMessage(messages.configurefriendarr)}
+                    </span>
+                  </Button>
+                </div>
+              </div>
+            </li>
+          )}
+        </ul>
+      </div>
+      {friendarrModal && friendarrData && (
+        <FriendarrModal
+          settings={friendarrData}
+          onSave={() => {
+            setFriendarrModal(false);
+            revalidateFriendarr();
+          }}
+        />
+      )}
       <div className="mb-6 mt-10">
         <h3 className="heading">
           {intl.formatMessage(messages.overrideRules)}
