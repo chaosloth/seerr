@@ -40,18 +40,26 @@
 
 | # | Task | Status | Notes |
 |---|---|---|---|
-| 1.2.1 | Create `EmbyRemoteScanner` | pending | Extends or adapts JellyfinScanner for per-instance config |
-| 1.2.2 | Adapt `JellyfinScanner` base to support multiple instances | pending | Currently singleton; refactor to accept instance config |
-| 1.2.3 | Add test connection for Emby remote libraries | pending | Validate URL + API key |
-| 1.2.4 | Scheduled sync for Emby remote libraries | pending | |
+| 1.2.1 | Create `EmbyRemoteScanner` | completed | Unified EmbyJellyfinScanner in `server/lib/scanners/emby-jellyfin/` |
+| 1.2.2 | Adapt `JellyfinScanner` base to support multiple instances | completed | Per-instance JellyfinAPI with configurable deviceId |
+| 1.2.3 | Add test connection for Emby remote libraries | completed | MediaBrowser auth header with deviceId support |
+| 1.2.4 | Scheduled sync for Emby remote libraries | completed | Remote Library Scan job runs embyJellyfinScanner |
 
 ### Phase 1.3: Other Jellyfin Instances
 
 | # | Task | Status | Notes |
 |---|---|---|---|
-| 1.3.1 | Reuse Emby implementation | pending | Jellyfin and Emby share the same API protocol |
-| 1.3.2 | Add test connection for Jellyfin remote libraries | pending | |
-| 1.3.3 | Scheduled sync for Jellyfin remote libraries | pending | |
+| 1.3.1 | Reuse Emby implementation | completed | Jellyfin and Emby share the same API protocol |
+| 1.3.2 | Add test connection for Jellyfin remote libraries | completed | Same endpoint as Emby |
+| 1.3.3 | Scheduled sync for Jellyfin remote libraries | completed | Same scanner, filtered by type |
+
+### Phase 1.4: Other Plex Instances
+
+| # | Task | Status | Notes |
+|---|---|---|---|
+| 1.4.1 | Create `RemotePlexScanner` | completed | `server/lib/scanners/remote-plex/index.ts`. Creates PlexAPI per-instance, paginates through library sections, extracts TMDB IDs from GUIDs (modern plex:// agent with Guid array + legacy imdb:///tmdb:///tvdb:// agents) |
+| 1.4.2 | Add test connection for Plex remote libraries | completed | `X-Plex-Token` header, GET `/` |
+| 1.4.3 | Scheduled sync for Plex remote libraries | completed | Remote Library Scan job runs remotePlexScanner |
 
 ---
 
@@ -76,12 +84,27 @@
 | 2.1.4 | Integrate with Downloading Service API | pending | Send authenticated request with content URL + metadata |
 | 2.1.5 | Track remote request status (queued/downloading/complete/failed) | pending | New column or status field on download service side |
 
-### Phase 2.2: Emby/Jellyfin Content Fetch
+### Phase 2.2: Seerr Content Fetch
 
 | # | Task | Status | Notes |
 |---|---|---|---|
-| 2.2.1 | Implement download URL generation for Emby/Jellyfin sources | pending | Construct direct download URL from Emby/Jellyfin API |
-| 2.2.2 | Handle authentication for download requests | pending | Pass auth tokens/headers to Downloading Service |
+| 2.2.1 | Implement download URL generation for Seerr sources | pending | Seerr's `/media/:id/download` endpoint |
+| 2.2.2 | Handle authentication for Seerr download requests | pending | Pass X-Api-Key to Downloading Service |
+
+### Phase 2.3: Emby/Jellyfin Content Fetch
+
+| # | Task | Status | Notes |
+|---|---|---|---|
+| 2.3.1 | Implement download URL generation for Emby/Jellyfin sources | pending | Construct direct download URL from Emby/Jellyfin Items API |
+| 2.3.2 | Handle authentication for download requests | pending | Pass MediaBrowser auth token + deviceId to Downloading Service |
+
+### Phase 2.4: Plex Content Fetch
+
+| # | Task | Status | Notes |
+|---|---|---|---|
+| 2.4.1 | Implement download URL generation for Plex sources | pending | Plex media parts URL: `/library/parts/:partId/file` |
+| 2.4.2 | Resolve media parts from ratingKey for downloading | pending | Query `/library/metadata/:key` to get Media.Part[].key |
+| 2.4.3 | Handle authentication for Plex download requests | pending | Pass X-Plex-Token to Downloading Service |
 
 ---
 
@@ -102,6 +125,9 @@ Content-Type: application/json
     "type": "seerr" | "plex" | "emby" | "jellyfin",
     "url": "https://friend-seerr.example.com",
     "authToken": "...",
+    "deviceId": "Seerr-script",
+    "mediaId": "123",
+    "ratingKey": "456",
     "mediaUrl": "https://friend-seerr.example.com/media/123/download"
   },
   "destination": {
@@ -160,6 +186,38 @@ Response:
 | Emby | `X-Emby-Token` header or `api_key` query param |
 | Jellyfin | `X-Emby-Token` header or `api_key` query param |
 
+### Source-Specific Download URLs
+
+Each source type provides a different mechanism for downloading the actual media file:
+
+**Seerr**: Uses the Seerr media download endpoint.
+```
+GET {baseUrl}/api/v1/media/{mediaId}/download
+Authorization: X-Api-Key {apiKey}
+```
+
+**Emby/Jellyfin**: Uses the Items endpoint to get the direct stream/download URL.
+```
+GET {baseUrl}/Items/{itemId}/Download
+Authorization: MediaBrowser Client="Seerr", Device="Seerr", DeviceId="{deviceId}", Version="1.0.0", Token="{apiKey}"
+```
+
+**Plex**: Resolves the media part key from the item metadata, then downloads the raw file.
+```
+# Step 1: Get item metadata with media parts
+GET {baseUrl}/library/metadata/{ratingKey}?includeMedia=1
+X-Plex-Token: {plexToken}
+
+# Response includes Media[].Part[] objects with a 'key' path
+
+# Step 2: Download the file directly
+GET {baseUrl}{partKey}?download=1
+X-Plex-Token: {plexToken}
+```
+The Plex part key is a path like `/library/parts/12345/file.mkv`. The Downloading Service must append `?download=1` to force a file download rather than a stream.
+
+For multi-part files (multiple video files per item), the service should concatenate all parts in order.
+
 ### File Placement Convention
 
 ```
@@ -194,4 +252,4 @@ Response:
 
 ## Current Progress
 
-**Status**: Planning complete. Ready to begin Phase 1.0 implementation.
+**Status**: Phase 1 complete (all four source types: Seerr, Emby, Jellyfin, Plex). Phase 2 ready to begin.
