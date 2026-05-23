@@ -462,7 +462,7 @@ const TitleCard = ({
               )}
             {(currentStatus ||
               (remoteAvailability && remoteAvailability.length > 0)) && (
-              <div className="flex flex-col items-center gap-1">
+              <div className="flex flex-col items-center gap-1 self-start">
                 {currentStatus && currentStatus !== MediaStatus.UNKNOWN && (
                   <div className="pointer-events-none z-40 flex">
                     <StatusBadgeMini
