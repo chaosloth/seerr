@@ -728,7 +728,8 @@ const RequestItem = ({ request, revalidateList }: RequestItemProps) => {
                 </span>
               </Button>
             )}
-          {requestData.status === MediaRequestStatus.APPROVED &&
+          {requestData.status !== MediaRequestStatus.DECLINED &&
+            requestData.status !== MediaRequestStatus.COMPLETED &&
             requestData?.remoteLibrary &&
             hasPermission(Permission.MANAGE_REQUESTS) && (
               <Button
