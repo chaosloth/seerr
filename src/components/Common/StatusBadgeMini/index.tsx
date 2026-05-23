@@ -41,9 +41,9 @@ const StatusBadgeMini = ({
 
   if (isRemoteOnly) {
     badgeStyle.push(
-      'bg-teal-500/80 border-teal-400 ring-teal-400 text-teal-100'
+      'bg-teal-500/80 border-teal-400 ring-teal-400 text-teal-100 seerr-remote-badge flex items-center justify-center'
     );
-    indicatorIcon = <UsersIcon className="h-3 w-3" />;
+    indicatorIcon = <UsersIcon className="seerr-remote-badge-icon h-3 w-3" />;
   } else {
     switch (status) {
       case MediaStatus.PROCESSING:
@@ -54,9 +54,11 @@ const StatusBadgeMini = ({
         break;
       case MediaStatus.AVAILABLE:
         badgeStyle.push(
-          'bg-green-500/80 border-green-400 ring-green-400 text-green-100'
+          'bg-green-500/80 border-green-400 ring-green-400 text-green-100 seerr-available-badge'
         );
-        indicatorIcon = <CheckCircleIcon />;
+        indicatorIcon = (
+          <CheckCircleIcon className="seerr-available-badge-icon" />
+        );
         break;
       case MediaStatus.PENDING:
         badgeStyle.push(

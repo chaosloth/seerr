@@ -19,8 +19,8 @@ const FriendBadge = ({ remoteAvailability }: FriendBadgeProps) => {
       title={`Available on: ${names}`}
       className="relative inline-flex items-center"
     >
-      <Badge badgeType="primary">
-        <UsersIcon className="mr-0.5 inline h-3 w-3" />
+      <Badge badgeType="primary" className="seerr-friends-badge">
+        <UsersIcon className="seerr-friends-badge-icon mr-0.5 inline h-3 w-3 align-[-2px]" />
         {count}
       </Badge>
     </span>
