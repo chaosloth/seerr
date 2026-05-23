@@ -59,6 +59,8 @@ const messages = defineMessages('components.Settings', {
   friendarrDescription:
     "Configure the downloading service for remote library requests. Friendarr handles downloading media from friends' libraries and placing it in the correct directory for Radarr/Sonarr to import.",
   configurefriendarr: 'Configure Friendarr',
+  enabled: 'Enabled',
+  disabled: 'Disabled',
 });
 
 interface ServerInstanceProps {
@@ -527,12 +529,16 @@ const SettingsServices = () => {
                 <div>
                   <div className="flex items-center space-x-2">
                     <span className="text-lg font-medium text-gray-200">
-                      Friendarr
+                      {intl.formatMessage(messages.friendarrsettings)}
                     </span>
                     {friendarrData.enabled ? (
-                      <Badge badgeType="success">Enabled</Badge>
+                      <Badge badgeType="success">
+                        {intl.formatMessage(messages.enabled)}
+                      </Badge>
                     ) : (
-                      <Badge badgeType="danger">Disabled</Badge>
+                      <Badge badgeType="danger">
+                        {intl.formatMessage(messages.disabled)}
+                      </Badge>
                     )}
                   </div>
                   {friendarrData.enabled && (

@@ -1272,5 +1272,7 @@
   "components.Settings.FriendarrModal.validationPortRequired": "You must provide a valid port number",
   "components.Settings.configurefriendarr": "Configure Friendarr",
   "components.Settings.friendarrDescription": "Configure the downloading service for remote library requests. Friendarr handles downloading media from friends' libraries and placing it in the correct directory for Radarr/Sonarr to import.",
-  "components.Settings.friendarrsettings": "Friendarr Settings"
+  "components.Settings.friendarrsettings": "Friendarr Settings",
+  "components.Settings.enabled": "Enabled",
+  "components.Settings.disabled": "Disabled"
 }
