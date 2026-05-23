@@ -48,6 +48,10 @@ const messages = defineMessages('components.RequestList.RequestItem', {
   unknowntitle: 'Unknown Title',
   removearr: 'Remove from {arr}',
   profileName: 'Profile',
+  friendrequest: '{name} ({type})',
+  sendtofriendarr: 'Send to Friendarr',
+  sendtofriendarrfail: 'Failed to send to Friendarr.',
+  sendtofriendarrsuccess: 'Request sent to Friendarr!',
 });
 
 const isMovie = (movie: MovieDetails | TvDetails): movie is MovieDetails => {
@@ -324,6 +328,7 @@ const RequestItem = ({ request, revalidateList }: RequestItemProps) => {
   });
 
   const [isRetrying, setRetrying] = useState(false);
+  const [isSendingToFriendarr, setSendingToFriendarr] = useState(false);
   const [updatingType, setUpdatingType] = useState<
     'approve' | 'decline' | null
   >(null);
@@ -374,6 +379,23 @@ const RequestItem = ({ request, revalidateList }: RequestItemProps) => {
       });
     } finally {
       setRetrying(false);
+    }
+  };
+
+  const sendToFriendarr = async () => {
+    setSendingToFriendarr(true);
+    try {
+      await axios.post(`/api/v1/request/${request.id}/send-to-remote`);
+      addToast(intl.formatMessage(messages.sendtofriendarrsuccess), {
+        appearance: 'success',
+      });
+      revalidateList();
+    } catch {
+      addToast(intl.formatMessage(messages.sendtofriendarrfail), {
+        appearance: 'error',
+      });
+    } finally {
+      setSendingToFriendarr(false);
     }
   };
 
@@ -669,6 +691,21 @@ const RequestItem = ({ request, revalidateList }: RequestItemProps) => {
                 </span>
               </div>
             )}
+            {requestData?.remoteLibrary && (
+              <div className="card-field">
+                <span className="card-field-name">
+                  {intl.formatMessage(messages.requested)}
+                </span>
+                <span className="flex truncate text-sm text-gray-300">
+                  <Badge badgeType="primary">
+                    {intl.formatMessage(messages.friendrequest, {
+                      name: requestData.remoteLibrary.name,
+                      type: requestData.remoteLibrary.type,
+                    })}
+                  </Badge>
+                </span>
+              </div>
+            )}
           </div>
         </div>
         <div className="z-10 mt-4 flex w-full flex-col justify-center space-y-2 pl-4 pr-4 xl:mt-0 xl:w-96 xl:items-end xl:pl-0">
@@ -689,6 +726,21 @@ const RequestItem = ({ request, revalidateList }: RequestItemProps) => {
                     isRetrying ? globalMessages.retrying : globalMessages.retry
                   )}
                 </span>
+              </Button>
+            )}
+          {requestData.status === MediaRequestStatus.APPROVED &&
+            requestData?.remoteLibrary &&
+            hasPermission(Permission.MANAGE_REQUESTS) && (
+              <Button
+                className="w-full"
+                buttonType="primary"
+                disabled={isSendingToFriendarr}
+                onClick={() => sendToFriendarr()}
+              >
+                <ArrowPathIcon
+                  className={isSendingToFriendarr ? 'animate-spin' : ''}
+                />
+                <span>{intl.formatMessage(messages.sendtofriendarr)}</span>
               </Button>
             )}
           {requestData.status !== MediaRequestStatus.PENDING &&

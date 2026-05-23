@@ -1733,5 +1733,9 @@
   "components.Settings.friendarrDescription": "Configure the downloading service for remote library requests. Friendarr handles downloading media from friends' libraries and placing it in the correct directory for Radarr/Sonarr to import.",
   "components.Settings.friendarrsettings": "Friendarr Settings",
   "components.Settings.enabled": "Enabled",
-  "components.Settings.disabled": "Disabled"
+  "components.Settings.disabled": "Disabled",
+  "components.RequestList.RequestItem.friendrequest": "{name} ({type})",
+  "components.RequestList.RequestItem.sendtofriendarr": "Send to Friendarr",
+  "components.RequestList.RequestItem.sendtofriendarrfail": "Failed to send to Friendarr.",
+  "components.RequestList.RequestItem.sendtofriendarrsuccess": "Request sent to Friendarr!"
 }

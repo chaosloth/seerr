@@ -130,6 +130,7 @@ requestRoutes.get<Record<string, unknown>, RequestResultsResponse>(
         .leftJoinAndSelect('request.seasons', 'seasons')
         .leftJoinAndSelect('request.modifiedBy', 'modifiedBy')
         .leftJoinAndSelect('request.requestedBy', 'requestedBy')
+        .leftJoinAndSelect('request.remoteLibrary', 'remoteLibrary')
         .where('request.status IN (:...requestStatus)', {
           requestStatus: statusFilter,
         })
